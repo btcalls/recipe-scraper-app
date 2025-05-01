@@ -8,43 +8,110 @@
 import Foundation
 import Combine
 
-enum NetworkError: Error {
-    case badUrl
-    case invalidRequest
-    case badResponse
-    case badStatus
-    case failedToDecodeResponse
+enum HTTPMethod {
+    case get
+    case post(Encodable?)
+    
+    var value: String {
+        switch self {
+        case .get:
+            return "GET"
+            
+        case .post(_):
+            return "POST"
+        }
+    }
 }
 
-struct Post: Decodable {
-    let id: Int
-    let title: String
-    let body: String
-}
-
-class PostsViewModel: ObservableObject {
-    @Published var posts: [Post] = []
+final class APIClient: NSObject {
+    static let shared: APIClient = APIClient()
     
-    private var cancellable: AnyCancellable?
-    
-    init() {
-        fetchItems()
+    var isAuthenticated: Bool {
+        return false
+        // TODO: Handle authentication
+//        guard let _: String = UserDefaults.standard.get(.accessToken) else {
+//            return false
+//        }
+//        
+//        return true
     }
     
-    func fetchItems() {
-        let urlString = "https://jsonplaceholder.typicode.com/posts"
+    func send<T: APIRequest>(_ request: T) -> AnyPublisher<T.Response, Error> {
+        let urlRequest = getURLRequest(for: request)
+        let config = URLSessionConfiguration.default
+        config.requestCachePolicy = .reloadIgnoringLocalCacheData
+        config.urlCache = nil
+        let decoder = JSONDecoder()
+        decoder.dateDecodingStrategy = .iso8601
         
-        guard let url = URL(string: urlString) else {
-            return
+        return URLSession(configuration: config).dataTaskPublisher(for: urlRequest)
+            .mapError { CustomError.error($0) }
+            .tryMap { [weak self] data, response -> Data in
+                if let error = self?.getHttpError(response) {
+                    throw error
+                }
+                
+                if let json = try? data.toJSON() {
+                    Debugger.print(json)
+                }
+                
+                return data
+            }
+            .decode(type: T.Response.self, decoder: decoder)
+            .eraseToAnyPublisher()
+    }
+}
+
+extension APIClient {
+    private func getHttpError(_ response: URLResponse?) -> CustomError? {
+        guard let response = response as? HTTPURLResponse else {
+            return .network(.failed)
         }
         
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map(\.data) // Extract data from response
-            .decode(type: [Post].self, decoder: JSONDecoder()) // Decode JSON into array of Posts
-            .replaceError(with: []) // Replace errors with an empty array
-            .receive(on: DispatchQueue.main) // Receive on main queue to update UI
-            .sink(receiveValue: { [weak self] fetchedPosts in
-                self?.posts = fetchedPosts // Update posts with fetched data
-            })
+        switch response.statusCode {
+        case 200...299:
+            return nil
+            
+        case 401...500:
+            return .network(.authError)
+            
+        case 501...599:
+            return .network(.badRequest)
+            
+        default:
+            return .network(.failed)
+        }
+    }
+    
+    private func getURLRequest<T: APIRequest>(for request: T) -> URLRequest {
+        let endpoint = request.endpoint
+        var urlRequest = URLRequest(url: endpoint.url, cachePolicy: .useProtocolCachePolicy)
+        urlRequest.httpMethod = endpoint.method.value
+        
+        Debugger.print(endpoint.url.absoluteString)
+        
+        // Configure body per request method
+        switch endpoint.method {
+        case .post(let encodable):
+            if let httpBody = try? encodable?.toJSONData() {
+                if let json = try? httpBody.toJSON() {
+                    Debugger.print("Params: \(json)")
+                }
+                
+                urlRequest.httpBody = httpBody
+            }
+            
+        default:
+            break
+        }
+        
+        // Add Headers
+        endpoint.headers.forEach { (key, value) in
+            if let value = value as? String {
+                urlRequest.setValue(value, forHTTPHeaderField: key)
+            }
+        }
+        
+        return urlRequest
     }
 }

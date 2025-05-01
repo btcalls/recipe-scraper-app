@@ -11,12 +11,13 @@ import SwiftData
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-    @ObservedObject var viewModel = PostsViewModel()
+    
+    @ObservedObject private var viewModel = HomeViewModel()
 
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(viewModel.posts, id: \.id) { item in
+                ForEach(viewModel.data, id: \.id) { item in
 //                    NavigationLink {
 //                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
 //                    } label: {
@@ -38,6 +39,9 @@ struct ContentView: View {
             }
         } detail: {
             Text("Select an item")
+        }
+        .onAppear {
+            viewModel.fetchData()
         }
     }
 
