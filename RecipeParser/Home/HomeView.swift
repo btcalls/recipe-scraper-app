@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
     
@@ -18,12 +18,11 @@ struct ContentView: View {
         NavigationSplitView {
             List {
                 ForEach(viewModel.data, id: \.id) { item in
-//                    NavigationLink {
-//                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
-//                    } label: {
-//                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
-//                    }
-                    Text(item.title)
+                    NavigationLink {
+                        Text(item.title)
+                    } label: {
+                        Text(item.title)
+                    }
                 }
                 .onDelete(perform: deleteItems)
             }
@@ -62,6 +61,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
         .modelContainer(for: Item.self, inMemory: true)
 }
