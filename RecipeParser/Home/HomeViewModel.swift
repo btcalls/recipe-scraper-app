@@ -9,36 +9,19 @@ import Foundation
 import Combine
 
 final class HomeViewModel: ViewModel, ObservableObject {
-    typealias Value = [Post]
+    typealias Value = [Test]
     
-    @Published var data: [Post] = []
-    @Published var error: CustomError?
+    @Published var data: [Test] = []
     @Published var isFetching: Bool = false
     
-    private var cancellables = Set<AnyCancellable>()
-    
-    func fetchData() {
+    @MainActor
+    func fetchData() async throws {
         isFetching = true
-        
-        APIClient.shared.send(PostRequest(endpoint: .getPosts))
-            .receive(on: RunLoop.main)
-            .sink { [weak self] completion in
-                self?.isFetching = false
-                
-                switch completion {
-                case .failure(let e):
-                    self?.error = e as? CustomError
-                    
-                default:
-                    break
-                }
-            } receiveValue: { [weak self] response in
-                self?.data = response
-            }
-            .store(in: &cancellables)
+        data = try await APIClient.shared.send(HomeEndpoints.getPosts)
     }
     
-    func reloadData() {
-        fetchData()
+    @MainActor
+    func reloadData() async throws {
+        try await fetchData()
     }
 }

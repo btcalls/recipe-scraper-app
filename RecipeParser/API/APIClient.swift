@@ -6,25 +6,11 @@
 //
 
 import Foundation
-import Combine
-
-enum HTTPMethod {
-    case get
-    case post(Encodable?)
-    
-    var value: String {
-        switch self {
-        case .get:
-            return "GET"
-            
-        case .post(_):
-            return "POST"
-        }
-    }
-}
 
 final class APIClient: NSObject {
-    static let shared: APIClient = APIClient()
+    static let shared = APIClient()
+    
+    private let baseURL = "https://jsonplaceholder.typicode.com"
     
     var isAuthenticated: Bool {
         return false
@@ -36,34 +22,28 @@ final class APIClient: NSObject {
 //        return true
     }
     
-    func send<T: APIRequest>(_ request: T) -> AnyPublisher<T.Response, Error> {
-        let urlRequest = getURLRequest(for: request)
-        let config = URLSessionConfiguration.default
-        config.requestCachePolicy = .reloadIgnoringLocalCacheData
-        config.urlCache = nil
-        let decoder = JSONDecoder()
-        decoder.dateDecodingStrategy = .iso8601
+    func send<D: Decodable>(_ endpoint: APIEndpoint) async throws -> D {
+        let urlRequest = try getURLRequest(from: endpoint)
+        let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
         
-        return URLSession(configuration: config).dataTaskPublisher(for: urlRequest)
-            .mapError { CustomError.error($0) }
-            .tryMap { [weak self] data, response -> Data in
-                if let error = self?.getHttpError(response) {
-                    throw error
-                }
-                
-                if let json = try? data.toJSON() {
-                    Debugger.print(json)
-                }
-                
-                return data
-            }
-            .decode(type: T.Response.self, decoder: decoder)
-            .eraseToAnyPublisher()
+        if let error = getHttpError(urlResponse) {
+            throw error
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            
+            return try decoder.decode(D.self, from: data)
+        } catch {
+            Debugger.print(error)
+            throw CustomError.network(.decodeError)
+        }
     }
 }
 
-extension APIClient {
-    private func getHttpError(_ response: URLResponse?) -> CustomError? {
+private extension APIClient {
+    func getHttpError(_ response: URLResponse?) -> CustomError? {
         guard let response = response as? HTTPURLResponse else {
             return .network(.failed)
         }
@@ -83,35 +63,34 @@ extension APIClient {
         }
     }
     
-    private func getURLRequest<T: APIRequest>(for request: T) -> URLRequest {
-        let endpoint = request.endpoint
-        var urlRequest = URLRequest(url: endpoint.url, cachePolicy: .useProtocolCachePolicy)
-        urlRequest.httpMethod = endpoint.method.value
+    func getURLRequest(from endpoint: APIEndpoint) throws -> URLRequest {
+        guard
+            let urlPath = URL(string: baseURL.appending(endpoint.path)),
+            var urlComponents = URLComponents(string: urlPath.path())
+        else {
+            throw CustomError.network(.invalidPath)
+        }
         
-        Debugger.print(endpoint.url.absoluteString)
+        if let parameters = endpoint.parameters {
+            urlComponents.queryItems = parameters
+        }
+        
+        var request = URLRequest(url: urlPath)
+        request.httpMethod = endpoint.method.rawValue
         
         // Configure body per request method
-        switch endpoint.method {
-        case .post(let encodable):
-            if let httpBody = try? encodable?.toJSONData() {
-                if let json = try? httpBody.toJSON() {
-                    Debugger.print("Params: \(json)")
-                }
-                
-                urlRequest.httpBody = httpBody
+        if let httpBody = try? endpoint.body?.toJSONData() {
+            // NOTE: For debugging purposes only
+            if let json = try? httpBody.toJSON() {
+                Debugger.print("Params: \(json)")
             }
             
-        default:
-            break
+            request.httpBody = httpBody
         }
         
-        // Add Headers
-        endpoint.headers.forEach { (key, value) in
-            if let value = value as? String {
-                urlRequest.setValue(value, forHTTPHeaderField: key)
-            }
-        }
+        // TODO: Add auth headers
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        return urlRequest
+        return request
     }
 }

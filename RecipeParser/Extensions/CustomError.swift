@@ -8,8 +8,8 @@
 import Foundation
 
 extension CustomError {
-    
-    var errorDescription: String? {
+    /// Detailed description for the custom error instance.
+    var errorDescription: String {
         switch self {
         case .network(let message):
             return NSLocalizedString(message.rawValue, comment: "Network Error")
@@ -24,5 +24,4 @@ extension CustomError {
             return NSLocalizedString(message, comment: "Error")
         }
     }
-    
 }

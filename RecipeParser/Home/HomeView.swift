@@ -13,13 +13,16 @@ struct HomeView: View {
     @Query private var items: [Item]
     
     @ObservedObject private var viewModel = HomeViewModel()
-
+    
     var body: some View {
         NavigationSplitView {
             List {
                 ForEach(viewModel.data, id: \.id) { item in
                     NavigationLink {
                         Text(item.title)
+                            .font(.title)
+                        Text(item.body)
+                            .font(.caption)
                     } label: {
                         Text(item.title)
                     }
@@ -39,8 +42,13 @@ struct HomeView: View {
         } detail: {
             Text("Select an item")
         }
-        .onAppear {
-            viewModel.fetchData()
+        .task {
+            do {
+                try await viewModel.fetchData()
+            } catch {
+                // TODO: Handle error
+                Debugger.print(error)
+            }
         }
     }
 
