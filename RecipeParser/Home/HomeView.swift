@@ -8,18 +8,23 @@
 import SwiftUI
 import SwiftData
 
-struct ContentView: View {
+struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
-
+    
+    @ObservedObject private var viewModel = HomeViewModel()
+    
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(items) { item in
+                ForEach(viewModel.data, id: \.id) { item in
                     NavigationLink {
-                        Text("Item at \(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))")
+                        Text(item.title)
+                            .font(.title)
+                        Text(item.body)
+                            .font(.caption)
                     } label: {
-                        Text(item.timestamp, format: Date.FormatStyle(date: .numeric, time: .standard))
+                        Text(item.title)
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -36,6 +41,14 @@ struct ContentView: View {
             }
         } detail: {
             Text("Select an item")
+        }
+        .task {
+            do {
+                try await viewModel.fetchData()
+            } catch {
+                // TODO: Handle error
+                Debugger.print(error)
+            }
         }
     }
 
@@ -56,6 +69,6 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    HomeView()
         .modelContainer(for: Item.self, inMemory: true)
 }
