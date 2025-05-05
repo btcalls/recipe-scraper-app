@@ -30,10 +30,7 @@ struct OnboardingButton: View {
             .multilineTextAlignment(.center)
         }
         .tint(.white)
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Color.primary, lineWidth: 2)
-        )
+        .rounded(cornerRadius: 20, lineWidth: 2, color: .primary)
     }
 }
 
