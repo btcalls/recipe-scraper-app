@@ -15,7 +15,7 @@ struct OnboardingView: View {
         VStack(alignment: .center, spacing: 15.0) {
             OnboardingButton(item: .init(title: "Paste URL",
                                          caption: "Select a Recipe Website's URL and paste it here.",
-                                         icon: "document.on.clipboard")) {
+                                         icon: .documentOnClipboard)) {
                 showPasteURLView = true
             }
             Divider()
@@ -23,7 +23,7 @@ struct OnboardingView: View {
                 .overlay(Color.primary)
             OnboardingButton(item: .init(title: "Open Browser",
                                          caption: "Search the recipe from the in-built browser. Click on the \"Save\" button to start parsing.",
-                                         icon: "globe")) {
+                                         icon: .globe)) {
                 Debugger.print("Open Browser")
             }
         }

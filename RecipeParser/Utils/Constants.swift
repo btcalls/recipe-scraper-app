@@ -6,6 +6,9 @@
 //
 
 import Foundation
+import UIKit
+import SwiftUI
+import SFSymbolsMacro
 
 // MARK: Errors
 
@@ -35,4 +38,12 @@ enum CustomError: LocalizedError {
 enum HTTPMethod: String {
     case GET
     case POST
+}
+
+// MARK: Icons
+
+@SFSymbol
+enum Symbol: String {
+    case documentOnClipboard = "document.on.clipboard"
+    case globe
 }

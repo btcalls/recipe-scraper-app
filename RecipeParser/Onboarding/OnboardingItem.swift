@@ -8,5 +8,5 @@
 struct OnboardingItem: Hashable {
     var title: String
     var caption: String
-    var icon: String
+    var icon: Symbol
 }
