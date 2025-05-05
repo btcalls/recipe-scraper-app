@@ -26,7 +26,6 @@ struct OnboardingButton: View {
             }
             .frame(maxHeight: .infinity)
             .padding(20)
-            .cornerRadius(20)
             .multilineTextAlignment(.center)
         }
         .tint(.white)

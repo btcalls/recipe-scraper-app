@@ -32,7 +32,8 @@ struct OnboardingView: View {
             showPasteURLView = false
         } content: {
             PasteURLView()
-                .presentationDetents([.fraction(0.3)])
+                .presentationDetents([.fraction(0.4)])
+                .presentationBackground(.thinMaterial)
         }
     }
 }

@@ -7,21 +7,6 @@
 
 import SwiftUI
 
-struct RoundedView: ViewModifier {
-    var cornerRadius: CGFloat = 0
-    var lineWidth: CGFloat = 0
-    var color: Color = .clear
-    
-    func body(content: Content) -> some View {
-        content
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-            .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
-                    .stroke(color, lineWidth: lineWidth)
-            )
-    }
-}
-
 extension View {
     public func rounded(cornerRadius: CGFloat,
                         lineWidth: CGFloat,
