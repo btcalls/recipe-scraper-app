@@ -14,7 +14,7 @@ struct OnboardingButton: View {
     var body: some View {
         Button(action: action) {
             VStack(spacing: 10.0) {
-                Image(systemName: item.icon)
+                item.icon.image
                     .imageScale(.large)
                     .foregroundStyle(.tint)
                     .font(.largeTitle)
@@ -36,8 +36,7 @@ struct OnboardingButton: View {
 #Preview {
     OnboardingButton(item: .init(title: "Hello, World!",
                                  caption: "Some description here.",
-                                 icon: "globe")) {
+                                 icon: .globe)) {
         // TODO: Pass
     }
 }
-
