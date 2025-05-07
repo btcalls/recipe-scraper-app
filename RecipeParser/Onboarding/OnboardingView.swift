@@ -14,16 +14,16 @@ struct OnboardingView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 15.0) {
-            OnboardingButton(item: .init(title: "Paste URL",
-                                         caption: "Select a Recipe Website's URL and paste it here.",
+            OnboardingButton(item: .init(title: .pasteURL,
+                                         caption: .pasteURLDescription,
                                          icon: .documentOnClipboard)) {
                 showPasteURLView = true
             }
+            
             Divider()
-                .frame(height: 2)
-                .overlay(Color.primary)
-            OnboardingButton(item: .init(title: "Open Browser",
-                                         caption: "Search the recipe from the in-built browser. Click on the \"Save\" button to start parsing.",
+            
+            OnboardingButton(item: .init(title: .openBrowser,
+                                         caption: .openBrowserDescription,
                                          icon: .globe)) {
                 showBrowserView = true
             }
@@ -39,10 +39,8 @@ struct OnboardingView: View {
         .sheet(isPresented: $showBrowserView) {
             showBrowserView = false
         } content: {
-            BrowserView(url: URL(string: "https://www.google.com")!)
+            BrowserView(url: URL(string: .googleURL)!)
                 .ignoresSafeArea()
-                .navigationTitle("Search Recipe")
-                .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

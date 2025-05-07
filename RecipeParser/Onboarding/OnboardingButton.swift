@@ -28,7 +28,7 @@ struct OnboardingButton: View {
             .padding(20)
             .multilineTextAlignment(.center)
         }
-        .tint(.white)
+        .tint(.primary)
         .rounded(cornerRadius: 20, lineWidth: 2, color: .primary)
     }
 }
