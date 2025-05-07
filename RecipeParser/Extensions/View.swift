@@ -12,8 +12,8 @@ extension View {
     /// - Parameter condition: Condition in which if true, will apply a `.placeholder` reason.
     /// - Returns: Modified view.
     @ViewBuilder
-    func redacted(if condition: @autoclosure () -> Bool) -> some View {
-        redacted(reason: condition() ? .placeholder : [])
+    func redacted(as reason: RedactionReasons, if condition: @autoclosure () -> Bool) -> some View {
+        redacted(reason: condition() ? reason : [])
     }
     
     /// Modifier to add rounded borders to a View.
@@ -23,8 +23,8 @@ extension View {
     ///   - color: Color of the border.
     /// - Returns: Modified view with rounded borders.
     func rounded(cornerRadius: CGFloat,
-                 lineWidth: CGFloat,
-                 color: Color) -> some View {
+                 lineWidth: CGFloat = 0,
+                 color: Color = .clear) -> some View {
         modifier(RoundedView(cornerRadius: cornerRadius,
                              lineWidth: lineWidth,
                              color: color))

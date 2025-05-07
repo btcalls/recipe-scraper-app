@@ -22,6 +22,8 @@ extension String {
     // MARK: Constants
     static let googleURL = "https://www.google.com"
     
+    // MARK: Functions
+    
     /// Generates a placeholder text. Typically used for skeleton views.
     /// - Parameter length: The length of the string.
     /// - Returns: `String` containing `length` number of characters.
