@@ -46,4 +46,5 @@ enum HTTPMethod: String {
 enum Symbol: String {
     case documentOnClipboard = "document.on.clipboard"
     case globe
+    case forkKnife = "fork.knife"
 }

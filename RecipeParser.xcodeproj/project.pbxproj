@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		492BD7DC2DC9A07F0020485B /* RecipeParserShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 492BD7D22DC9A07F0020485B /* RecipeParserShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		492BD7F82DC9E45F0020485B /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 492BD7F72DC9E45F0020485B /* SFSymbolsMacro */; };
 		49A5307C2DC88CDF0023574C /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 49A5307B2DC88CDF0023574C /* SFSymbolsMacro */; };
 /* End PBXBuildFile section */
 
@@ -67,8 +68,16 @@
 		492BD7E62DC9B1260020485B /* Exceptions for "RecipeParser" folder in "RecipeParserShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Extensions/NSItemProvider.swift,
 				Extensions/NSNotification.swift,
+				Extensions/String.swift,
+				Extensions/View.swift,
+				Home/HomeModels.swift,
+				Utils/Constants.swift,
+				Utils/ExtractRecipeMetadata.swift,
+				Views/Modifiers/RoundedView.swift,
 				Views/ParseRecipeView.swift,
+				Views/RecipeMetadataView.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;
 		};
@@ -116,6 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				492BD7F82DC9E45F0020485B /* SFSymbolsMacro in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,6 +154,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		492BD7F62DC9E45F0020485B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		49B19D272DB0F9EC008F9B9E = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +168,7 @@
 				49B19D442DB0F9EE008F9B9E /* RecipeParserTests */,
 				49B19D4E2DB0F9EE008F9B9E /* RecipeParserUITests */,
 				492BD7D32DC9A07F0020485B /* RecipeParserShareExtension */,
+				492BD7F62DC9E45F0020485B /* Frameworks */,
 				49B19D312DB0F9ED008F9B9E /* Products */,
 			);
 			sourceTree = "<group>";
@@ -186,6 +204,7 @@
 			);
 			name = RecipeParserShareExtension;
 			packageProductDependencies = (
+				492BD7F72DC9E45F0020485B /* SFSymbolsMacro */,
 			);
 			productName = RecipeParserShareExtension;
 			productReference = 492BD7D22DC9A07F0020485B /* RecipeParserShareExtension.appex */;
@@ -767,6 +786,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		492BD7F72DC9E45F0020485B /* SFSymbolsMacro */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49A5307A2DC88CDF0023574C /* XCRemoteSwiftPackageReference "SFSymbolsMacro" */;
+			productName = SFSymbolsMacro;
+		};
 		49A5307B2DC88CDF0023574C /* SFSymbolsMacro */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 49A5307A2DC88CDF0023574C /* XCRemoteSwiftPackageReference "SFSymbolsMacro" */;

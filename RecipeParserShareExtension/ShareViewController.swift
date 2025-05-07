@@ -9,6 +9,7 @@ import UIKit
 import UniformTypeIdentifiers
 import SwiftUI
 
+// Based on https://agtlucas.com/blog/implementing-a-swift-ui-sharesheet-extension/
 class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
