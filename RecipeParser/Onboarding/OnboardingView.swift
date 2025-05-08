@@ -14,17 +14,22 @@ struct OnboardingView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: 15.0) {
-            OnboardingButton(item: .init(title: .pasteURL,
-                                         caption: .pasteURLDescription,
-                                         icon: .documentOnClipboard)) {
+            Text("New Recipe")
+                .font(.headline)
+            
+            OnboardingButton(title: .pasteURL,
+                             image: Symbol.documentOnClipboard.image) {
+                Text(String.pasteURLDescription)
+            } action: {
                 showPasteURLView = true
             }
             
             Divider()
             
-            OnboardingButton(item: .init(title: .openBrowser,
-                                         caption: .openBrowserDescription,
-                                         icon: .globe)) {
+            OnboardingButton(title: .openBrowser,
+                             image: Symbol.globe.image) {
+                Text(String.openBrowserDescription)
+            } action: {
                 showBrowserView = true
             }
         }
@@ -34,7 +39,6 @@ struct OnboardingView: View {
         } content: {
             PasteURLView()
                 .presentationDetents([.fraction(0.4)])
-                .presentationBackground(.thinMaterial)
         }
         .sheet(isPresented: $showBrowserView) {
             showBrowserView = false

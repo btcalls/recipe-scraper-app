@@ -68,6 +68,7 @@
 		492BD7E62DC9B1260020485B /* Exceptions for "RecipeParser" folder in "RecipeParserShareExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Extensions/Bundle.swift,
 				Extensions/NSItemProvider.swift,
 				Extensions/NSNotification.swift,
 				Extensions/String.swift,

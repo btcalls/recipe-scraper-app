@@ -10,22 +10,28 @@ import SwiftUI
 struct PasteURLView: View {
     @State var text: String = ""
     
+    @State private var isValid = false
+    
     var body: some View {
         VStack(spacing: 20) {
             Text("Parse Recipe via URL")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.title)
+            
             CustomTextField(text: $text)
                 .frame(maxWidth: .infinity)
                 .textContentType(.URL)
-            Button() {
-                // TODO: Submit to API
+            
+            Button {
+                // TODO: API call
             } label: {
-                Text("Parse")
+                Text(String.parseRecipe)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 2.5)
+                    .padding(.vertical, 5)
             }
-                .buttonStyle(.borderedProminent)
+            .buttonStyle(.borderedProminent)
+            .buttonBorderShape(.roundedRectangle(radius: 5))
+            .disabled(!isValid)
         }
         .padding(20)
     }

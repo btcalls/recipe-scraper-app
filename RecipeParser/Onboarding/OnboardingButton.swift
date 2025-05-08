@@ -7,36 +7,32 @@
 
 import SwiftUI
 
-struct OnboardingButton: View {
-    var item: OnboardingItem
+struct OnboardingButton<Content: View>: View where Content: View {
+    var title: String
+    var image: Image
+    var isEnabled: Bool = true
+    var caption: () -> Content
     var action: () -> Void
     
     var body: some View {
         Button(action: action) {
             VStack(spacing: 10.0) {
-                item.icon.image
+                image
                     .imageScale(.large)
                     .foregroundStyle(.tint)
                     .font(.largeTitle)
-                Text(item.title)
+                Text(title)
                     .font(.title)
-                Text(item.caption)
+                caption()
                     .font(.subheadline)
                     .frame(maxWidth: .infinity)
             }
             .frame(maxHeight: .infinity)
-            .padding(20)
+            .padding(30)
             .multilineTextAlignment(.center)
         }
         .tint(.primary)
+        .disabled(!isEnabled)
         .rounded(cornerRadius: 20, lineWidth: 2, color: .primary)
-    }
-}
-
-#Preview {
-    OnboardingButton(item: .init(title: "Hello, World!",
-                                 caption: "Some description here.",
-                                 icon: .globe)) {
-        // TODO: Pass
     }
 }

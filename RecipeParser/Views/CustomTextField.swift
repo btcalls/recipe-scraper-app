@@ -14,8 +14,10 @@ struct CustomTextField: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "document.on.clipboard")
-            TextField("Paste URL", text: $text)
+            Symbol.documentOnClipboard.image
+            TextField(String.pasteURLPlaceholder, text: $text) {
+                Debugger.print(text)
+            }
         }
         .padding(EdgeInsets(top: 10, leading: 15, bottom: 10, trailing: 15))
         .font(.body)
