@@ -8,42 +8,37 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @State private var isOnboardingComplete: Bool = false
-    @State private var showPasteURLView: Bool = false
-    @State private var showBrowserView: Bool = false
+    @State private var isBrowserPresented = false
     
     var body: some View {
-        VStack(alignment: .center, spacing: 15.0) {
-            Text("New Recipe")
-                .font(.headline)
+        TabView {
+            OnboardingCard(
+                title: .onboardingItemOneTitle,
+                image: Image("Placeholder"),
+                caption: {
+                    Text(String.onboardingItemOneDesc)
+                }
+            )
+            .tag(0)
             
-            OnboardingButton(title: .pasteURL,
-                             image: Symbol.documentOnClipboard.image) {
-                Text(String.pasteURLDescription)
-            } action: {
-                showPasteURLView = true
-            }
-            
-            Divider()
-            
-            OnboardingButton(title: .openBrowser,
-                             image: Symbol.globe.image) {
-                Text(String.openBrowserDescription)
-            } action: {
-                showBrowserView = true
-            }
+            OnboardingCard(
+                title: .onboardingItemTwoTitle,
+                image: Image("Placeholder"),
+                caption: {
+                    Text(String.onboardingItemTwoDesc)
+                },
+                action: (.getStarted, {
+                    isBrowserPresented = true
+                })
+            )
+            .tag(1)
         }
-        .padding(20)
-        .sheet(isPresented: $showPasteURLView) {
-            showPasteURLView = false
+        .tabViewStyle(PageTabViewStyle())
+        .padding(.vertical, 20)
+        .sheet(isPresented: $isBrowserPresented) {
+            isBrowserPresented = false
         } content: {
-            PasteURLView()
-                .presentationDetents([.fraction(0.4)])
-        }
-        .sheet(isPresented: $showBrowserView) {
-            showBrowserView = false
-        } content: {
-            BrowserView(url: URL(string: .googleURL)!)
+            BrowserView()
                 .ignoresSafeArea()
         }
     }

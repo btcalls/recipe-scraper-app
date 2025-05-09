@@ -27,18 +27,18 @@ class ShareViewController: UIViewController {
         
         if itemProvider.hasItemConformingToTypeIdentifier(identifier) {
             itemProvider.loadItem(forTypeIdentifier: identifier, options: nil) { [weak self] (url, error) in
-                guard let self = self else {
+                guard let self else {
                     return
                 }
                 
-                guard error == nil, let sharedUrl = url as? URL else {
+                guard error == nil, let url = url as? URL else {
                     self.close()
                     
                     return
                 }
                 
                 DispatchQueue.main.async {
-                    let contentView = UIHostingController(rootView: ParseRecipeView(url: sharedUrl))
+                    let contentView = UIHostingController(rootView: ParseRecipeView(url: url))
                     
                     self.addChild(contentView)
                     self.view.addSubview(contentView.view)

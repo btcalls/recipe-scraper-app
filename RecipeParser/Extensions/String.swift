@@ -12,20 +12,18 @@ extension String {
     // MARK: Buttons
     static let cancel = "Cancel"
     static let parseRecipe = "Parse Recipe"
+    static let getStarted = "Get Started"
     
     // MARK: Navigation/View Titles
     static let addNewRecipe = "Add New Recipe"
-    static let parseViaURL = "Parse Recipe via URL"
     
-    // MARK: Titles and Captions
-    static let pasteURL = "Paste URL"
-    static let pasteURLPlaceholder = "https://www.recipe.com/burger"
-    static let pasteURLDescription = "Select a recipe websites's URL and paste it here."
-    static let openBrowser = "Open Browser"
-    
-    static var openBrowserDescription: AttributedString {
+    // MARK: Onboarding
+    static let onboardingItemOneTitle = "Search Recipe"
+    static let onboardingItemOneDesc = "Search your desired recipe using the in-built browser or Safari."
+    static let onboardingItemTwoTitle = "Save it!"
+    static var onboardingItemTwoDesc: AttributedString {
         let displayName = Bundle.main.displayName ?? "app"
-        var attrString = AttributedString("Search your desired recipe from the in-built browser. Share the URL and select the \(displayName) option to parse it.")
+        var attrString = AttributedString("Using the browser's Share option, select the \(displayName) to save it.")
         
         if let range = attrString.range(of: displayName) {
             attrString[range].font = Font.system(size: 16, weight: .bold)

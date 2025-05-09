@@ -19,10 +19,8 @@ struct ParseRecipeView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 20) {
-                Text(
-                    "Recipe from \(Text(sharedURL.absoluteString).fontWeight(.medium))."
-                )
-                .font(.subheadline)
+                Text("Recipe from \(Text(sharedURL.absoluteString).fontWeight(.medium)).")
+                    .font(.subheadline)
                 
                 Divider()
                 
@@ -31,7 +29,8 @@ struct ParseRecipeView: View {
                 Spacer()
                 
                 Button {
-                    self.close()
+                    // TODO: API client call
+                    close()
                 } label: {
                     Text(String.parseRecipe)
                         .frame(maxWidth: .infinity)
@@ -43,7 +42,7 @@ struct ParseRecipeView: View {
             .padding()
             .toolbar {
                 Button(String.cancel) {
-                    self.close()
+                    close()
                 }
             }
             .navigationTitle(String.addNewRecipe)
