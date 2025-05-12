@@ -29,4 +29,13 @@ extension View {
                              lineWidth: lineWidth,
                              color: color))
     }
+    
+    /// Modifier to implement default `shadow()` across views.
+    /// - Returns: Modified view with shadow.
+    func shadow() -> some View {
+        shadow(color: Color(red: 0, green: 0, blue: 0, opacity: 0.15),
+               radius: 8,
+               x: 6,
+               y: 8)
+    }
 }

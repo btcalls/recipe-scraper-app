@@ -5,22 +5,36 @@
 //  Created by Jason Jon Carreos on 6/5/2025.
 //
 
+import Foundation
+import SwiftUI
+
 extension String {
     // MARK: Buttons
     static let cancel = "Cancel"
     static let parseRecipe = "Parse Recipe"
+    static let getStarted = "Get Started"
     
     // MARK: Navigation/View Titles
     static let addNewRecipe = "Add New Recipe"
     
-    // MARK: Titles and Captions
-    static let pasteURL = "Paste URL"
-    static let pasteURLDescription = "Select a Recipe Website's URL and paste it here."
-    static let openBrowser = "Open Browser"
-    static let openBrowserDescription = "Search the recipe from the in-built browser. Click on the \"Save\" button to start parsing."
+    // MARK: Onboarding
+    static let onboardingItemOneTitle = "Search Recipe"
+    static let onboardingItemOneDesc = "Search your desired recipe using the in-built browser or Safari."
+    static let onboardingItemTwoTitle = "Save it!"
+    static var onboardingItemTwoDesc: AttributedString {
+        let displayName = Bundle.main.displayName ?? "app"
+        var attrString = AttributedString("Using the browser's Share option, select the \(displayName) to save it.")
+        
+        if let range = attrString.range(of: displayName) {
+            attrString[range].font = Font.system(size: 16, weight: .bold)
+        }
+        
+        return attrString
+    }
     
     // MARK: Constants
     static let googleURL = "https://www.google.com"
+    static let extensionGroup = "group.RecipeParser"
     
     // MARK: Functions
     
