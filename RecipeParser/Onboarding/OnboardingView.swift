@@ -37,7 +37,12 @@ struct OnboardingView: View {
         .padding(.vertical, 20)
         .sheet(isPresented: $isBrowserPresented) {
             isBrowserPresented = false
+            
+            if AppSettings.shared.isOnboardingComplete {
+                // TODO: Go to next view
+            }
         } content: {
+
             BrowserView()
                 .ignoresSafeArea()
         }

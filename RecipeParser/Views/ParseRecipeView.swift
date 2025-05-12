@@ -53,6 +53,8 @@ struct ParseRecipeView: View {
     }
     
     private func close() {
+        AppSettings.shared.isOnboardingComplete = true
+        
         NotificationCenter.default.post(name: .closeShareView, object: nil)
     }
     

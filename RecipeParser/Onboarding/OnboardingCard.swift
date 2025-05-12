@@ -21,7 +21,6 @@ struct OnboardingCard<Content>: View where Content: View {
                 .resizable()
                 .scaledToFit()
                 .shadow()
-                .scaleEffect(isAnimating ? 1.0 : 0.6)
                 .containerRelativeFrame(.vertical, count: 100, span: 65, spacing: 0)
             
             Text(title)

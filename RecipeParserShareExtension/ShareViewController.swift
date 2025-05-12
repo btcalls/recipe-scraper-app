@@ -67,7 +67,7 @@ class ShareViewController: UIViewController {
         }
     }
     
-    func close() {
+    private func close() {
         self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
     }
 }

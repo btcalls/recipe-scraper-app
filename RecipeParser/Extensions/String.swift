@@ -34,6 +34,7 @@ extension String {
     
     // MARK: Constants
     static let googleURL = "https://www.google.com"
+    static let extensionGroup = "group.RecipeParser"
     
     // MARK: Functions
     
