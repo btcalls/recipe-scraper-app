@@ -9,8 +9,8 @@ import Foundation
 
 enum HomeEndpoints: APIEndpoint {
     case getPosts
-    case addPost(Test)
-    case updatePost(Test)
+    case addRecipe(Recipe)
+    case updateRecipe(Recipe)
 }
 
 extension HomeEndpoints {
@@ -22,7 +22,7 @@ extension HomeEndpoints {
     }
     var body: Data? {
         switch self {
-        case .addPost(let value), .updatePost(let value):
+        case .addRecipe(let value), .updateRecipe(let value):
             return try? value.toJSONData()
         default:
             return nil

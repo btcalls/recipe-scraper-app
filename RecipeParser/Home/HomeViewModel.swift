@@ -9,9 +9,9 @@ import Foundation
 import Combine
 
 final class HomeViewModel: ViewModel, ObservableObject {
-    typealias Value = [Test]
+    typealias Value = [Recipe]
     
-    @Published var data: [Test] = []
+    @Published var data: [Recipe] = []
     @Published var isFetching: Bool = false
     
     @MainActor
