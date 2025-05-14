@@ -10,7 +10,7 @@ import Foundation
 final class APIClient: NSObject {
     static let shared = APIClient()
     
-    private let baseURL = "https://jsonplaceholder.typicode.com"
+    private let baseURL = "https://recipe-scraper-api-r1ui.onrender.com"
     
     var isAuthenticated: Bool {
         return false
@@ -27,11 +27,13 @@ final class APIClient: NSObject {
         let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
         
         if let error = getHttpError(urlResponse) {
+            Debugger.print(error)
             throw error
         }
         
         do {
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .iso8601
             
             return try decoder.decode(D.self, from: data)
@@ -78,8 +80,7 @@ private extension APIClient {
         var request = URLRequest(url: urlPath)
         request.httpMethod = endpoint.method.rawValue
         
-        // Configure body per request method
-        if let httpBody = try? endpoint.body?.toJSONData() {
+        if let httpBody = endpoint.body {
             // NOTE: For debugging purposes only
             if let json = try? httpBody.toJSON() {
                 Debugger.print("Params: \(json)")

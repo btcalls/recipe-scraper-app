@@ -13,6 +13,7 @@ extension String {
     static let cancel = "Cancel"
     static let parseRecipe = "Parse Recipe"
     static let getStarted = "Get Started"
+    static let fetching = "Fetching..."
     
     // MARK: Navigation/View Titles
     static let addNewRecipe = "Add New Recipe"

@@ -21,7 +21,7 @@ protocol APIEndpoint {
     var body: Data? { get }
 }
 
-/// Protocol for implementing a view model with fetching/reloading data capabilities used for populating a screen.
+/// Protocol for implementing a base view model where business logic and processes are performed.
 protocol ViewModel {
     associatedtype Value
     
@@ -29,9 +29,24 @@ protocol ViewModel {
     var data: Value { get set }
     /// Published property for fetching state managed by view model. Add @Published wrapper upon implementation.
     var isFetching: Bool { get set }
-    
+    /// Published property for errors catched by the view model. Add @Published wrapper upon implementation.
+    var error: CustomError? { get set }
+}
+
+/// Protocol for implementing a view model with fetching/reloading data capabilities used for populating a screen.
+protocol FetchViewModel: ViewModel {
     /// Function to initiate data fetching. Add @MainActor wrapper upon implementation.
     func fetchData() async throws
     /// Function to initiate data reloading. Add @MainActor wrapper upon implementation.
     func reloadData() async throws
+}
+
+protocol ProcessViewModel: ViewModel {
+    associatedtype Body
+    
+    /// Process provided instance based on corresponding view model's business logic (e.g. API call, save to local storage, etc.)
+    ///
+    /// Add @MainActor wrapper upon implementation.
+    /// - Parameter body: The instance to process.
+    func process(_ body: Body) async
 }

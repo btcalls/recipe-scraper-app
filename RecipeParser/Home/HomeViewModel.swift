@@ -13,6 +13,7 @@ final class HomeViewModel: ViewModel, ObservableObject {
     
     @Published var data: [Recipe] = []
     @Published var isFetching: Bool = false
+    @Published var error: CustomError? = nil
     
     @MainActor
     func fetchData() async throws {

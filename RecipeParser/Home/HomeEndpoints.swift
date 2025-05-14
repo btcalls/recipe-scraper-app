@@ -11,19 +11,42 @@ enum HomeEndpoints: APIEndpoint {
     case getPosts
     case addRecipe(Recipe)
     case updateRecipe(Recipe)
+    case parseRecipe(URL)
 }
 
 extension HomeEndpoints {
     var path: String {
+        let basePath = "/recipe"
+        
         switch self {
+        case .parseRecipe(_:):
+            return "\(basePath)/parse"
+        
         default:
-            return "/posts"
+            return basePath
         }
+    }
+    var method: HTTPMethod {
+        switch self {
+        case .parseRecipe(_:):
+            return .POST
+        
+        default:
+            return .GET
+        }
+    }
+    var parameters: [URLQueryItem]? {
+        return nil
     }
     var body: Data? {
         switch self {
         case .addRecipe(let value), .updateRecipe(let value):
             return try? value.toJSONData()
+        
+        case .parseRecipe(let url):
+            return try? JSONSerialization.data(withJSONObject: ["url": url.absoluteString],
+                                               options: [])
+        
         default:
             return nil
         }
