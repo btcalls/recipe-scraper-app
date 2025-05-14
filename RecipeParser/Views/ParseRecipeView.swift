@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct ParseRecipeView: View {
-    @State var sharedURL: URL
-    
     @State private var recipeMetadata: RecipeMetadata?
+    @ObservedObject private var viewModel = ParseRecipeViewModel()
+    
+    var sharedURL: URL
     
     init(url: URL) {
         sharedURL = url
@@ -28,14 +29,12 @@ struct ParseRecipeView: View {
                 
                 Spacer()
                 
-                Button {
-                    // TODO: API client call
-                    close()
-                } label: {
-                    Text(String.parseRecipe)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 5)
+                FullWidthButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
+                    Task {
+                        await processRecipe()
+                    }
                 }
+                .disabled(viewModel.isFetching)
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 5))
             }
@@ -44,6 +43,7 @@ struct ParseRecipeView: View {
                 Button(String.cancel) {
                     close()
                 }
+                .disabled(viewModel.isFetching)
             }
             .navigationTitle(String.addNewRecipe)
             .task {
@@ -52,15 +52,23 @@ struct ParseRecipeView: View {
         }
     }
     
+    private func parseSharedURL() async {
+        recipeMetadata = try? await ExtractRecipeMetadata(url: sharedURL)
+            .parse()
+    }
+    
+    private func processRecipe() async {
+        await viewModel.process(sharedURL)
+        
+        if viewModel.error == nil {
+            close()
+        }
+    }
+    
     private func close() {
         AppSettings.shared.isOnboardingComplete = true
         
         NotificationCenter.default.post(name: .closeShareView, object: nil)
-    }
-    
-    private func parseSharedURL() async {
-        recipeMetadata = try? await ExtractRecipeMetadata(url: sharedURL)
-            .parse()
     }
 }
 

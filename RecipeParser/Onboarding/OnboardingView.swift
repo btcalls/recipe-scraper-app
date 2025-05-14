@@ -42,7 +42,6 @@ struct OnboardingView: View {
                 // TODO: Go to next view
             }
         } content: {
-
             BrowserView()
                 .ignoresSafeArea()
         }

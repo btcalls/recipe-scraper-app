@@ -10,7 +10,7 @@ import Foundation
 final class APIClient: NSObject {
     static let shared = APIClient()
     
-    private let baseURL = "https://jsonplaceholder.typicode.com"
+    private let baseURL = "https://recipe-scraper-api-r1ui.onrender.com"
     
     var isAuthenticated: Bool {
         return false
@@ -26,12 +26,11 @@ final class APIClient: NSObject {
         let urlRequest = try getURLRequest(from: endpoint)
         let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
         
-        if let error = getHttpError(urlResponse) {
-            throw error
-        }
+        try getHttpError(urlResponse)
         
         do {
             let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
             decoder.dateDecodingStrategy = .iso8601
             
             return try decoder.decode(D.self, from: data)
@@ -43,23 +42,23 @@ final class APIClient: NSObject {
 }
 
 private extension APIClient {
-    func getHttpError(_ response: URLResponse?) -> CustomError? {
-        guard let response = response as? HTTPURLResponse else {
-            return .network(.failed)
-        }
+    func getHttpError(_ response: URLResponse?) throws {
+        let response = try (response as? HTTPURLResponse).orThrow(
+            CustomError.network(.failed)
+        )
         
         switch response.statusCode {
         case 200...299:
-            return nil
+            return
             
         case 401...500:
-            return .network(.authError)
+            throw CustomError.network(.authError)
             
         case 501...599:
-            return .network(.badRequest)
+            throw CustomError.network(.badRequest)
             
         default:
-            return .network(.failed)
+            throw CustomError.network(.failed)
         }
     }
     
@@ -78,8 +77,7 @@ private extension APIClient {
         var request = URLRequest(url: urlPath)
         request.httpMethod = endpoint.method.rawValue
         
-        // Configure body per request method
-        if let httpBody = try? endpoint.body?.toJSONData() {
+        if let httpBody = endpoint.body {
             // NOTE: For debugging purposes only
             if let json = try? httpBody.toJSON() {
                 Debugger.print("Params: \(json)")

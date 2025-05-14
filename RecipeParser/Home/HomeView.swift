@@ -19,12 +19,13 @@ struct HomeView: View {
             List {
                 ForEach(viewModel.data, id: \.id) { item in
                     NavigationLink {
-                        Text(item.title)
+                        Text(item.name)
                             .font(.title)
-                        Text(item.body)
+                        Text(item.description)
                             .font(.caption)
                     } label: {
-                        Text(item.title)
+                        Text(item.name)
+                        Text(item.description)
                     }
                 }
                 .onDelete(perform: deleteItems)

@@ -25,7 +25,8 @@ struct RecipeParserApp: App {
 
     var body: some Scene {
         WindowGroup {
-            OnboardingView()
+//            OnboardingView()
+            ParseRecipeView(url: URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!)
         }
         .modelContainer(sharedModelContainer)
     }

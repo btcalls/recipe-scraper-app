@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct OnboardingCard<Content>: View where Content: View {
+struct OnboardingCard<Content>: View where Content : View {
     @State private var isAnimating: Bool = false
     
     var title: String
