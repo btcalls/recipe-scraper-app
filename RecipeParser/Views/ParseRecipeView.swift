@@ -29,14 +29,10 @@ struct ParseRecipeView: View {
                 
                 Spacer()
                 
-                Button {
+                FullWidthButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
                     Task {
                         await processRecipe()
                     }
-                } label: {
-                    Text(viewModel.isFetching ? String.fetching : String.parseRecipe)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 5)
                 }
                 .disabled(viewModel.isFetching)
                 .buttonStyle(.borderedProminent)

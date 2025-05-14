@@ -31,6 +31,7 @@ final class ParseRecipeViewModel: ProcessViewModel, ObservableObject {
             
             if let data {
                 // TODO: Save viewModel.data to local storage
+                Debugger.print(data)
             }
         } catch {
             if let customError = error as? CustomError {
