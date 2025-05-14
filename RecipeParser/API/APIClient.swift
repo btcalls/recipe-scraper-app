@@ -26,10 +26,7 @@ final class APIClient: NSObject {
         let urlRequest = try getURLRequest(from: endpoint)
         let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
         
-        if let error = getHttpError(urlResponse) {
-            Debugger.print(error)
-            throw error
-        }
+        try getHttpError(urlResponse)
         
         do {
             let decoder = JSONDecoder()
@@ -45,23 +42,23 @@ final class APIClient: NSObject {
 }
 
 private extension APIClient {
-    func getHttpError(_ response: URLResponse?) -> CustomError? {
-        guard let response = response as? HTTPURLResponse else {
-            return .network(.failed)
-        }
+    func getHttpError(_ response: URLResponse?) throws {
+        let response = try (response as? HTTPURLResponse).orThrow(
+            CustomError.network(.failed)
+        )
         
         switch response.statusCode {
         case 200...299:
-            return nil
+            return
             
         case 401...500:
-            return .network(.authError)
+            throw CustomError.network(.authError)
             
         case 501...599:
-            return .network(.badRequest)
+            throw CustomError.network(.badRequest)
             
         default:
-            return .network(.failed)
+            throw CustomError.network(.failed)
         }
     }
     

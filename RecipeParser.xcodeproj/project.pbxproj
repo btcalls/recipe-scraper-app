@@ -74,6 +74,7 @@
 				Extensions/Encodable.swift,
 				Extensions/NSItemProvider.swift,
 				Extensions/NSNotification.swift,
+				Extensions/Optional.swift,
 				Extensions/String.swift,
 				Extensions/View.swift,
 				Home/HomeEndpoints.swift,
