@@ -8,7 +8,7 @@
 import Foundation
 
 enum HomeEndpoints: APIEndpoint {
-    case getPosts
+    case getRecipes
     case addRecipe(Recipe)
     case updateRecipe(Recipe)
     case parseRecipe(URL)

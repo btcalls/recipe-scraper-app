@@ -9,7 +9,7 @@ import Foundation
 
 extension Data {
     /// Converts a `Data` instance to a JSON object for easier debugging or for form submissions.
-    /// - Returns: `[String: Any]` JSON instance.
+    /// - Returns: Optional. `[String: Any]` JSON instance.
     func toJSON() throws -> [String: Any]? {
         if let json = try? JSONSerialization.jsonObject(with: self, options: []) {
             return json as? [String: Any]

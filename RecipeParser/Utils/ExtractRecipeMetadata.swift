@@ -16,7 +16,7 @@ final class ExtractRecipeMetadata {
     }
     
     /// Starts parsing of provided URL upon initialisation to its corresponding `RecipeMetadata` instance.
-    /// - Returns: `RecipeMetadata` derived from URL.
+    /// - Returns: `RecipeMetadata` derived from URL, if available.
     func parse() async throws -> RecipeMetadata {
         let provider = LPMetadataProvider()
         let metadata = try await provider.startFetchingMetadata(for: url)

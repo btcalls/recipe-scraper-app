@@ -29,7 +29,7 @@ struct ParseRecipeView: View {
                 
                 Spacer()
                 
-                FullWidthButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
+                CustomButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
                     Task {
                         await processRecipe()
                     }

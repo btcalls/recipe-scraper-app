@@ -35,6 +35,24 @@ struct Recipe: Codable {
     }
 }
 
+extension Recipe {
+    static var sample: Self {
+        return .init(
+            id: "1zefe3",
+            name: "Cheeseburger",
+            imageUrl: "",
+            category: "Main",
+            cuisine: "American",
+            description: "Tasty cheeseburger",
+            prepTime: 20,
+            totalTime: 40,
+            instructions: [],
+            ingredients: [],
+            _description: ""
+        )
+    }
+}
+
 struct Ingredient: Codable {
     var name: String
     var amount: String?

@@ -17,8 +17,23 @@ protocol APIEndpoint {
     var method: HTTPMethod { get }
     /// Query parameters configured for API endpoints.
     var parameters: [URLQueryItem]? { get }
-    /// Instance to be encoded as HTTP body and  added to a URL request.
+    /// Optional. Instance to be encoded as HTTP body and  added to a URL request.
     var body: Data? { get }
+}
+
+extension APIEndpoint {
+    var path: String {
+        return ""
+    }
+    var method: HTTPMethod {
+        return .GET
+    }
+    var parameters: [URLQueryItem]? {
+        return nil
+    }
+    var body: Data? {
+        return nil
+    }
 }
 
 /// Protocol for implementing a base view model where business logic and processes are performed.

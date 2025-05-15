@@ -26,7 +26,7 @@ enum AppResponse: String {
     case URLOpenError = "App cannot open specified URL."
 }
 
-enum CustomError: LocalizedError {
+enum CustomError: LocalizedError, Equatable {
     case network(NetworkResponse)
     case app(AppResponse)
     case error(Error)
@@ -47,4 +47,9 @@ enum Symbol: String {
     case documentOnClipboard = "document.on.clipboard"
     case globe
     case forkKnife = "fork.knife"
+    case x = "xmark"
+    case info = "info.circle.fill"
+    case warning = "exclamationmark.triangle.fill"
+    case success = "checkmark.circle.fill"
+    case error = "xmark.circle.fill"
 }

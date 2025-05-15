@@ -70,6 +70,8 @@
 			membershipExceptions = (
 				API/APIClient.swift,
 				Extensions/Bundle.swift,
+				Extensions/Color.swift,
+				Extensions/CustomError.swift,
 				Extensions/Data.swift,
 				Extensions/Encodable.swift,
 				Extensions/NSItemProvider.swift,
@@ -86,10 +88,12 @@
 				Utils/Models.swift,
 				Utils/PropertyWrappers.swift,
 				Utils/Protocols.swift,
-				Views/FullWidthButton.swift,
-				Views/Modifiers/RoundedView.swift,
+				Views/CustomButton.swift,
+				Views/Modifiers/RoundedViewModifier.swift,
+				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
+				Views/ToastView.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;
 		};
