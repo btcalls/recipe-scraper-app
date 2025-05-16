@@ -18,7 +18,7 @@ struct RecipeMetadataView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
-                .rounded(cornerRadius: 10)
+                .rounded(cornerRadius: .regular)
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(metadata?.title ?? .placeholder(length: 15))

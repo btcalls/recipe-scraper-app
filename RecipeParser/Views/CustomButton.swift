@@ -1,5 +1,5 @@
 //
-//  FullWidthButton.swift
+//  CustomButton.swift
 //  RecipeParser
 //
 //  Created by Jason Jon Carreos on 14/5/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FullWidthButton<Label>: View where Label : View {
+struct CustomButton<Label>: View where Label : View {
     var action: @MainActor () -> Void
     var label: () -> Label
     
@@ -20,7 +20,7 @@ struct FullWidthButton<Label>: View where Label : View {
     }
 }
 
-extension FullWidthButton where Label == Text {
+extension CustomButton where Label == Text {
     internal init(
         _ label: any StringProtocol,
         action: @escaping @MainActor () -> Void

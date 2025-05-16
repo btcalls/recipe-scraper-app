@@ -18,7 +18,7 @@ final class HomeViewModel: ViewModel, ObservableObject {
     @MainActor
     func fetchData() async throws {
         isFetching = true
-        data = try await APIClient.shared.send(HomeEndpoints.getPosts)
+        data = try await APIClient.shared.send(HomeEndpoints.getRecipes)
     }
     
     @MainActor

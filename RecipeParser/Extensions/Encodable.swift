@@ -10,7 +10,7 @@ import Foundation
 extension Encodable {
     /// Converts a `Encodable` instance to a JSON object to be used for form submission.
     /// - Parameter key: Encoding strategy to be used.
-    /// - Returns: Optional `Data` instance.
+    /// - Returns: Optional. `Data` instance.
     func toJSONData(
         key: JSONEncoder.KeyEncodingStrategy = .convertToSnakeCase
     ) throws -> Data? {

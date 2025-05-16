@@ -26,7 +26,7 @@ enum AppResponse: String {
     case URLOpenError = "App cannot open specified URL."
 }
 
-enum CustomError: LocalizedError {
+enum CustomError: LocalizedError, Equatable {
     case network(NetworkResponse)
     case app(AppResponse)
     case error(Error)
@@ -40,11 +40,22 @@ enum HTTPMethod: String {
     case POST
 }
 
-// MARK: Icons
+// MARK: UI
+
+enum CornerRadius: CGFloat {
+    case sm = 5
+    case regular = 10
+    case lg = 15
+}
 
 @SFSymbol
 enum Symbol: String {
     case documentOnClipboard = "document.on.clipboard"
     case globe
     case forkKnife = "fork.knife"
+    case x = "xmark"
+    case info = "info.circle.fill"
+    case warning = "exclamationmark.triangle.fill"
+    case success = "checkmark.circle.fill"
+    case error = "xmark.circle.fill"
 }

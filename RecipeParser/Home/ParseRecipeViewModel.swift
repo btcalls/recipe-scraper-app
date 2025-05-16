@@ -8,13 +8,14 @@
 import Foundation
 import Combine
 
-final class ParseRecipeViewModel: ProcessViewModel, ObservableObject {
+final class ParseRecipeViewModel: ProcessViewModel {
     typealias Body = URL
     typealias Value = Recipe?
     
     @Published var data: Recipe?
     @Published var isFetching: Bool = false
     @Published var error: CustomError?
+    @Published var state: ToastView.State? = nil
     
     @MainActor
     func process(_ body: URL) async {
@@ -33,9 +34,10 @@ final class ParseRecipeViewModel: ProcessViewModel, ObservableObject {
                 // TODO: Save viewModel.data to local storage
                 Debugger.print(data)
             }
-        } catch {
-            if let customError = error as? CustomError {
-                self.error = customError
+        } catch(let e) {
+            if let customError = e as? CustomError {
+                error = customError
+                state = .error(customError)
             }
         }
     }

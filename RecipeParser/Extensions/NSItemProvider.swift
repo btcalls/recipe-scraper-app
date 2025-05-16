@@ -11,7 +11,7 @@ import UniformTypeIdentifiers
 extension NSItemProvider {
     /// Wrapper for `loadDataRepresentation` to be callable via `async/await` mechanism.
     /// - Parameter type: The type of data to load.
-    /// - Returns: Optional `UIImage` instance loaded from data.
+    /// - Returns: Optional. `UIImage` instance loaded from data.
     func loadImageRepresentation(for type: UTType) async -> UIImage? {
         return await withCheckedContinuation { continuation in
             _ = loadDataRepresentation(for: type) { data, error in

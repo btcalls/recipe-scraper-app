@@ -1,5 +1,5 @@
 //
-//  RoundedView.swift
+//  RoundedViewModifier.swift
 //  RecipeParser
 //
 //  Created by Jason Jon Carreos on 5/5/2025.
@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct RoundedView: ViewModifier {
-    var cornerRadius: CGFloat = 0
+struct RoundedViewModifier: ViewModifier {
+    var cornerRadius: CornerRadius
     var lineWidth: CGFloat = 0
     var color: Color = .clear
     
     func body(content: Content) -> some View {
         content
-            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius.rawValue))
             .overlay(
-                RoundedRectangle(cornerRadius: cornerRadius)
+                RoundedRectangle(cornerRadius: cornerRadius.rawValue)
                     .stroke(color, lineWidth: lineWidth)
             )
     }
