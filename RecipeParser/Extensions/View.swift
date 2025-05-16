@@ -8,6 +8,20 @@
 import SwiftUI
 
 extension View {
+    /// Modifier to present a `ToastView` to this view.
+    /// - Parameters:
+    ///   - state: Optional. Binding state in which the toast will be based upon.
+    ///   - duration: The duration in which the toast may be dismissed after certain interval, or persisted indefinitely.
+    ///   - onDismiss: Action to take upon explicitly closing the toast.
+    /// - Returns: Modified view with toast presented.
+    func presentToast(as state: Binding<ToastView.State?>,
+                      duration: ToastView.Duration = .timed(4),
+                      onDismiss: @escaping @MainActor () -> Void) -> some View {
+        modifier(ToastModifier(state: state,
+                               duration: duration,
+                               onDismiss: onDismiss))
+    }
+    
     /// ViewBuilder for conditional application of `.redacted()` modifier based on `condition`.
     /// - Parameter condition: Condition in which if true, will apply a `.placeholder` reason.
     /// - Returns: Modified view.
@@ -22,16 +36,13 @@ extension View {
     ///   - cornerRadius: Value corner radius to be applied.
     ///   - lineWidth: Thickness of the border width.
     ///   - color: Color of the border.
-    ///   - background: Optional. The background to add to the rounded view.
     /// - Returns: Modified view with rounded borders.
-    func rounded<Background>(cornerRadius: CGFloat,
-                             lineWidth: CGFloat = 0,
-                             color: Color = .clear,
-                             background: Background = Color.clear) -> some View where Background: View {
+    func rounded(cornerRadius: CornerRadius = .sm,
+                 lineWidth: CGFloat = 0,
+                 color: Color = .clear) -> some View {
         modifier(RoundedViewModifier(cornerRadius: cornerRadius,
                                      lineWidth: lineWidth,
-                                     color: color,
-                                     background: background))
+                                     color: color))
     }
     
     /// Modifier to implement default `shadow()` across views.
@@ -44,20 +55,6 @@ extension View {
             color = .lightShadowColor
         }
         
-        return shadow(color: color, radius: 10, x: 0, y: 10)
-    }
-    
-    /// Modifier to present a `ToastView` to this view.
-    /// - Parameters:
-    ///   - state: Optional. Binding state in which the toast will be based upon.
-    ///   - duration: The duration in which the toast may be dismissed after certain interval, or persisted indefinitely.
-    ///   - onDismiss: Action to take upon explicitly closing the toast.
-    /// - Returns: Modified view with toast presented.
-    func presentToast(as state: Binding<ToastView.State?>,
-                      duration: ToastView.Duration = .timed(3),
-                      onDismiss: @escaping @MainActor () -> Void) -> some View {
-        modifier(ToastModifier(state: state,
-                               duration: duration,
-                               onDismiss: onDismiss))
+        return shadow(color: color, radius: 10, x: 2, y: 10)
     }
 }

@@ -74,10 +74,9 @@ struct ToastView: View {
         .foregroundColor(themeColor)
         .padding(.vertical, 12)
         .padding(.horizontal, 15)
-        .rounded(cornerRadius: 5,
-                 lineWidth: 1,
-                 color: themeColor,
-                 background: bgColor.shadow(basedOn: colorScheme))
+        .background(bgColor)
+        .rounded(lineWidth: 1, color: themeColor)
+        .shadow(basedOn: colorScheme)
     }
 }
 
@@ -112,5 +111,8 @@ extension ToastView.State {
 }
 
 #Preview {
-    ToastView(state: .success("Hello!")) {}
+    VStack {
+        ToastView(state: .success("Hello!")) {}
+    }
+    .padding(20)
 }

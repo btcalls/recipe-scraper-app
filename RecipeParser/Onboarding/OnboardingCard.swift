@@ -44,7 +44,7 @@ struct OnboardingCard<Content>: View where Content : View {
                         .padding(.horizontal, 20)
                         .padding(.vertical, 10)
                 }
-                .rounded(cornerRadius: 10, lineWidth: 1, color: .white)
+                .rounded(cornerRadius: .regular, lineWidth: 1, color: .white)
                 .tint(.white)
                 .offset(y: -50)
             }

@@ -10,9 +10,8 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var items: [Item]
-    
     @ObservedObject private var viewModel = HomeViewModel()
+    @Query private var items: [Item]
     
     var body: some View {
         NavigationSplitView {

@@ -93,6 +93,7 @@
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
+				Views/ToastableView.swift,
 				Views/ToastView.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;

@@ -40,7 +40,13 @@ enum HTTPMethod: String {
     case POST
 }
 
-// MARK: Icons
+// MARK: UI
+
+enum CornerRadius: CGFloat {
+    case sm = 5
+    case regular = 10
+    case lg = 15
+}
 
 @SFSymbol
 enum Symbol: String {

@@ -19,35 +19,37 @@ struct ParseRecipeView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(alignment: .leading, spacing: 20) {
-                Text("Recipe from \(Text(sharedURL.absoluteString).fontWeight(.medium)).")
-                    .font(.subheadline)
-                
-                Divider()
-                
-                RecipeMetadataView(metadata: recipeMetadata)
-                
-                Spacer()
-                
-                CustomButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
-                    Task {
-                        await processRecipe()
+            ToastableView(viewModel: viewModel) {
+                VStack(alignment: .leading, spacing: 20) {
+                    Text("Recipe from \(Text(sharedURL.absoluteString).fontWeight(.medium)).")
+                        .font(.subheadline)
+                    
+                    Divider()
+                    
+                    RecipeMetadataView(metadata: recipeMetadata)
+                    
+                    Spacer()
+                    
+                    CustomButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
+                        Task {
+                            await processRecipe()
+                        }
                     }
+                    .disabled(viewModel.isFetching)
+                    .buttonStyle(.borderedProminent)
+                    .buttonBorderShape(.roundedRectangle(radius: 5))
                 }
-                .disabled(viewModel.isFetching)
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle(radius: 5))
-            }
-            .padding()
-            .toolbar {
-                Button(String.cancel) {
-                    close()
+                .padding()
+                .toolbar {
+                    Button(String.cancel) {
+                        close()
+                    }
+                    .disabled(viewModel.isFetching)
                 }
-                .disabled(viewModel.isFetching)
-            }
-            .navigationTitle(String.addNewRecipe)
-            .task {
-                await parseSharedURL()
+                .navigationTitle(String.addNewRecipe)
+                .task {
+                    await parseSharedURL()
+                }
             }
         }
     }

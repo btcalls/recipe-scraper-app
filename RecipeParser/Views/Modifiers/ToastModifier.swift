@@ -21,7 +21,7 @@ struct ToastModifier: ViewModifier {
             .overlay {
                 ZStack {
                     mainToastView()
-                        .padding(.bottom, 30)
+                        .padding(.bottom, 20)
                 }
                 .animation(.snappy, value: state)
             }
