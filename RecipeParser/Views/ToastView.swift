@@ -10,7 +10,7 @@ import SwiftUI
 struct ToastView: View {
     @Environment(\.colorScheme) private var colorScheme
     
-    var state: State = .error(CustomError.network(.authError))
+    var state: State
     var onDismiss: @MainActor () -> Void
     
     private var caption: String {
@@ -18,20 +18,8 @@ struct ToastView: View {
         case .error(let error):
             return error.description
         
-        case .info(let text), .success(let text):
+        case .info(let text), .success(let text), .loading(let text):
             return text
-        }
-    }
-    private var icon: Image {
-        switch state {
-        case .info(_:):
-            return Symbol.info.image
-        
-        case .error(_:):
-            return Symbol.error.image
-
-        case .success(_:):
-            return Symbol.success.image
         }
     }
     private var bgColor: Color {
@@ -43,19 +31,51 @@ struct ToastView: View {
     private var themeColor: Color {
         switch state {
         case .info(_:):
-            return .secondary
+            return .blue
             
         case .error(_:):
             return .red
             
         case .success(_:):
             return .green
+            
+        case .loading(_:):
+            return .secondary
+        }
+    }
+    
+    @ViewBuilder private var iconView: some View {
+        switch state {
+        case .info(_:):
+            Symbol.info.image
+            
+        case .error(_:):
+            Symbol.error.image
+            
+        case .success(_:):
+            Symbol.success.image
+            
+        case .loading(_:):
+            ProgressView()
+        }
+    }
+    
+    @ViewBuilder private var closeButton: some View {
+        switch state {
+        case .info(_:), .error(_:), .success(_:):
+            Button(action: onDismiss) {
+                Symbol.x.image
+                    .padding(10)
+            }
+            
+        default:
+            EmptyView()
         }
     }
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            icon
+            iconView
                 .font(.system(size: 18))
             
             Text(caption)
@@ -64,12 +84,10 @@ struct ToastView: View {
                 .lineLimit(2)
             
             Spacer(minLength: 10)
-            
-            Button(action: onDismiss) {
-                Symbol.x.image
-                    .padding(10)
-            }
+                
+            closeButton
         }
+        .frame(minHeight: 30)
         .font(.caption)
         .foregroundColor(themeColor)
         .padding(.vertical, 12)
@@ -85,6 +103,7 @@ extension ToastView {
         case info(String)
         case error(CustomError)
         case success(String)
+        case loading(String)
     }
     
     enum Duration {
@@ -98,7 +117,8 @@ extension ToastView.State {
         switch (lhs, rhs) {
         case
             (.info(let val1), .info(let val2)),
-            (.success(let val1), .success(let val2)):
+            (.success(let val1), .success(let val2)),
+            (.loading(let val1), .loading(let val2)):
             return val1 == val2
             
         case (.error(let val1), .error(let val2)):
@@ -112,7 +132,10 @@ extension ToastView.State {
 
 #Preview {
     VStack {
-        ToastView(state: .success("Hello!")) {}
+        ToastView(state: .info("This is a sample toast")) {}
+        ToastView(state: .error(CustomError.network(.authError))) {}
+        ToastView(state: .success("Successful request.")) {}
+        ToastView(state: .loading("Parsing recipe...")) {}
     }
     .padding(20)
 }

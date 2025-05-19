@@ -12,7 +12,9 @@ struct OnboardingCard<Content>: View where Content : View {
     
     var title: String
     var image: Image
-    var caption: () -> Content
+    
+    @ViewBuilder let caption:  Content
+    
     var action: (title: String, handler: (() -> Void))?
     
     var body: some View {
@@ -29,7 +31,7 @@ struct OnboardingCard<Content>: View where Content : View {
                 .fontWeight(.semibold)
                 .shadow()
             
-            caption()
+            caption
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)

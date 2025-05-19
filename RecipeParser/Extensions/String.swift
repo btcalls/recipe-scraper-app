@@ -11,9 +11,10 @@ import SwiftUI
 extension String {
     // MARK: Buttons
     static let cancel = "Cancel"
-    static let parseRecipe = "Parse Recipe"
+    static let saveRecipe = "Save Recipe"
     static let getStarted = "Get Started"
-    static let fetching = "Fetching..."
+    static let processing = "Processing..."
+    static let parsingRecipe = "Parsing Recipe..."
     
     // MARK: Navigation/View Titles
     static let addNewRecipe = "Add New Recipe"

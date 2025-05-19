@@ -12,12 +12,12 @@ final class HomeViewModel: ViewModel, ObservableObject {
     typealias Value = [Recipe]
     
     @Published var data: [Recipe] = []
-    @Published var isFetching: Bool = false
+    @Published var isProcessing: Bool = false
     @Published var error: CustomError?
     
     @MainActor
     func fetchData() async throws {
-        isFetching = true
+        isProcessing = true
         data = try await APIClient.shared.send(HomeEndpoints.getRecipes)
     }
     

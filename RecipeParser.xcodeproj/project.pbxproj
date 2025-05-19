@@ -89,11 +89,11 @@
 				Utils/PropertyWrappers.swift,
 				Utils/Protocols.swift,
 				Views/CustomButton.swift,
+				Views/LoadableView.swift,
 				Views/Modifiers/RoundedViewModifier.swift,
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
-				Views/ToastableView.swift,
 				Views/ToastView.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;
