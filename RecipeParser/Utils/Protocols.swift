@@ -42,8 +42,8 @@ protocol ViewModel: ObservableObject {
     
     /// Published property for data fetched by view model. Add @Published wrapper upon implementation.
     var data: Value { get set }
-    /// Published property for fetching state managed by view model. Add @Published wrapper upon implementation.
-    var isFetching: Bool { get set }
+    /// Published property for signifying a process state being managed by view model. Add @Published wrapper upon implementation.
+    var isProcessing: Bool { get set }
     /// Published property for errors catched by the view model. Add @Published wrapper upon implementation.
     var error: CustomError? { get set }
     

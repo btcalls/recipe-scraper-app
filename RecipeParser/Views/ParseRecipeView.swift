@@ -17,34 +17,38 @@ struct ParseRecipeView: View {
         sharedURL = url
     }
     
+    private var urlText: Text {
+        Text(sharedURL.absoluteString)
+            .fontWeight(.medium)
+            .foregroundStyle(.blue)
+    }
+    
     var body: some View {
         NavigationStack {
-            ToastableView(viewModel: viewModel) {
+            LoadableView(viewModel: viewModel) {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Recipe from \(Text(sharedURL.absoluteString).fontWeight(.medium)).")
+                    Text("Recipe from \(urlText).")
                         .font(.subheadline)
                     
                     Divider()
+                        .frame(height: 1)
+                        .background(.secondary.opacity(0.5))
                     
                     RecipeMetadataView(metadata: recipeMetadata)
                     
                     Spacer()
                     
-                    CustomButton(viewModel.isFetching ? String.fetching : String.parseRecipe) {
+                    CustomButton(.idle(.saveRecipe)) {
                         Task {
                             await processRecipe()
                         }
                     }
-                    .disabled(viewModel.isFetching)
-                    .buttonStyle(.borderedProminent)
-                    .buttonBorderShape(.roundedRectangle(radius: 5))
                 }
                 .padding()
                 .toolbar {
                     Button(String.cancel) {
                         close()
                     }
-                    .disabled(viewModel.isFetching)
                 }
                 .navigationTitle(String.addNewRecipe)
                 .task {

@@ -7,27 +7,65 @@
 
 import SwiftUI
 
-struct CustomButton<Label>: View where Label : View {
+struct CustomButton: View {
+    var state: State
+    var role: ButtonRole? = .none
     var action: @MainActor () -> Void
-    var label: () -> Label
+    
+    @ViewBuilder private var imageAndLabelView: some View {
+        switch state {
+        case .idle(let title, let sfSymbol):
+            if let sfSymbol {
+                sfSymbol.image
+            }
+            
+            Text(title)
+        
+        case .loading(let title):
+            ProgressView()
+            
+            Text(title)
+        }
+    }
     
     var body: some View {
-        Button(action: action) {
-            label()
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 5)
+        Button(role: role, action: action) {
+            HStack(alignment: .center, spacing: 5) {
+                imageAndLabelView
+                    .bold()
+                    .padding(.vertical, 5)
+            }
+            .frame(maxWidth: .infinity, maxHeight: 40)
         }
+        .buttonStyle(.borderedProminent)
+        .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))
     }
 }
 
-extension CustomButton where Label == Text {
+extension CustomButton {
+    enum State {
+        case idle(String, Symbol? = nil)
+        case loading(String = .processing)
+    }
+    
     internal init(
-        _ label: any StringProtocol,
+        _ state: State,
         action: @escaping @MainActor () -> Void
     ) {
+        self.state = state
         self.action = action
-        self.label = {
-            Text(label)
-        }
     }
+    
+    internal init(
+        _ title: String,
+        action: @escaping @MainActor () -> Void
+    ) {
+        self.state = .idle(title)
+        self.action = action
+    }
+}
+
+#Preview {
+    CustomButton(.idle("Text")) {}
+    CustomButton(state: .idle("Delete"), role: .destructive) {}
 }

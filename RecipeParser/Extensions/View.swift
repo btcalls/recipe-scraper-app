@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: Modifiers
+
 extension View {
     /// Modifier to present a `ToastView` to this view.
     /// - Parameters:
@@ -22,10 +24,9 @@ extension View {
                                onDismiss: onDismiss))
     }
     
-    /// ViewBuilder for conditional application of `.redacted()` modifier based on `condition`.
+    /// Modifier for conditional application of `.redacted()` modifier based on `condition`.
     /// - Parameter condition: Condition in which if true, will apply a `.placeholder` reason.
-    /// - Returns: Modified view.
-    @ViewBuilder
+    /// - Returns: Modified view with redacted application.
     func redacted(as reason: RedactionReasons,
                   if condition: @autoclosure () -> Bool) -> some View {
         redacted(reason: condition() ? reason : [])

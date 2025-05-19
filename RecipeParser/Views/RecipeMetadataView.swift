@@ -12,9 +12,17 @@ struct RecipeMetadataView: View {
     
     var metadata: RecipeMetadata?
     
+    private var recipeImage: Image {
+        guard let metadata, let image = metadata.image else {
+            return Image("Placeholder")
+        }
+        
+        return Image(uiImage: image)
+    }
+    
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            getImage()
+            recipeImage
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
@@ -31,14 +39,6 @@ struct RecipeMetadataView: View {
             .multilineTextAlignment(.leading)
         }
         .redacted(as: .placeholder, if: metadata == nil)
-    }
-    
-    private func getImage() -> Image {
-        guard let metadata, let image = metadata.image else {
-            return Image("Placeholder")
-        }
-        
-        return Image(uiImage: image)
     }
 }
 

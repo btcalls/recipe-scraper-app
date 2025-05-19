@@ -13,17 +13,21 @@ final class ParseRecipeViewModel: ProcessViewModel {
     typealias Value = Recipe?
     
     @Published var data: Recipe?
-    @Published var isFetching: Bool = false
+    @Published var isProcessing: Bool = false {
+        willSet {
+            state = newValue ? .loading(.parsingRecipe) : nil
+        }
+    }
     @Published var error: CustomError?
     @Published var state: ToastView.State? = nil
     
     @MainActor
     func process(_ body: URL) async {
         defer {
-            isFetching = false
+            isProcessing = false
         }
         
-        isFetching = true
+        isProcessing = true
         
         do {
             data = try await APIClient.shared.send(

@@ -7,13 +7,14 @@
 
 import SwiftUI
 
-struct ToastableView<Content: View, VM: LoadableViewModel>: View {
-    @StateObject var viewModel: VM
+struct LoadableView<Content: View, VM: LoadableViewModel>: View {
+    @ObservedObject var viewModel: VM
     
-    var content: () -> Content
+    @ViewBuilder let content: Content
     
     var body: some View {
-        content()
+        content
+            .disabled(viewModel.isProcessing)
             .presentToast(as: $viewModel.state) {
                 viewModel.state = nil
             }
