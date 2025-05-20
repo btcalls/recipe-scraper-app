@@ -45,9 +45,9 @@ class ShareViewController: UIViewController {
                     
                     contentView.view.translatesAutoresizingMaskIntoConstraints = false
                     contentView.view.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-                    contentView.view.bottomAnchor.constraint (equalTo: self.view.bottomAnchor).isActive = true
+                    contentView.view.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
                     contentView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-                    contentView.view.rightAnchor.constraint (equalTo: self.view.rightAnchor).isActive = true
+                    contentView.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
                 }
             }
         } else {
@@ -68,6 +68,7 @@ class ShareViewController: UIViewController {
     }
     
     private func close() {
-        self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+        self.extensionContext?.completeRequest(returningItems: [],
+                                               completionHandler: nil)
     }
 }

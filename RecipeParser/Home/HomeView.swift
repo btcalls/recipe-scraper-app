@@ -9,66 +9,38 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @Environment(\.modelContext) private var modelContext
     @ObservedObject private var viewModel = HomeViewModel()
-    @Query private var items: [Item]
+    @Query private var items: [Recipe]
     
     var body: some View {
         NavigationSplitView {
             List {
-                ForEach(viewModel.data, id: \.id) { item in
+                ForEach(items, id: \.id) { item in
                     NavigationLink {
                         Text(item.name)
                             .font(.title)
-                        Text(item.description)
+                        Text(item.detail)
                             .font(.caption)
                     } label: {
                         Text(item.name)
-                        Text(item.description)
+                        Text(item.detail)
                     }
                 }
-                .onDelete(perform: deleteItems)
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
-                }
-                ToolbarItem {
-                    Button(action: addItem) {
-                        Label("Add Item", systemImage: "plus")
-                    }
+            .navigationTitle(String.yourRecipes)
+            .overlay {
+                if items.isEmpty {
+                    ContentUnavailableView(String.noRecipes,
+                                           systemImage: Symbol.forkKnife.rawValue,
+                                           description: Text(String.noRecipesDescription))
                 }
             }
         } detail: {
-            Text("Select an item")
-        }
-        .task {
-            do {
-                try await viewModel.fetchData()
-            } catch {
-                // TODO: Handle error
-                Debugger.print(error)
-            }
-        }
-    }
-
-    private func addItem() {
-        withAnimation {
-            let newItem = Item(timestamp: Date())
-            modelContext.insert(newItem)
-        }
-    }
-
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            for index in offsets {
-                modelContext.delete(items[index])
-            }
+            // TODO:
         }
     }
 }
 
 #Preview {
     HomeView()
-        .modelContainer(for: Item.self, inMemory: true)
 }

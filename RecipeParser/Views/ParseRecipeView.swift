@@ -6,10 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ParseRecipeView: View {
-    @State private var recipeMetadata: RecipeMetadata?
+    @Environment(\.modelContext) private var context
     @ObservedObject private var viewModel = ParseRecipeViewModel()
+    @State private var recipeMetadata: RecipeMetadata?
     
     var sharedURL: URL
     
