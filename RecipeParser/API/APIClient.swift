@@ -36,8 +36,8 @@ final class APIClient: NSObject {
             
             return try decoder.decode(D.self, from: data)
         } catch {
-            Debugger.print(error)
-            throw CustomError.custom(error.localizedDescription)
+            Debugger.critical(error)
+            throw CustomError.error(error)
         }
     }
     
@@ -60,19 +60,28 @@ private extension APIClient {
             CustomError.network(.failed)
         )
         
+        var error: CustomError? = nil
+        
         switch response.statusCode {
         case 200...299:
             return
             
         case 401...500:
-            throw CustomError.network(.authError)
+            error = CustomError.network(.authError)
             
         case 501...599:
-            throw CustomError.network(.badRequest)
+            error = CustomError.network(.badRequest)
             
         default:
-            throw CustomError.network(.failed)
+            error = CustomError.network(.failed)
         }
+        
+        guard let error else {
+            return
+        }
+        
+        Debugger.critical(error)
+        throw error
     }
     
     func getURLRequest(from endpoint: APIEndpoint) throws -> URLRequest {
@@ -80,7 +89,10 @@ private extension APIClient {
             let urlPath = URL(string: baseURL.appending(endpoint.path)),
             var urlComponents = URLComponents(string: urlPath.path())
         else {
-            throw CustomError.network(.invalidPath)
+            let error = CustomError.network(.invalidPath)
+            
+            Debugger.critical(error)
+            throw error
         }
         
         if let parameters = endpoint.parameters {
@@ -89,15 +101,7 @@ private extension APIClient {
         
         var request = URLRequest(url: urlPath)
         request.httpMethod = endpoint.method.rawValue
-        
-        if let httpBody = endpoint.body {
-            // NOTE: For debugging purposes only
-            if let json = try? httpBody.toJSON() {
-                Debugger.print("Params: \(json)")
-            }
-            
-            request.httpBody = httpBody
-        }
+        request.httpBody = endpoint.body
         
         // TODO: Add auth headers
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
