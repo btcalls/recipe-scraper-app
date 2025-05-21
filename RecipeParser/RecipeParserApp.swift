@@ -10,11 +10,14 @@ import SwiftData
 
 @main
 struct RecipeParserApp: App {
+//    @State private var isOnboardingComplete
     var body: some Scene {
         WindowGroup {
-//            OnboardingView()
-//            ParseRecipeView(url: URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!)
-            HomeView()
+            if AppSettings.shared.isOnboardingComplete {
+                HomeView()
+            } else {
+                OnboardingView()
+            }
         }
         .modelContainer(.shared)
     }

@@ -10,7 +10,7 @@ import SwiftData
 
 struct ParseRecipeView: View {
     @Environment(\.modelContext) private var context
-    @ObservedObject private var viewModel = ParseRecipeViewModel()
+    @ObservedObject private var viewState = ViewState()
     @State private var recipeMetadata: RecipeMetadata?
     
     var sharedURL: URL
@@ -27,7 +27,7 @@ struct ParseRecipeView: View {
     
     var body: some View {
         NavigationStack {
-            LoadableView(viewModel: viewModel) {
+            LoadableView(viewState: viewState) {
                 VStack(alignment: .leading, spacing: 20) {
                     Text("Recipe from \(urlText).")
                         .font(.subheadline)
@@ -66,10 +66,28 @@ struct ParseRecipeView: View {
     }
     
     private func processRecipe() async {
-        await viewModel.process(sharedURL)
+        defer {
+            viewState.isProcessing = false
+        }
         
-        if viewModel.error == nil {
-            close()
+        viewState.isProcessing = true
+        viewState.toast = .loading(.parsingRecipe)
+
+        do {
+            let model: Model<Recipe> = try await APIClient.shared
+                .send(HomeEndpoints.parseRecipe(sharedURL), storeTo: context)
+            
+            viewState.toast = nil
+            
+            if let _ = try context.getModel(model) {
+                close()
+            }
+        } catch(let e) {
+            if let customError = e as? CustomError {
+                viewState.toast = .error(customError)
+            } else {
+                viewState.toast = .error(CustomError.error(e))
+            }
         }
     }
     

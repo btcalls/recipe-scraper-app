@@ -27,6 +27,7 @@ struct HomeView: View {
                     }
                 }
             }
+            .refreshable {}
             .navigationTitle(String.yourRecipes)
             .overlay {
                 if items.isEmpty {

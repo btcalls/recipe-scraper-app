@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 final class APIClient: NSObject {
     static let shared = APIClient()
@@ -22,7 +23,7 @@ final class APIClient: NSObject {
 //        return true
     }
     
-    func send<D: Decodable>(_ endpoint: APIEndpoint) async throws -> D {
+    func send<D: AppModel>(_ endpoint: APIEndpoint) async throws -> D {
         let urlRequest = try getURLRequest(from: endpoint)
         let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
         
@@ -36,8 +37,20 @@ final class APIClient: NSObject {
             return try decoder.decode(D.self, from: data)
         } catch {
             Debugger.print(error)
-            throw CustomError.network(.decodeError)
+            throw CustomError.custom(error.localizedDescription)
         }
+    }
+    
+    func send<T: AppModel>(_ endpoint: APIEndpoint,
+                           storeTo context: ModelContext? = nil) async throws -> Model<T> {
+        let obj: T = try await send(endpoint)
+        
+        if let context {
+            context.insert(obj)
+            try context.save()
+        }
+        
+        return .init(obj)
     }
 }
 

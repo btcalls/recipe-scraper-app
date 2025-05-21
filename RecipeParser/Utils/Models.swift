@@ -9,6 +9,8 @@ import Foundation
 import UIKit
 import SwiftData
 
+typealias AppModel = Codable & Identifiable
+
 struct RecipeMetadata {
     var title: String
     var description: String
@@ -17,8 +19,18 @@ struct RecipeMetadata {
     var icon: UIImage? = nil
 }
 
+struct Model<T: PersistentModel>: Sendable {
+    let persistentId: PersistentIdentifier
+}
+
+extension Model {
+    init(_ model: T) {
+        self.init(persistentId: model.persistentModelID)
+    }
+}
+
 @Model
-final class Recipe: Codable, Identifiable {
+final class Recipe: AppModel {
     @Attribute(.unique)
     var id: String
     @Relationship(deleteRule: .cascade)
@@ -107,8 +119,10 @@ final class Recipe: Codable, Identifiable {
 }
 
 @Model
-final class Ingredient: Codable, Identifiable {
+final class Ingredient: AppModel {
+    @Attribute(.unique)
     var id: String
+    
     var name: String
     var amount: String?
     var method: String?
