@@ -39,7 +39,7 @@ extension String {
     
     // MARK: Constants
     static let googleURL = "https://www.google.com"
-    static let extensionGroup = "group.RecipeParser"
+    static let extensionGroup = "group.JJC.RecipeParser"
     
     // MARK: Functions
     
