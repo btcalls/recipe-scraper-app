@@ -7,14 +7,19 @@
 
 import Foundation
 
-final class AppSettings {
-    static let shared = AppSettings()
+final class AppSettings: ObservableObject {
+    enum RootView {
+        case onboarding
+        case home
+    }
     
     @UserDefaultsWrapper(
         key: "isOnboardingComplete",
         storage: .init(suiteName: .extensionGroup) ?? .standard
     )
     var isOnboardingComplete: Bool = false
+    
+    @Published var rootView: RootView = .onboarding
 }
 
 final class ViewState: ObservableObject {

@@ -9,6 +9,7 @@ import SwiftUI
 import SwiftData
 
 struct ParseRecipeView: View {
+    @EnvironmentObject private var appSettings: AppSettings
     @Environment(\.modelContext) private var context
     @ObservedObject private var viewState = ViewState()
     @State private var recipeMetadata: RecipeMetadata?
@@ -92,7 +93,7 @@ struct ParseRecipeView: View {
     }
     
     private func close() {
-        AppSettings.shared.isOnboardingComplete = true
+        appSettings.isOnboardingComplete = true
         
         NotificationCenter.default.post(name: .closeShareView, object: nil)
     }

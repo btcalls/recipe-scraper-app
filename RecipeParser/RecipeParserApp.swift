@@ -10,15 +10,24 @@ import SwiftData
 
 @main
 struct RecipeParserApp: App {
-//    @State private var isOnboardingComplete
+    @StateObject private var appSettings = AppSettings()
+    
     var body: some Scene {
         WindowGroup {
-            if AppSettings.shared.isOnboardingComplete {
+            if appSettings.isOnboardingComplete {
                 HomeView()
             } else {
-                OnboardingView()
+                switch appSettings.rootView {
+                case .onboarding:
+                    OnboardingView()
+                    
+                case .home:
+                    HomeView()
+                        .transition(.opacity.animation(.bouncy(duration: 0.5)))
+                }
             }
         }
+        .environmentObject(appSettings)
         .modelContainer(.shared)
     }
 }
