@@ -10,24 +10,24 @@ import SwiftData
 
 @main
 struct RecipeParserApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @StateObject private var appSettings = AppSettings()
+    
     var body: some Scene {
         WindowGroup {
-//            OnboardingView()
-            ParseRecipeView(url: URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!)
+            if appSettings.isOnboardingComplete {
+                HomeView()
+            } else {
+                switch appSettings.rootView {
+                case .onboarding:
+                    OnboardingView()
+                    
+                case .home:
+                    HomeView()
+                        .transition(.opacity.animation(.bouncy(duration: 0.5)))
+                }
+            }
         }
-        .modelContainer(sharedModelContainer)
+        .environmentObject(appSettings)
+        .modelContainer(.shared)
     }
 }

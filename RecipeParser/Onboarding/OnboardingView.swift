@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
+    @EnvironmentObject private var appSettings: AppSettings
     @State private var isBrowserPresented = false
     
     var body: some View {
@@ -38,8 +39,10 @@ struct OnboardingView: View {
         .sheet(isPresented: $isBrowserPresented) {
             isBrowserPresented = false
             
-            if AppSettings.shared.isOnboardingComplete {
-                // TODO: Go to next view
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                if appSettings.isOnboardingComplete {
+                    appSettings.rootView = .home
+                }
             }
         } content: {
             BrowserView()

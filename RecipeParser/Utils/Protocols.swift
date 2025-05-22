@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 // MARK: Networking
 
@@ -42,8 +43,6 @@ protocol ViewModel: ObservableObject {
     
     /// Published property for data fetched by view model. Add @Published wrapper upon implementation.
     var data: Value { get set }
-    /// Published property for signifying a process state being managed by view model. Add @Published wrapper upon implementation.
-    var isProcessing: Bool { get set }
     /// Published property for errors catched by the view model. Add @Published wrapper upon implementation.
     var error: CustomError? { get set }
     
@@ -51,8 +50,8 @@ protocol ViewModel: ObservableObject {
 
 /// Protocol for implementing a view model with loading/processing functionalities in which result needs to be reflected in the view via toast or other means.
 protocol LoadableViewModel: ViewModel {
-    /// Published property for observing the type of toast to be presentend in response to a process completion. Add @Published wrapper upon implementation.
-    var state: ToastView.State? { get set }
+    /// Published property for observing the view state in response to some action or process. This will include the type of toast to be presentend in response to a process completion. Add @Published wrapper upon implementation.
+    var state: ViewState { get set }
 }
 
 /// Protocol for implementing a view model with fetching/reloading data capabilities used for populating a screen.
@@ -63,6 +62,7 @@ protocol FetchViewModel: LoadableViewModel {
     func reloadData() async throws
 }
 
+///  Protocol for implementing a view model with processing capabilities (e.g. submission to a web service).
 protocol ProcessViewModel: LoadableViewModel {
     associatedtype Body
     

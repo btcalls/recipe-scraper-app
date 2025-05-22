@@ -11,6 +11,7 @@ extension Optional {
     /// - Returns: `Wrapped` instance, if available.
     func orThrow(_ errorExpression: @autoclosure () -> Error) throws -> Wrapped {
         guard let value = self else {
+            Debugger.critical(errorExpression())
             throw errorExpression()
         }
         

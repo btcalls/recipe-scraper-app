@@ -18,6 +18,9 @@ extension String {
     
     // MARK: Navigation/View Titles
     static let addNewRecipe = "Add New Recipe"
+    static let yourRecipes = "Your Recipes"
+    static let noRecipes = "No Recipes"
+    static let noRecipesDescription = "You haven't saved any recipes yet."
     
     // MARK: Onboarding
     static let onboardingItemOneTitle = "Search Recipe"
@@ -36,7 +39,7 @@ extension String {
     
     // MARK: Constants
     static let googleURL = "https://www.google.com"
-    static let extensionGroup = "group.RecipeParser"
+    static let extensionGroup = "group.JJC.RecipeParser"
     
     // MARK: Functions
     
