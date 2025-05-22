@@ -30,11 +30,7 @@ final class APIClient: NSObject {
         try getHttpError(urlResponse)
         
         do {
-            let decoder = JSONDecoder()
-            decoder.keyDecodingStrategy = .convertFromSnakeCase
-            decoder.dateDecodingStrategy = .iso8601
-            
-            return try decoder.decode(D.self, from: data)
+            return try data.decoded()
         } catch {
             Debugger.critical(error)
             throw CustomError.error(error)

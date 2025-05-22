@@ -1,0 +1,133 @@
+{
+    "id": "fcebaf25-8d63-4d3d-9ee3-fff74228e649",
+    "name": "Crispy Oven Baked Beef Quesadillas",
+    "image_url": "https://www.recipetineats.com/tachyon/2024/07/Baked-Beef-Quasadillas-51259.jpg",
+    "category": "Main",
+    "cuisine": "Mexican",
+    "description": "This is a super handy method to make 3, 4 or 8 quesadillas in the oven at the same time rather than cooking them one by one on the stove. They are impressively crispy (see photos and video for proof!) and very quick to make.Stuffed with my beef taco filling though you can switch with chicken, turkey, pork or lamb, or stuff with whatever your heart desires as long as it's not too watery because this might affect how well the tortilla crisps in the oven.",
+    "prep_time": 5,
+    "total_time": 25,
+    "instructions": [
+        "Filling - Heat the oil in a non stick pan over high heat. Add the beef and cook, breaking it up as you go, until the red colour is mostly gone. Add the Taco Seasoning and cook for 1 minute. Add the tomato paste and cook for 30 seconds. Stir in the beans and corn, then add the water and stir. The filling should be juicy (not dry) but not watery (compromises crispiness!). Remove into a bowl and cool for at least 15 minutes.",
+        "Preheat the oven to 220°C / 425°F (200°C fan-forced). Grease a metal tray with 1 teaspoon of olive oil (I use my hand).",
+        "Assemble quesadillas - Spread the filling on one side of the quesadilla. Top with cheese, fold to cover. Place on tray, repeat with remaining quesadillas.",
+        "Drizzle the top of each with 1/2 tsp olive oil then spread using your hands (top and sides, not underside). Press the quesadilla down to flatten the surface.",
+        "Bake for 8 minutes. Flip the quesadillas, bake for 5 minutes, flip again then bake for a further 2 minutes or until crispy. (Sometimes I spritz with oil to give it a helping hand)",
+        "Serve - Cut each into half and serve immediately with dipping sauce/toppings of choice."
+    ],
+    "instance_description": "\n        Crispy Oven Baked Beef Quesadillas - Main - Mexican\n    \n        Description: This is a super handy method to make 3, 4 or 8 quesadillas in the oven at the same time rather than cooking them one by one on the stove. They are impressively crispy (see photos and video for proof!) and very quick to make.Stuffed with my beef taco filling though you can switch with chicken, turkey, pork or lamb, or stuff with whatever your heart desires as long as it's not too watery because this might affect how well the tortilla crisps in the oven.\n        Prep time: 5 mins.\n        Total time: 25 mins.\n        ",
+    "ingredients": [
+        {
+            "id": "dd7d198f-1e26-42fe-9ef4-5fbde7a76594",
+            "name": "olive oil",
+            "amount": "2 tsps",
+            "method": null,
+            "instance_description": "2 tsps olive oil"
+        },
+        {
+            "id": "4447fa44-b353-44b7-bb60-aa6db892a48f",
+            "name": "beef mince (ground beef)",
+            "amount": "250 g",
+            "method": null,
+            "instance_description": "250 g beef mince (ground beef)"
+        },
+        {
+            "id": "01578466-a582-4794-8ae7-d7ca7da0d09e",
+            "name": "tomato paste",
+            "amount": "1 tbsp",
+            "method": null,
+            "instance_description": "1 tbsp tomato paste"
+        },
+        {
+            "id": "8ec4242a-f3d9-4d35-ae55-f5c42434b75f",
+            "name": "corn kernels",
+            "amount": "1/3 cups",
+            "method": null,
+            "instance_description": "1/3 cups corn kernels"
+        },
+        {
+            "id": "f260a25e-aa5f-4642-a843-013fdbac4391",
+            "name": "black beans",
+            "amount": "1/3 cups",
+            "method": "caned, drained",
+            "instance_description": "1/3 cups black beans (caned, drained)"
+        },
+        {
+            "id": "2125b43c-ae06-4ea8-8133-06ae3231339c",
+            "name": "water",
+            "amount": "2 tbsps",
+            "method": null,
+            "instance_description": "2 tbsps water"
+        },
+        {
+            "id": "8a8e6fb8-9a04-46ad-b6af-4ef6e5abec15",
+            "name": "flour tortillas",
+            "amount": "4",
+            "method": "8\"",
+            "instance_description": "4 flour tortillas (8\")"
+        },
+        {
+            "id": "1cbf939e-659c-4cc7-8fb2-6c6a964fd353",
+            "name": "olive oil",
+            "amount": "3 tsps",
+            "method": null,
+            "instance_description": "3 tsps olive oil"
+        },
+        {
+            "id": "8e83060c-68fe-485a-b29c-fa023d26d4da",
+            "name": "cheese",
+            "amount": "1 1/4 cups",
+            "method": "shredded",
+            "instance_description": "1 1/4 cups cheese (shredded)"
+        },
+        {
+            "id": "98608f40-b3f4-4f07-9ba4-2e0871b11a78",
+            "name": "ground garlic",
+            "amount": "1/2 tsps",
+            "method": null,
+            "instance_description": "1/2 tsps ground garlic"
+        },
+        {
+            "id": "29ce3086-6ee6-4f84-a06e-d0aff8787444",
+            "name": "cumin",
+            "amount": "1 tsp",
+            "method": null,
+            "instance_description": "1 tsp cumin"
+        },
+        {
+            "id": "dbe087c0-319b-4d7e-bee9-da98dceba326",
+            "name": "cayenne pepper",
+            "amount": "1/8 tsps",
+            "method": null,
+            "instance_description": "1/8 tsps cayenne pepper"
+        },
+        {
+            "id": "5d6ee53c-b53f-417e-a07c-7569a3462919",
+            "name": "cooking salt",
+            "amount": "1/4 tsps",
+            "method": null,
+            "instance_description": "1/4 tsps cooking salt"
+        },
+        {
+            "id": "422fcb0a-7e0f-432e-8c47-b141c55d8349",
+            "name": "Avocado sauce",
+            "amount": null,
+            "method": null,
+            "instance_description": "Avocado sauce"
+        },
+        {
+            "id": "0118aeff-d3a8-48ee-839b-7fdc10701b28",
+            "name": "Pico de Gallo",
+            "amount": null,
+            "method": null,
+            "instance_description": "Pico de Gallo"
+        },
+        {
+            "id": "d3facf69-f49d-484a-980d-5f621c66602c",
+            "name": "Sour cream",
+            "amount": null,
+            "method": null,
+            "instance_description": "Sour cream"
+        }
+    ]
+}

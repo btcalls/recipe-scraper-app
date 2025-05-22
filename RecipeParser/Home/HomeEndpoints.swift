@@ -41,7 +41,7 @@ extension HomeEndpoints {
     var body: Data? {
         switch self {
         case .addRecipe(let value), .updateRecipe(let value):
-            return try? value.toJSONData()
+            return try? value.encoded()
         
         case .parseRecipe(let url):
             return try? JSONSerialization.data(withJSONObject: ["url": url.absoluteString],

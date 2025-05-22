@@ -118,6 +118,28 @@ final class Recipe: AppModel {
     }
 }
 
+extension Recipe {
+    static var sample: Recipe {
+        if let obj: Recipe = try? Recipe.fromJSONFile("test") {
+            return obj
+        }
+        
+        return .init(
+            id: "asdf-dfd",
+            name: "Burger",
+            imageUrl: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
+            category: "Main",
+            cuisine: "American",
+            detail: "Tasty burger",
+            prepTime: 20,
+            totalTime: 40,
+            instructions: [""],
+            ingredients: [],
+            _description: ""
+        )
+    }
+}
+
 @Model
 final class Ingredient: AppModel {
     @Attribute(.unique)

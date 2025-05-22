@@ -10,7 +10,8 @@ import SwiftData
 
 struct HomeView: View {
     @ObservedObject private var viewModel = HomeViewModel()
-    @Query private var items: [Recipe]
+//    @Query private var items: [Recipe] = [.sample]
+    private var items: [Recipe] = [.sample]
     
     var body: some View {
         NavigationSplitView {
@@ -24,6 +25,7 @@ struct HomeView: View {
                     } label: {
                         Text(item.name)
                         Text(item.detail)
+                            .lineLimit(3)
                     }
                 }
             }
