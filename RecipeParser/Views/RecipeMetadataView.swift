@@ -12,7 +12,7 @@ struct RecipeMetadataView: View {
     
     var metadata: RecipeMetadata?
     
-    private var recipeImage: Image {
+    private func recipeImage() -> Image {
         guard let metadata, let image = metadata.image else {
             return Image("Placeholder")
         }
@@ -22,7 +22,7 @@ struct RecipeMetadataView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            recipeImage
+            recipeImage()
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
