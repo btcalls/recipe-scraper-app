@@ -12,7 +12,7 @@ struct RecipeRow: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 20) {
-            CustomImage()
+            CustomImage(content: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
                 .clipTo(shape: Circle(), lineWidth: 2, color: .primary)
             

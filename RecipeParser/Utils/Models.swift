@@ -9,8 +9,6 @@ import Foundation
 import UIKit
 import SwiftData
 
-typealias AppModel = Codable & Identifiable
-
 struct RecipeMetadata {
     var title: String
     var description: String
@@ -18,6 +16,10 @@ struct RecipeMetadata {
     var image: UIImage? = nil
     var icon: UIImage? = nil
 }
+
+// MARK: Persistent Models
+
+typealias AppModel = Codable & Identifiable
 
 struct Model<T: PersistentModel>: Sendable {
     let persistentId: PersistentIdentifier
@@ -37,7 +39,7 @@ final class Recipe: AppModel {
     var ingredients: [Ingredient]
     
     var name: String
-    var imageUrl: String
+    var image: String
     var category: String
     var cuisine: String
     var detail: String
@@ -48,8 +50,13 @@ final class Recipe: AppModel {
     var createdOn: Date
     var modifiedOn: Date
     
+    var imageURL: URL? {
+        return URL(string: image)
+    }
+    
     private enum CodingKeys: String, CodingKey {
-        case id, name, imageUrl, category, cuisine, prepTime, totalTime, instructions, ingredients
+        case id, name, category, cuisine, prepTime, totalTime, instructions, ingredients
+        case image = "imageUrl"
         case detail = "description"
         case _description = "instanceDescription"
     }
@@ -57,7 +64,7 @@ final class Recipe: AppModel {
     init(
         id: String,
         name: String,
-        imageUrl: String,
+        image: String,
         category: String,
         cuisine: String,
         detail: String,
@@ -69,7 +76,7 @@ final class Recipe: AppModel {
     ) {
         self.id = id
         self.name = name
-        self.imageUrl = imageUrl
+        self.image = image
         self.category = category
         self.cuisine = cuisine
         self.detail = detail
@@ -86,17 +93,15 @@ final class Recipe: AppModel {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
-        imageUrl = try container.decode(String.self, forKey: .imageUrl)
+        image = try container.decode(String.self, forKey: .image)
         category = try container.decode(String.self, forKey: .category)
         cuisine = try container.decode(String.self, forKey: .cuisine)
         detail = try container.decode(String.self, forKey: .detail)
         prepTime = try container.decode(Double.self, forKey: .prepTime)
         totalTime = try container.decode(Double.self, forKey: .totalTime)
         instructions = try container.decode([String].self, forKey: .instructions)
-        ingredients = try container
-            .decode([Ingredient].self, forKey: .ingredients)
+        ingredients = try container.decode([Ingredient].self, forKey: .ingredients)
         _description = try container.decode(String.self, forKey: ._description)
-        
         createdOn = .init()
         modifiedOn = .init()
     }
@@ -106,7 +111,7 @@ final class Recipe: AppModel {
         
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
-        try container.encode(imageUrl, forKey: .imageUrl)
+        try container.encode(image, forKey: .image)
         try container.encode(category, forKey: .category)
         try container.encode(cuisine, forKey: .cuisine)
         try container.encode(detail, forKey: .detail)
@@ -127,7 +132,7 @@ extension Recipe {
         return .init(
             id: "asdf-dfd",
             name: "Burger",
-            imageUrl: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
+            image: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
             category: "Main",
             cuisine: "American",
             detail: "Tasty burger",
