@@ -13,13 +13,21 @@ final class AppSettings: ObservableObject {
         case home
     }
     
+    @Published var rootView: RootView = .onboarding
+}
+
+final class AppValues {
+    static var shared = AppValues()
+    
+    @UserDefaultsWrapper(
+        key: "accessToken",
+    )
+    var accessToken: String? = nil
     @UserDefaultsWrapper(
         key: "isOnboardingComplete",
         storage: .init(suiteName: .extensionGroup) ?? .standard
     )
     var isOnboardingComplete: Bool = false
-    
-    @Published var rootView: RootView = .onboarding
 }
 
 final class ViewState: ObservableObject {

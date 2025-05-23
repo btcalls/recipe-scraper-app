@@ -14,7 +14,7 @@ struct RecipeParserApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if appSettings.isOnboardingComplete {
+            if AppValues.shared.isOnboardingComplete {
                 HomeView()
             } else {
                 switch appSettings.rootView {

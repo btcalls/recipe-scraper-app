@@ -14,26 +14,27 @@ final class APIClient: NSObject {
     private let baseURL = "https://recipe-scraper-api-r1ui.onrender.com"
     
     var isAuthenticated: Bool {
-        return false
-        // TODO: Handle authentication
-//        guard let _: String = UserDefaults.standard.get(.accessToken) else {
-//            return false
-//        }
-//        
-//        return true
+        guard let _ = AppValues.shared.accessToken else {
+            return false
+        }
+        
+        return true
     }
     
     func send<D: AppModel>(_ endpoint: APIEndpoint) async throws -> D {
-        let urlRequest = try getURLRequest(from: endpoint)
-        let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
-        
-        try getHttpError(urlResponse)
-        
         do {
+            let urlRequest = try getURLRequest(from: endpoint)
+            let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
+        
+            try getHttpError(urlResponse)
+        
             return try data.decoded()
-        } catch {
-            Debugger.critical(error)
-            throw CustomError.error(error)
+        } catch let e as CustomError {
+            Debugger.critical(e)
+            throw e
+        } catch let e {
+            Debugger.critical(e)
+            throw CustomError.error(e)
         }
     }
     
@@ -41,12 +42,20 @@ final class APIClient: NSObject {
                            storeTo context: ModelContext? = nil) async throws -> Model<T> {
         let obj: T = try await send(endpoint)
         
-        if let context {
-            context.insert(obj)
-            try context.save()
+        do {
+            if let context {
+                context.insert(obj)
+                try context.save()
+            }
+            
+            return .init(obj)
+        } catch let e as CustomError {
+            Debugger.critical(e)
+            throw e
+        } catch let e {
+            Debugger.critical(e)
+            throw CustomError.error(e)
         }
-        
-        return .init(obj)
     }
 }
 
@@ -56,28 +65,19 @@ private extension APIClient {
             CustomError.network(.failed)
         )
         
-        var error: CustomError? = nil
-        
         switch response.statusCode {
         case 200...299:
             return
             
         case 401...500:
-            error = CustomError.network(.authError)
+            throw CustomError.network(.authError)
             
         case 501...599:
-            error = CustomError.network(.badRequest)
+            throw CustomError.network(.badRequest)
             
         default:
-            error = CustomError.network(.failed)
+            throw CustomError.network(.failed)
         }
-        
-        guard let error else {
-            return
-        }
-        
-        Debugger.critical(error)
-        throw error
     }
     
     func getURLRequest(from endpoint: APIEndpoint) throws -> URLRequest {
@@ -85,10 +85,7 @@ private extension APIClient {
             let urlPath = URL(string: baseURL.appending(endpoint.path)),
             var urlComponents = URLComponents(string: urlPath.path())
         else {
-            let error = CustomError.network(.invalidPath)
-            
-            Debugger.critical(error)
-            throw error
+            throw CustomError.network(.invalidPath)
         }
         
         if let parameters = endpoint.parameters {
@@ -99,8 +96,16 @@ private extension APIClient {
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = endpoint.body
         
-        // TODO: Add auth headers
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        // TODO: Add auth headers
+        if let accessToken = AppValues.shared.accessToken {
+            request
+                .setValue(
+                    "Basic \(accessToken)",
+                    forHTTPHeaderField: "Authorization"
+                )
+        }
         
         return request
     }

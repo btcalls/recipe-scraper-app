@@ -9,12 +9,13 @@ import Foundation
 import SwiftData
 
 extension ModelContainer {
-    static var shared: ModelContainer = {
+    static var shared: ModelContainer {
         let schema = Schema([
             Recipe.self,
             Ingredient.self
         ])
-        let modelConfiguration = ModelConfiguration(isStoredInMemoryOnly: false,
+        let modelConfiguration = ModelConfiguration(schema: schema,
+                                                    isStoredInMemoryOnly: false,
                                                     groupContainer: .identifier(.extensionGroup))
         
         do {
@@ -22,7 +23,7 @@ extension ModelContainer {
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }
-    }()
+    }
 }
 
 extension ModelContext {
@@ -30,7 +31,16 @@ extension ModelContext {
     /// - Parameter model: `Model` instance in which the persistent model is wrapped.
     /// - Returns: Optional.  The model of type `T`.
     func getModel<T>(_ model: Model<T>) throws -> T? where T: PersistentModel {
-        try self.persistentModel(withID: model.persistentId)
+        return try self.persistentModel(withID: model.persistentId)
+    }
+    
+    /// Checks whether persistent model is available in current context.
+    /// - Parameter model: `Model` in which the `persistentId` is used for lookup.
+    /// - Returns: Boolean flag for instance availability.
+    func hasModel<T>(_ model: Model<T>) -> Bool where T: PersistentModel {
+        let obj: T? = try? getModel(model)
+        
+        return obj != nil
     }
     
     /// Queries for data from given ID.

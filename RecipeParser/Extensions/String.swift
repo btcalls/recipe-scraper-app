@@ -39,6 +39,7 @@ extension String {
     
     // MARK: Constants
     static let googleURL = "https://www.google.com"
+    static let sampleRecipeURL = "https://www.recipetineats.com/crispy-oven-baked-quesadillas/"
     static let extensionGroup = "group.JJC.RecipeParser"
     
     // MARK: Functions

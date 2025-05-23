@@ -24,6 +24,7 @@ enum NetworkResponse: String {
 
 enum AppResponse: String {
     case URLOpenError = "App cannot open specified URL."
+    case persistentDataLookupError = "Failed saving recipe. Please try again later."
 }
 
 enum CustomError: LocalizedError, Equatable {

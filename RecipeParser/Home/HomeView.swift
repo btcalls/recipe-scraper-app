@@ -10,8 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @ObservedObject private var viewModel = HomeViewModel()
-//    @Query private var items: [Recipe] = [.sample]
-    private var items: [Recipe] = [.sample, .sample, .sample]
+    @Query private var items: [Recipe]
     
     var body: some View {
         NavigationView {
