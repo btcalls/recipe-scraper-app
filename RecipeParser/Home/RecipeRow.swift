@@ -14,7 +14,7 @@ struct RecipeRow: View {
         HStack(alignment: .center, spacing: 20) {
             CustomImage(content: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
-                .clipTo(shape: Circle(), lineWidth: 2, color: .primary)
+                .clipTo(shape: Circle())
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(recipe.name)
@@ -26,7 +26,8 @@ struct RecipeRow: View {
                     .font(.subheadline)
             }
         }
-        .padding(10)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 20)
         .background(Gradient(colors: [.teal, .purple]))
         .rounded(cornerRadius: .regular)
         .shadow()

@@ -10,8 +10,8 @@ import SwiftData
 
 struct ParseRecipeView: View {
     @Environment(\.modelContext) private var context
-    @ObservedObject private var viewState = ViewState()
     @State private var recipeMetadata: RecipeMetadata?
+    @StateObject private var viewState = ViewState()
     
     var sharedURL: URL
     
@@ -29,18 +29,15 @@ struct ParseRecipeView: View {
         NavigationStack {
             LoadableView(viewState: viewState) {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Recipe from \(urlText).")
-                        .font(.subheadline)
+                    RecipeMetadataView(metadata: recipeMetadata)
+                    
+                    Spacer()
                     
                     Divider()
                         .frame(height: 1)
                         .background(.secondary.opacity(0.5))
                     
-                    RecipeMetadataView(metadata: recipeMetadata)
-                    
-                    Spacer()
-                    
-                    CustomButton(.idle(.saveRecipe)) {
+                    CustomButton(.saveRecipe) {
                         Task {
                             await processRecipe()
                         }

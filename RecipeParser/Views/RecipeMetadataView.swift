@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeMetadataView: View {
-    private let size: CGFloat = 110
+    private let size: CGFloat = 150
     
     var metadata: RecipeMetadata?
     
@@ -21,18 +21,18 @@ struct RecipeMetadataView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
+        VStack(alignment: .center, spacing: 30) {
             recipeImage()
                 .resizable()
-                .aspectRatio(contentMode: .fill)
                 .frame(width: size, height: size)
+                .aspectRatio(contentMode: .fill)
                 .rounded(cornerRadius: .regular)
             
-            VStack(alignment: .leading, spacing: 5) {
-                Text(metadata?.title ?? .placeholder(length: 15))
+            VStack(alignment: .center, spacing: 10) {
+                Text(metadata?.title ?? .placeholder(length: 30))
                     .font(.title2)
-                Text(metadata?.description ?? .placeholder(length: 60))
-                    .lineLimit(2)
+                Text(metadata?.description ?? .placeholder(length: 80))
+                    .lineLimit(3)
                     .truncationMode(.tail)
             }
             .font(.subheadline)
