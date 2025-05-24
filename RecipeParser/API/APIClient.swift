@@ -11,16 +11,6 @@ import SwiftData
 final class APIClient: NSObject {
     static let shared = APIClient()
     
-    private let baseURL = "https://recipe-scraper-api-r1ui.onrender.com"
-    
-    var isAuthenticated: Bool {
-        guard let _ = AppValues.shared.accessToken else {
-            return false
-        }
-        
-        return true
-    }
-    
     func send<D: AppModel>(_ endpoint: APIEndpoint) async throws -> D {
         do {
             let urlRequest = try getURLRequest(from: endpoint)
@@ -82,7 +72,8 @@ private extension APIClient {
     
     func getURLRequest(from endpoint: APIEndpoint) throws -> URLRequest {
         guard
-            let urlPath = URL(string: baseURL.appending(endpoint.path)),
+            let apiURL = Bundle.main.apiURL,
+            let urlPath = URL(string: apiURL.appending(endpoint.path)),
             var urlComponents = URLComponents(string: urlPath.path())
         else {
             throw CustomError.network(.invalidPath)

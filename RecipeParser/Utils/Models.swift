@@ -39,7 +39,6 @@ final class Recipe: AppModel {
     var ingredients: [Ingredient]
     
     var name: String
-    var image: String
     var category: String
     var cuisine: String
     var detail: String
@@ -49,6 +48,8 @@ final class Recipe: AppModel {
     var _description: String
     var createdOn: Date
     var modifiedOn: Date
+    
+    private var image: String
     
     var imageURL: URL? {
         return URL(string: image)

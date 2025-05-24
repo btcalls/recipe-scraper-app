@@ -93,7 +93,6 @@
 				Utils/Models.swift,
 				Utils/PropertyWrappers.swift,
 				Utils/Protocols.swift,
-				Utils/test.json,
 				Utils/Utils.swift,
 				Views/BrowserView.swift,
 				Views/CustomButton.swift,
@@ -565,6 +564,8 @@
 		};
 		49B19D572DB0F9EE008F9B9E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 49B19D322DB0F9ED008F9B9E /* RecipeParser */;
+			baseConfigurationReferenceRelativePath = Configs/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -628,6 +629,8 @@
 		};
 		49B19D582DB0F9EE008F9B9E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 49B19D322DB0F9ED008F9B9E /* RecipeParser */;
+			baseConfigurationReferenceRelativePath = Configs/Config.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

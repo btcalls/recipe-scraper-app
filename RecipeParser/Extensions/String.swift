@@ -41,9 +41,11 @@ extension String {
     static let googleURL = "https://www.google.com"
     static let sampleRecipeURL = "https://www.recipetineats.com/crispy-oven-baked-quesadillas/"
     static let extensionGroup = "group.JJC.RecipeParser"
-    
-    // MARK: Functions
-    
+}
+
+// MARK: Functions
+
+extension String {
     /// Generates a placeholder text. Typically used for skeleton views.
     /// - Parameter length: The length of the string.
     /// - Returns: `String` containing `length` number of characters.
