@@ -13,7 +13,7 @@ struct OnboardingCard<Content>: View where Content : View {
     var title: String
     var image: Image
     
-    @ViewBuilder let caption:  Content
+    @ViewBuilder let caption: Content
     
     var action: (title: String, handler: (() -> Void))?
     

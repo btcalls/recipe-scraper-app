@@ -12,7 +12,7 @@ struct CustomButton: View {
     var role: ButtonRole? = .none
     var action: @MainActor () -> Void
     
-    @ViewBuilder private var imageAndLabelView: some View {
+    @ViewBuilder private func imageAndLabelView() -> some View {
         switch state {
         case .idle(let title, let sfSymbol):
             if let sfSymbol {
@@ -31,7 +31,7 @@ struct CustomButton: View {
     var body: some View {
         Button(role: role, action: action) {
             HStack(alignment: .center, spacing: 5) {
-                imageAndLabelView
+                imageAndLabelView()
                     .bold()
                     .padding(.vertical, 5)
             }

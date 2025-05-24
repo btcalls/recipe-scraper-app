@@ -24,7 +24,7 @@ struct Debugger {
     ///   - function: The function in which the logger was called.
     ///   - line: The line number in which the logger was called.
     static func log(_ message: String,
-                    type: Debugger.`Type` = .trace,
+                    type: Debugger.`Type` = .notice,
                     file: String = #file,
                     function: String = #function,
                     line: Int = #line) {

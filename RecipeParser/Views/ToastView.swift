@@ -44,7 +44,7 @@ struct ToastView: View {
         }
     }
     
-    @ViewBuilder private var iconView: some View {
+    @ViewBuilder private func iconView() -> some View {
         switch state {
         case .info(_:):
             Symbol.info.image
@@ -60,7 +60,7 @@ struct ToastView: View {
         }
     }
     
-    @ViewBuilder private var closeButton: some View {
+    @ViewBuilder private func closeButton() -> some View {
         switch state {
         case .info(_:), .error(_:), .success(_:):
             Button(action: onDismiss) {
@@ -75,7 +75,7 @@ struct ToastView: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
-            iconView
+            iconView()
                 .font(.system(size: 18))
             
             Text(caption)
@@ -85,7 +85,7 @@ struct ToastView: View {
             
             Spacer(minLength: 10)
                 
-            closeButton
+            closeButton()
         }
         .frame(minHeight: 30)
         .font(.caption)

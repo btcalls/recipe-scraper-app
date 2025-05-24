@@ -40,7 +40,7 @@ struct OnboardingView: View {
             isBrowserPresented = false
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if appSettings.isOnboardingComplete {
+                if AppValues.shared.isOnboardingComplete {
                     appSettings.rootView = .home
                 }
             }

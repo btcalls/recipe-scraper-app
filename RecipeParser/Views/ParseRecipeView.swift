@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct ParseRecipeView: View {
-    @EnvironmentObject private var appSettings: AppSettings
     @Environment(\.modelContext) private var context
     @ObservedObject private var viewState = ViewState()
     @State private var recipeMetadata: RecipeMetadata?
@@ -80,25 +79,25 @@ struct ParseRecipeView: View {
             
             viewState.toast = nil
             
-            if let _ = try context.getModel(model) {
-                close()
-            }
-        } catch(let e) {
-            if let customError = e as? CustomError {
-                viewState.toast = .error(customError)
+            if context.hasModel(model) {
+                close(hasCompleted: true)
             } else {
-                viewState.toast = .error(CustomError.error(e))
+                viewState.toast = .error(.app(.persistentDataLookupError))
             }
+        } catch let e as CustomError {
+            viewState.toast = .error(e)
+        } catch let e {
+            viewState.toast = .error(.error(e))
         }
     }
     
-    private func close() {
-        appSettings.isOnboardingComplete = true
+    private func close(hasCompleted: Bool = false) {
+        AppValues.shared.isOnboardingComplete = hasCompleted
         
         NotificationCenter.default.post(name: .closeShareView, object: nil)
     }
 }
 
 #Preview {
-    ParseRecipeView(url: URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!)
+    ParseRecipeView(url: URL(string: .sampleRecipeURL)!)
 }

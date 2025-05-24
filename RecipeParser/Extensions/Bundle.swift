@@ -8,7 +8,23 @@
 import Foundation
 
 extension Bundle {
+    var apiURL: String? {
+        let key = "CONFIG_API_URL"
+        
+        guard let url = fetch("CONFIG_API_URL") as String? else {
+            fatalError("Could not fetch value for \(key)")
+        }
+        
+        return "https://\(url)"
+    }
     var displayName: String? {
-        return object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+        return fetch("CFBundleDisplayName") as String?
+    }
+    
+    /// Retrieves value from Bundle instance for given key.
+    /// - Parameter key: The key to lookup value for.
+    /// - Returns: Optional. Value of type `T`.
+    private func fetch<T>(_ key: String) -> T? {
+        return object(forInfoDictionaryKey: key) as? T
     }
 }

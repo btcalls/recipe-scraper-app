@@ -13,31 +13,27 @@ struct HomeView: View {
     @Query private var items: [Recipe]
     
     var body: some View {
-        NavigationSplitView {
+        NavigationView {
             List {
                 ForEach(items, id: \.id) { item in
-                    NavigationLink {
-                        Text(item.name)
-                            .font(.title)
-                        Text(item.detail)
-                            .font(.caption)
-                    } label: {
-                        Text(item.name)
-                        Text(item.detail)
-                    }
+                    RecipeRow(recipe: item)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 }
             }
+            .scrollContentBackground(.hidden)
+            .listStyle(.plain)
             .refreshable {}
             .navigationTitle(String.yourRecipes)
             .overlay {
                 if items.isEmpty {
-                    ContentUnavailableView(String.noRecipes,
-                                           systemImage: Symbol.forkKnife.rawValue,
-                                           description: Text(String.noRecipesDescription))
+                    ContentUnavailableView(
+                        String.noRecipes,
+                        systemImage: Symbol.forkKnife.rawValue,
+                        description: Text(String.noRecipesDescription)
+                    )
                 }
             }
-        } detail: {
-            // TODO:
         }
     }
 }
