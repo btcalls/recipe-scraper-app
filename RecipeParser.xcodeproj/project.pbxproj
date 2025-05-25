@@ -98,6 +98,7 @@
 				Views/CustomButton.swift,
 				Views/CustomImage.swift,
 				Views/LoadableView.swift,
+				Views/Modifiers/EmptyViewModifier.swift,
 				Views/Modifiers/ShapeAndBorderModifier.swift,
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,

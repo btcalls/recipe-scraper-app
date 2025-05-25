@@ -26,9 +26,9 @@ struct RecipeRow: View {
                     .font(.subheadline)
             }
         }
-        .padding(.vertical, 10)
+        .padding(.vertical, 15)
         .padding(.horizontal, 20)
-        .background(Gradient(colors: [.teal, .purple]))
+        .background(Color.appBackground.brightness(0.1))
         .rounded(cornerRadius: .regular)
         .shadow()
     }

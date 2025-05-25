@@ -10,6 +10,25 @@ import SwiftUI
 // MARK: Modifiers
 
 extension View {
+    /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
+    /// - Parameters:
+    ///   - condition: The condition to display the view.
+    ///   - label: `Label` that makes up the main title of the view.
+    ///   - description: Optional. The details of the view.
+    ///   - actions: Optional. Actions to display along the view.
+    /// - Returns: Modified view with unavailable view option.
+    func emptyView<Label, Actions>(
+        if condition: @autoclosure () -> Bool,
+        label: Label,
+        description: String? = nil,
+        @ViewBuilder actions: () -> Actions = { EmptyView() }
+    ) -> some View where Label : View, Actions : View  {
+        return modifier(EmptyViewModifier(label,
+                                          if: condition(),
+                                          description: description,
+                                          actions: actions))
+    }
+    
     /// Modifier to present a `ToastView` to this view.
     /// - Parameters:
     ///   - state: Optional. Binding state in which the toast will be based upon.
@@ -38,6 +57,8 @@ extension View {
         return shadow(color: .black.opacity(0.3), radius: 10, x: 2, y: 10)
     }
 }
+
+// MARK: Shape-related
 
 extension View {
     /// Modifier to clip View to specified shape, and add border if applicable.
@@ -76,6 +97,12 @@ extension View {
 }
 
 // MARK: Views
+
+extension Label where Title == Text, Icon == Image  {
+    init(_ title: String, symbol: Symbol) {
+        self.init(title, systemImage: symbol.rawValue )
+    }
+}
 
 extension RoundedRectangle {
     init(

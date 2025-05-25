@@ -21,19 +21,16 @@ struct HomeView: View {
                         .listRowSeparator(.hidden)
                 }
             }
+            .background(Color.appBackground)
             .scrollContentBackground(.hidden)
             .listStyle(.plain)
             .refreshable {}
             .navigationTitle(String.yourRecipes)
-            .overlay {
-                if items.isEmpty {
-                    ContentUnavailableView(
-                        String.noRecipes,
-                        systemImage: Symbol.forkKnife.rawValue,
-                        description: Text(String.noRecipesDescription)
-                    )
-                }
-            }
+            .emptyView(
+                if: items.isEmpty,
+                label: Label(.noRecipes, symbol: .forkKnife),
+                description: .noRecipesDescription
+            )
         }
     }
 }
