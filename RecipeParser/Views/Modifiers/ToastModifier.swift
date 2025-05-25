@@ -36,7 +36,8 @@ struct ToastModifier: ViewModifier {
                 ToastView(state: state, onDismiss: onDismiss)
             }
             .padding(.horizontal, 10)
-            .transition(.move(edge: .bottom))
+            .transition(.asymmetric(insertion: .move(edge: .bottom),
+                                    removal: .opacity))
         }
     }
     

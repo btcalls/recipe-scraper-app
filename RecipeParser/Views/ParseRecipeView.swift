@@ -43,13 +43,13 @@ struct ParseRecipeView: View {
                         }
                     }
                 }
-                .padding()
                 .toolbar {
                     Button(String.cancel) {
                         close()
                     }
                 }
                 .navigationTitle(String.addNewRecipe)
+                .padding()
                 .task {
                     await parseSharedURL()
                 }

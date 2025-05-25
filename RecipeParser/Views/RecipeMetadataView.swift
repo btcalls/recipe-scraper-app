@@ -31,6 +31,8 @@ struct RecipeMetadataView: View {
             VStack(alignment: .center, spacing: 10) {
                 Text(metadata?.title ?? .placeholder(length: 30))
                     .font(.title2)
+                    .fontWeight(.medium)
+
                 Text(metadata?.description ?? .placeholder(length: 80))
                     .lineLimit(3)
                     .truncationMode(.tail)

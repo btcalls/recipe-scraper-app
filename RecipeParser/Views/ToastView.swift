@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct ToastView: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
     var state: State
     var onDismiss: @MainActor () -> Void
     
@@ -21,12 +19,6 @@ struct ToastView: View {
         case .info(let text), .success(let text), .loading(let text):
             return text
         }
-    }
-    private var bgColor: Color {
-        return colorScheme == .light ? .offWhite : .darkGray
-    }
-    private var textColor: Color {
-        return colorScheme == .light ? .darkGray : .offWhite
     }
     private var themeColor: Color {
         switch state {
@@ -77,9 +69,9 @@ struct ToastView: View {
         HStack(alignment: .center, spacing: 10) {
             iconView()
                 .font(.system(size: 18))
+                .foregroundColor(themeColor)
             
             Text(caption)
-                .foregroundColor(textColor)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineLimit(2)
             
@@ -89,12 +81,13 @@ struct ToastView: View {
         }
         .frame(minHeight: 30)
         .font(.caption)
-        .foregroundColor(themeColor)
+        .fontWeight(.medium)
+        .foregroundColor(Color.appForeground)
         .padding(.vertical, 12)
         .padding(.horizontal, 15)
-        .background(bgColor)
-        .rounded(lineWidth: 1, color: themeColor)
-        .shadow(basedOn: colorScheme)
+        .background(Color.appBackground)
+        .rounded(cornerRadius: .regular, lineWidth: 1, color: themeColor)
+        .shadow()
     }
 }
 

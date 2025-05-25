@@ -14,6 +14,7 @@ struct LoadableView<Content: View>: View {
     
     var body: some View {
         content
+            .background(Color.appBackground)
             .disabled(viewState.isProcessing)
             .presentToast(as: $viewState.toast) {
                 viewState.toast = nil

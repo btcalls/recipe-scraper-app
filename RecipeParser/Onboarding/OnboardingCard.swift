@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct OnboardingCard<Content>: View where Content : View {
-    @State private var isAnimating: Bool = false
-    
     var title: String
     var image: Image
     
@@ -23,7 +21,7 @@ struct OnboardingCard<Content>: View where Content : View {
                 .resizable()
                 .scaledToFit()
                 .shadow()
-                .containerRelativeFrame(.vertical, count: 100, span: 65, spacing: 0)
+                .containerRelativeFrame(.vertical, count: 100, span: 60, spacing: 0)
             
             Text(title)
                 .font(.largeTitle)
@@ -48,13 +46,9 @@ struct OnboardingCard<Content>: View where Content : View {
                 }
                 .rounded(cornerRadius: .regular, lineWidth: 1, color: .white)
                 .tint(.white)
-                .offset(y: -50)
             }
-        }
-        .onAppear {
-            withAnimation(.easeOut(duration: 0.5)) {
-                isAnimating = true
-            }
+            
+            Spacer()
         }
         .frame(minWidth: 0,
                maxWidth: .infinity,

@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct CustomButton: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
     var state: State
     var role: ButtonRole? = .none
     var action: @MainActor () -> Void
@@ -42,7 +40,7 @@ struct CustomButton: View {
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))
         .compositingGroup()
-        .shadow(basedOn: colorScheme)
+        .shadow()
     }
 }
 

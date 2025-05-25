@@ -34,15 +34,8 @@ extension View {
     
     /// Modifier to implement default `shadow()` across views.
     /// - Returns: Modified view with shadow.
-    /// - Parameter colorScheme: Optional. The app's current color scheme.
-    func shadow(basedOn colorScheme: ColorScheme? = nil) -> some View {
-        var color = Color.darkShadowColor
-        
-        if let colorScheme, colorScheme == .dark {
-            color = .lightShadowColor
-        }
-        
-        return shadow(color: color, radius: 10, x: 2, y: 10)
+    func shadow() -> some View {
+        return shadow(color: .black.opacity(0.3), radius: 10, x: 2, y: 10)
     }
 }
 
