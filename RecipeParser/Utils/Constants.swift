@@ -59,4 +59,5 @@ enum Symbol: String {
     case warning = "exclamationmark.triangle.fill"
     case success = "checkmark.circle.fill"
     case error = "xmark.circle.fill"
+    case plus = "plus"
 }

@@ -40,7 +40,7 @@ final class ShareViewController: UIViewController {
                 DispatchQueue.main.async {
                     let contentView = UIHostingController(
                         rootView: ParseRecipeView(url: url)
-                            .modelContainer(.shared)
+                            .modelContainer(.shared())
                     )
                     
                     self.addChild(contentView)

@@ -9,13 +9,13 @@ import Foundation
 import SwiftData
 
 extension ModelContainer {
-    static var shared: ModelContainer {
+    static func shared(inMemoryOnly: Bool = false) -> ModelContainer {
         let schema = Schema([
             Recipe.self,
             Ingredient.self
         ])
         let modelConfiguration = ModelConfiguration(schema: schema,
-                                                    isStoredInMemoryOnly: false,
+                                                    isStoredInMemoryOnly: inMemoryOnly,
                                                     groupContainer: .identifier(.extensionGroup))
         
         do {

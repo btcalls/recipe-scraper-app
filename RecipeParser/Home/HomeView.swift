@@ -9,8 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @Environment(\.modelContext) private var context
     @ObservedObject private var viewModel = HomeViewModel()
-    @Query private var items: [Recipe]
+    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
     
     var body: some View {
         NavigationView {
@@ -37,4 +38,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .modelContainer(.shared(inMemoryOnly: true))
 }

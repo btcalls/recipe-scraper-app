@@ -28,6 +28,6 @@ struct RecipeParserApp: App {
             }
         }
         .environmentObject(appSettings)
-        .modelContainer(.shared)
+        .modelContainer(.shared())
     }
 }

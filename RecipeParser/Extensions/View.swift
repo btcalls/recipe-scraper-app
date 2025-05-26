@@ -99,7 +99,7 @@ extension View {
 // MARK: Views
 
 extension Label where Title == Text, Icon == Image  {
-    init(_ title: String, symbol: Symbol) {
+    init(_ title: String = "", symbol: Symbol) {
         self.init(title, systemImage: symbol.rawValue )
     }
 }
