@@ -12,18 +12,17 @@ struct RecipeMetadataView: View {
     
     var metadata: RecipeMetadata?
     
-    private func recipeImage() -> Image {
+    private func recipeImage() -> CustomImage {
         guard let metadata, let image = metadata.image else {
-            return Image("Placeholder")
+            return .init(content: .resource("Placeholder"))
         }
         
-        return Image(uiImage: image)
+        return .init(content: .uiImage(image))
     }
     
     var body: some View {
         VStack(alignment: .center, spacing: 30) {
             recipeImage()
-                .resizable()
                 .frame(width: size, height: size)
                 .aspectRatio(contentMode: .fill)
                 .rounded(cornerRadius: .regular)
