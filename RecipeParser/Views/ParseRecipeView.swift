@@ -33,9 +33,7 @@ struct ParseRecipeView: View {
                     
                     Spacer()
                     
-                    Divider()
-                        .frame(height: 1)
-                        .background(.secondary.opacity(0.5))
+                    Divider().asStandard()
                     
                     CustomButton(.saveRecipe) {
                         Task {

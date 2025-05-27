@@ -49,6 +49,13 @@ final class Recipe: AppModel {
     var createdOn: Date
     var modifiedOn: Date
     
+    var cuisineCategory: String {
+        return "\(cuisine) • \(category)"
+    }
+    var cookTime: Double {
+        return totalTime - prepTime
+    }
+    
     private var image: String
     
     var imageURL: URL? {

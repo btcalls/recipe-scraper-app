@@ -22,7 +22,7 @@ struct RecipeRow: View {
                     .font(.headline)
                     .lineLimit(2)
                 
-                Text("\(recipe.cuisine) • \(recipe.category)")
+                Text(recipe.cuisineCategory)
                     .font(.caption)
                     .fontWeight(.medium)
             }

@@ -38,42 +38,78 @@ struct RecipeView: View {
         }
     }
     
+    private func measurement(of value: Double) -> String {
+        let measurement = Measurement(value: value, unit: UnitDuration.minutes)
+        let formatter = MeasurementFormatter()
+        formatter.unitOptions = .providedUnit
+        
+        return formatter.string(from: measurement)
+    }
+    
+    @ViewBuilder private func timeView(_ value: Double, as label: String) -> some View {
+        HStack(alignment: .center) {
+            Text(label)
+                .frame(width: 90, alignment: .leading)
+            
+            Text(measurement(of: value))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fontWeight(.light)
+                .italic()
+        }
+    }
+    
     var body: some View {
-        NavigationView {
-            ZStack {
-                ScrollView {
-                    VStack(spacing: 10) {
-                        Text(recipe.name)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                        
-                        Text("\(recipe.cuisine) • \(recipe.category)")
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                        
-                        Text(recipe.detail)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .fontWeight(.light)
-                        
-                        headerView(.ingredients)
-                        
-                        ForEach(recipe.ingredients) { ingredient in
-                            ingredientView(ingredient)
-                        }
-                        
-                        headerView(.instructions)
-                        
-                        ForEach(recipe.instructions, id: \.self) { instruction in
-                            instructionsView(instruction)
-                        }
+        ZStack {
+            ScrollView {
+                VStack(spacing: 10) {
+                    Text(recipe.name)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                    
+                    Text(recipe.cuisineCategory)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                    
+                    Text(recipe.detail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .fontWeight(.light)
+                    
+                    Divider()
+                        .asStandard()
+                        .padding(.vertical, 5)
+                    
+                    VStack(alignment: .leading) {
+                        timeView(recipe.prepTime, as: .prepTime)
+                        timeView(recipe.cookTime, as: .cookTime)
                     }
-                    .padding()
+                    
+                    Divider()
+                        .asStandard()
+                        .padding(.vertical, 5)
+                    
+                    headerView(.ingredients)
+                    
+                    ForEach(recipe.ingredients) { ingredient in
+                        ingredientView(ingredient)
+                    }
+                    
+                    Divider()
+                        .asStandard()
+                        .padding(.vertical, 5)
+                    
+                    headerView(.instructions)
+                    
+                    ForEach(recipe.instructions, id: \.self) { instruction in
+                        instructionsView(instruction)
+                    }
                 }
-                .scrollBounceBehavior(.basedOnSize)
-                .padding(.bottom, 30)
+                .padding()
             }
+            .scrollBounceBehavior(.basedOnSize)
+            .padding(.bottom, 30)
+            .background(Color.appBackground)
         }
     }
 }

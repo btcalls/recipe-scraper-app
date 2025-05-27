@@ -98,6 +98,14 @@ extension View {
 
 // MARK: Views
 
+extension Divider {
+    func asStandard() -> some View {
+        self
+            .frame(height: 1)
+            .background(.secondary.opacity(0.5))
+    }
+}
+
 extension Label where Title == Text, Icon == Image  {
     init(_ title: String = "", symbol: Symbol) {
         self.init(title, systemImage: symbol.rawValue )

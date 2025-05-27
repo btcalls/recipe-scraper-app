@@ -43,6 +43,8 @@ extension String {
     static let extensionGroup = "group.JJC.RecipeParser"
     static let ingredients = "Ingredients"
     static let instructions = "Instructions"
+    static let prepTime = "Prep. Time:"
+    static let cookTime = "Cook Time:"
 }
 
 // MARK: Functions
