@@ -8,14 +8,32 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @Namespace var ingredientsID
+    @Namespace var instructionsID
+    
     var recipe: Recipe
     
-    @ViewBuilder private func headerView(_ value: String) -> some View {
-        Text(value)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .font(.title2)
-            .fontWeight(.semibold)
-            .padding(.vertical, 10)
+    private func measurement(of value: Double) -> String {
+        let measurement = Measurement(value: value, unit: UnitDuration.minutes)
+        let formatter = MeasurementFormatter()
+        formatter.unitOptions = .providedUnit
+        
+        return formatter.string(from: measurement)
+    }
+    
+    @ViewBuilder private func headerView(_ value: String,
+                                         action: @escaping @MainActor () -> Void) -> some View {
+        Button(action: action) {
+            Label(.link) {
+                Text(value)
+                    .font(.title2)
+                    .fontWeight(.semibold)
+            }
+            .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 10)
+        .tint(.primary)
     }
     
     @ViewBuilder private func ingredientView(_ ingredient: Ingredient) -> some View {
@@ -38,14 +56,6 @@ struct RecipeView: View {
         }
     }
     
-    private func measurement(of value: Double) -> String {
-        let measurement = Measurement(value: value, unit: UnitDuration.minutes)
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        
-        return formatter.string(from: measurement)
-    }
-    
     @ViewBuilder private func timeView(_ value: Double, as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
@@ -59,7 +69,7 @@ struct RecipeView: View {
     }
     
     var body: some View {
-        ZStack {
+        ScrollViewReader { proxy in
             ScrollView {
                 VStack(spacing: 10) {
                     Text(recipe.name)
@@ -89,7 +99,12 @@ struct RecipeView: View {
                         .asStandard()
                         .padding(.vertical, 5)
                     
-                    headerView(.ingredients)
+                    headerView(.ingredients) {
+                        withAnimation {
+                            proxy.scrollTo(ingredientsID, anchor: .top)
+                        }
+                    }
+                    .id(ingredientsID)
                     
                     ForEach(recipe.ingredients) { ingredient in
                         ingredientView(ingredient)
@@ -99,7 +114,12 @@ struct RecipeView: View {
                         .asStandard()
                         .padding(.vertical, 5)
                     
-                    headerView(.instructions)
+                    headerView(.instructions) {
+                        withAnimation {
+                            proxy.scrollTo(instructionsID, anchor: .top)
+                        }
+                    }
+                    .id(instructionsID)
                     
                     ForEach(recipe.instructions, id: \.self) { instruction in
                         instructionsView(instruction)

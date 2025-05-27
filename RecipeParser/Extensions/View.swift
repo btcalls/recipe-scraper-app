@@ -110,6 +110,12 @@ extension Label where Title == Text, Icon == Image  {
     init(_ title: String = "", symbol: Symbol) {
         self.init(title, systemImage: symbol.rawValue )
     }
+    
+    init(_ symbol: Symbol, title: () -> Text) {
+        self.init(title: title) {
+            Icon(systemName: symbol.rawValue)
+        }
+    }
 }
 
 extension RoundedRectangle {
