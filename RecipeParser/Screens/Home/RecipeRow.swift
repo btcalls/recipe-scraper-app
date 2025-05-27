@@ -23,7 +23,8 @@ struct RecipeRow: View {
                     .lineLimit(2)
                 
                 Text("\(recipe.cuisine) • \(recipe.category)")
-                    .font(.subheadline)
+                    .font(.caption)
+                    .fontWeight(.medium)
             }
         }
         .padding(.vertical, 15)
@@ -31,6 +32,12 @@ struct RecipeRow: View {
         .background(Color.appBackground.brightness(0.1))
         .rounded(cornerRadius: .regular)
         .shadow()
+    }
+}
+
+extension RecipeRow {
+    init(_ recipe: Recipe) {
+        self.recipe = recipe
     }
 }
 

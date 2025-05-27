@@ -16,10 +16,14 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(items, id: \.id) { item in
-                    RecipeRow(recipe: item)
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+                ForEach(items, id: \.id) { recipe in
+                    NavigationLink {
+                        RecipeView(recipe)
+                    } label: {
+                        RecipeRow(recipe)
+                    }
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 }
             }
             .background(Color.appBackground)

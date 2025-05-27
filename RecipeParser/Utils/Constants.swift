@@ -60,4 +60,5 @@ enum Symbol: String {
     case success = "checkmark.circle.fill"
     case error = "xmark.circle.fill"
     case plus = "plus"
+    case bullet = "circle.fill"
 }
