@@ -14,14 +14,18 @@ struct HomeView: View {
     @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(items, id: \.id) { recipe in
-                    NavigationLink {
-                        RecipeView(recipe)
-                    } label: {
-                        RecipeRow(recipe)
-                    }
+                    RecipeRow(recipe)
+                        .overlay {
+                            NavigationLink {
+                                RecipeView(recipe)
+                            } label: {
+                                EmptyView()
+                            }
+                            .opacity(0)
+                        }
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
                 }
