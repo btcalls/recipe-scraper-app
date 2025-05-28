@@ -11,7 +11,7 @@ import SwiftData
 struct ParseRecipeView: View {
     @Environment(\.modelContext) private var context
     @State private var recipeMetadata: RecipeMetadata?
-    @StateObject private var viewState = ViewState()
+    @State private var viewState = ViewState()
     
     var sharedURL: URL
     

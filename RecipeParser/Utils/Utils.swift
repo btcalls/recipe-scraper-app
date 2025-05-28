@@ -6,14 +6,16 @@
 //
 
 import Foundation
+import SwiftUI
 
-final class AppSettings: ObservableObject {
+@Observable
+final class AppSettings {
     enum RootView {
         case onboarding
         case home
     }
     
-    @Published var rootView: RootView = .onboarding
+    var rootView: RootView = .onboarding
 }
 
 final class AppValues {
@@ -30,7 +32,8 @@ final class AppValues {
     var isOnboardingComplete: Bool = false
 }
 
-final class ViewState: ObservableObject {
-    @Published var isProcessing = false
-    @Published var toast: ToastView.State?
+@Observable
+final class ViewState {
+    var isProcessing = false
+    var toast: ToastView.State?
 }

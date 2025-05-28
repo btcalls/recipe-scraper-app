@@ -10,7 +10,6 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var context
-    @ObservedObject private var viewModel = HomeViewModel()
     @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
     
     var body: some View {

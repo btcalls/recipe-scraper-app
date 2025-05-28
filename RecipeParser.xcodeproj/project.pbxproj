@@ -83,7 +83,6 @@
 				Extensions/View.swift,
 				RecipeParserApp.swift,
 				Screens/Home/HomeView.swift,
-				Screens/Home/HomeViewModel.swift,
 				Screens/Home/RecipeRow.swift,
 				Screens/Onboarding/OnboardingCard.swift,
 				Screens/Onboarding/OnboardingView.swift,

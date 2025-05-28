@@ -10,7 +10,7 @@ import SwiftData
 
 @main
 struct RecipeParserApp: App {
-    @StateObject private var appSettings = AppSettings()
+    @State private var appSettings = AppSettings()
     
     var body: some Scene {
         WindowGroup {
@@ -27,7 +27,7 @@ struct RecipeParserApp: App {
                 }
             }
         }
-        .environmentObject(appSettings)
+        .environment(appSettings)
         .modelContainer(.shared())
     }
 }
