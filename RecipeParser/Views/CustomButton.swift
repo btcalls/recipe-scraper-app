@@ -39,6 +39,8 @@ struct CustomButton: View {
         }
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))
+        .compositingGroup()
+        .shadow()
     }
 }
 

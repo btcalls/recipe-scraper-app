@@ -39,8 +39,8 @@ struct OnboardingView: View {
         .sheet(isPresented: $isBrowserPresented) {
             isBrowserPresented = false
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                if AppValues.shared.isOnboardingComplete {
+            if AppValues.shared.isOnboardingComplete {
+                withAnimation {
                     appSettings.rootView = .home
                 }
             }

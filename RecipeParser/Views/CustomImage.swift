@@ -13,6 +13,7 @@ struct CustomImage: View {
     enum Content {
         case resource(String)
         case url(URL?, toCache: Bool = true)
+        case uiImage(UIImage)
     }
     
     var content: Content
@@ -56,6 +57,11 @@ struct CustomImage: View {
         
         case .url(let url, let toCache):
             asyncImage(url, toCache: toCache)
+            
+        case .uiImage(let uiImage):
+            Image(uiImage: uiImage)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
         }
     }
 }

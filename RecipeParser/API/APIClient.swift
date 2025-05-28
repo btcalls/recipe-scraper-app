@@ -8,10 +8,8 @@
 import Foundation
 import SwiftData
 
-final class APIClient: NSObject {
-    static let shared = APIClient()
-    
-    func send<D: AppModel>(_ endpoint: APIEndpoint) async throws -> D {
+final class APIClient<E: APIEndpoint>: NSObject {
+    func send<D: AppModel>(_ endpoint: E) async throws -> D {
         do {
             let urlRequest = try getURLRequest(from: endpoint)
             let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
@@ -28,7 +26,7 @@ final class APIClient: NSObject {
         }
     }
     
-    func send<T: AppModel>(_ endpoint: APIEndpoint,
+    func send<T: AppModel>(_ endpoint: E,
                            storeTo context: ModelContext? = nil) async throws -> Model<T> {
         let obj: T = try await send(endpoint)
         
@@ -70,7 +68,7 @@ private extension APIClient {
         }
     }
     
-    func getURLRequest(from endpoint: APIEndpoint) throws -> URLRequest {
+    func getURLRequest(from endpoint: E) throws -> URLRequest {
         guard
             let apiURL = Bundle.main.apiURL,
             let urlPath = URL(string: apiURL.appending(endpoint.path)),

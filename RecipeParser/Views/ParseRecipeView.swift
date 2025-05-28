@@ -10,8 +10,8 @@ import SwiftData
 
 struct ParseRecipeView: View {
     @Environment(\.modelContext) private var context
-    @ObservedObject private var viewState = ViewState()
     @State private var recipeMetadata: RecipeMetadata?
+    @StateObject private var viewState = ViewState()
     
     var sharedURL: URL
     
@@ -29,30 +29,25 @@ struct ParseRecipeView: View {
         NavigationStack {
             LoadableView(viewState: viewState) {
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Recipe from \(urlText).")
-                        .font(.subheadline)
-                    
-                    Divider()
-                        .frame(height: 1)
-                        .background(.secondary.opacity(0.5))
-                    
                     RecipeMetadataView(metadata: recipeMetadata)
                     
                     Spacer()
                     
-                    CustomButton(.idle(.saveRecipe)) {
+                    Divider().asStandard()
+                    
+                    CustomButton(.saveRecipe) {
                         Task {
                             await processRecipe()
                         }
                     }
                 }
-                .padding()
                 .toolbar {
                     Button(String.cancel) {
                         close()
                     }
                 }
                 .navigationTitle(String.addNewRecipe)
+                .padding()
                 .task {
                     await parseSharedURL()
                 }
@@ -74,8 +69,9 @@ struct ParseRecipeView: View {
         viewState.toast = .loading(.parsingRecipe)
 
         do {
-            let model: Model<Recipe> = try await APIClient.shared
-                .send(HomeEndpoints.parseRecipe(sharedURL), storeTo: context)
+            let client = APIClient<RecipeEndpoints>()
+            let model: Model<Recipe> = try await client
+                .send(.parseRecipe(sharedURL), storeTo: context)
             
             viewState.toast = nil
             

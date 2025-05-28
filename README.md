@@ -21,6 +21,6 @@ For sensitive values (API URLs, access tokens, etc.), do the following:
 
 To access these user-defined settings and configuration variables in the app:
 
-- Declare the keys and values in your `Info.plist` file.
+- Declare the keys and values in both the `RecipeParser` and `RecipeParserShareExtension` `Info.plist` files.
 - In `Bundle` extension, you will see some variables declared for retrieving said values from `Info.plist`.
 - Add/Update variables accordingly.

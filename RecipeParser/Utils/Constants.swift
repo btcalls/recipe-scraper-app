@@ -44,9 +44,9 @@ enum HTTPMethod: String {
 // MARK: UI
 
 enum CornerRadius: CGFloat {
-    case sm = 5
-    case regular = 10
-    case lg = 15
+    case sm = 8
+    case regular = 16
+    case lg = 24
 }
 
 @SFSymbol
@@ -59,4 +59,7 @@ enum Symbol: String {
     case warning = "exclamationmark.triangle.fill"
     case success = "checkmark.circle.fill"
     case error = "xmark.circle.fill"
+    case plus
+    case bullet = "circle.fill"
+    case link
 }

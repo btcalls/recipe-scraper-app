@@ -14,7 +14,7 @@ struct RecipeRow: View {
         HStack(alignment: .center, spacing: 20) {
             CustomImage(content: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
-                .clipTo(shape: Circle(), lineWidth: 2, color: .primary)
+                .clipTo(shape: Circle())
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(recipe.name)
@@ -22,14 +22,22 @@ struct RecipeRow: View {
                     .font(.headline)
                     .lineLimit(2)
                 
-                Text("\(recipe.cuisine) • \(recipe.category)")
-                    .font(.subheadline)
+                Text(recipe.cuisineCategory)
+                    .font(.caption)
+                    .fontWeight(.medium)
             }
         }
-        .padding(10)
-        .background(Gradient(colors: [.teal, .purple]))
+        .padding(.vertical, 15)
+        .padding(.horizontal, 20)
+        .background(Color.appBackground.brightness(0.1))
         .rounded(cornerRadius: .regular)
         .shadow()
+    }
+}
+
+extension RecipeRow {
+    init(_ recipe: Recipe) {
+        self.recipe = recipe
     }
 }
 

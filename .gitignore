@@ -62,3 +62,4 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 Config.xcconfig
+sample_data.json

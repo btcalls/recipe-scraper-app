@@ -49,6 +49,13 @@ final class Recipe: AppModel {
     var createdOn: Date
     var modifiedOn: Date
     
+    var cuisineCategory: String {
+        return "\(cuisine) • \(category)"
+    }
+    var cookTime: Double {
+        return totalTime - prepTime
+    }
+    
     private var image: String
     
     var imageURL: URL? {
@@ -126,7 +133,7 @@ final class Recipe: AppModel {
 
 extension Recipe {
     static var sample: Recipe {
-        if let obj: Recipe = try? Recipe.fromJSONFile("test") {
+        if let obj: Recipe = try? Recipe.fromJSONFile("sample_data") {
             return obj
         }
         
@@ -154,11 +161,11 @@ final class Ingredient: AppModel {
     var name: String
     var amount: String?
     var method: String?
-    var _description: String
+    var label: String
     
     private enum CodingKeys: String, CodingKey {
         case id, name, amount, method
-        case _description = "instanceDescription"
+        case label = "instanceDescription"
     }
     
     init(
@@ -166,13 +173,13 @@ final class Ingredient: AppModel {
         name: String,
         amount: String? = nil,
         method: String? = nil,
-        _description: String
+        label: String
     ) {
         self.id = id
         self.name = name
         self.amount = amount
         self.method = method
-        self._description = _description
+        self.label = label
     }
     
     required init(from decoder: any Decoder) throws {
@@ -181,7 +188,7 @@ final class Ingredient: AppModel {
         name = try container.decode(String.self, forKey: .name)
         amount = try container.decodeIfPresent(String.self, forKey: .amount)
         method = try container.decodeIfPresent(String.self, forKey: .method)
-        _description = try container.decode(String.self, forKey: ._description)
+        label = try container.decode(String.self, forKey: .label)
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -191,6 +198,6 @@ final class Ingredient: AppModel {
         try container.encode(name, forKey: .name)
         try container.encodeIfPresent(amount, forKey: .amount)
         try container.encodeIfPresent(method, forKey: .method)
-        try container.encode(_description, forKey: ._description)
+        try container.encode(label, forKey: .label)
     }
 }
