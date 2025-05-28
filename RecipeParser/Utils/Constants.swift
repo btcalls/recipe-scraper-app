@@ -44,9 +44,9 @@ enum HTTPMethod: String {
 // MARK: UI
 
 enum CornerRadius: CGFloat {
-    case sm = 5
-    case regular = 10
-    case lg = 15
+    case sm = 8
+    case regular = 16
+    case lg = 24
 }
 
 @SFSymbol

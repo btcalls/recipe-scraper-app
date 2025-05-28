@@ -69,8 +69,9 @@ struct ParseRecipeView: View {
         viewState.toast = .loading(.parsingRecipe)
 
         do {
-            let model: Model<Recipe> = try await APIClient.shared
-                .send(HomeEndpoints.parseRecipe(sharedURL), storeTo: context)
+            let client = APIClient<RecipeEndpoints>()
+            let model: Model<Recipe> = try await client
+                .send(.parseRecipe(sharedURL), storeTo: context)
             
             viewState.toast = nil
             

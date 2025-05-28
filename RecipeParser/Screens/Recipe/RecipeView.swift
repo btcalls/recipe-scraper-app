@@ -21,8 +21,10 @@ struct RecipeView: View {
         return formatter.string(from: measurement)
     }
     
-    @ViewBuilder private func headerView(_ value: String,
-                                         action: @escaping @MainActor () -> Void) -> some View {
+    @ViewBuilder private func headerView(
+        _ value: String,
+        action: @escaping @MainActor () -> Void
+    ) -> some View {
         Button(action: action) {
             Label(.link) {
                 Text(value)
@@ -56,7 +58,8 @@ struct RecipeView: View {
         }
     }
     
-    @ViewBuilder private func timeView(_ value: Double, as label: String) -> some View {
+    @ViewBuilder private func timeView(_ value: Double,
+                                       as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
                 .frame(width: 90, alignment: .leading)

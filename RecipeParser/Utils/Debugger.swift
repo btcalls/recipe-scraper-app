@@ -36,6 +36,11 @@ struct Debugger {
         env = "[QA] "
 #endif
         
+        // Only print at Dev and QA builds
+        guard !env.isEmpty else {
+            return
+        }
+        
         let logger = Logger(subsystem: Bundle.main.bundleIdentifier!,
                             category: file)
         
@@ -53,6 +58,7 @@ struct Debugger {
             logger.critical("\(env)At \(function) (line: \(line)):\n -> \(message)")
         }
     }
+    
     /// Print function only for debugging a single item on debug environments.
     /// - Parameters:
     ///   - items: The items to print.
