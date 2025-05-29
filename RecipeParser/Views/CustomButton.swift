@@ -52,17 +52,21 @@ extension CustomButton {
     
     internal init(
         _ state: State,
+        role: ButtonRole? = .none,
         action: @escaping @MainActor () -> Void
     ) {
         self.state = state
+        self.role = role
         self.action = action
     }
     
     internal init(
         _ title: String,
+        role: ButtonRole? = .none,
         action: @escaping @MainActor () -> Void
     ) {
         self.state = .idle(title)
+        self.role = role
         self.action = action
     }
 }

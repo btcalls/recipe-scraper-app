@@ -14,7 +14,7 @@ struct RecipeRow: View {
         HStack(alignment: .center, spacing: 20) {
             CustomImage(content: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
-                .clipTo(shape: Circle())
+                .clipTo(Circle())
             
             VStack(alignment: .leading, spacing: 5) {
                 Text(recipe.name)

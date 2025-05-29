@@ -62,4 +62,6 @@ enum Symbol: String {
     case plus
     case bullet = "circle.fill"
     case link
+    case arrowUp = "arrow.up"
+    case arrowDown = "arrow.down"
 }

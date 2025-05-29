@@ -67,7 +67,7 @@ extension View {
     ///   - lineWidth: Thickness of the border width.
     ///   - color: Color of the border.
     /// - Returns: Modified view clipped to a circle shape, and drawn border, if applicable.
-    func clipTo<S: Shape>(shape: S,
+    func clipTo<S: Shape>(_ shape: S,
                           lineWidth: CGFloat = 0,
                           color: Color = .clear) -> some View {
         return modifier(
@@ -89,7 +89,7 @@ extension View {
                  lineWidth: CGFloat = 0,
                  color: Color = .clear) -> some View {
         return clipTo(
-            shape: RoundedRectangle(cornerRadius: cornerRadius),
+            RoundedRectangle(cornerRadius: cornerRadius),
             lineWidth: lineWidth,
             color: color
         )

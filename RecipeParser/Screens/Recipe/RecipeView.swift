@@ -13,14 +13,6 @@ struct RecipeView: View {
     
     var recipe: Recipe
     
-    private func measurement(of value: Double) -> String {
-        let measurement = Measurement(value: value, unit: UnitDuration.minutes)
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        
-        return formatter.string(from: measurement)
-    }
-    
     @ViewBuilder private func headerView(
         _ value: String,
         action: @escaping @MainActor () -> Void
@@ -36,6 +28,7 @@ struct RecipeView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 10)
         .tint(.primary)
+        .background(Color.appBackground)
     }
     
     @ViewBuilder private func ingredientView(_ ingredient: Ingredient) -> some View {
@@ -58,82 +51,104 @@ struct RecipeView: View {
         }
     }
     
-    @ViewBuilder private func timeView(_ value: Double,
+    @ViewBuilder private func timeView(_ measurement: Measurement<UnitDuration>,
                                        as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
                 .frame(width: 90, alignment: .leading)
             
-            Text(measurement(of: value))
+            Text(measurement, format: .measurement(width: .wide))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
                 .italic()
         }
     }
     
-    var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 10) {
-                    Text(recipe.name)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Text(recipe.cuisineCategory)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    
-                    Text(recipe.detail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fontWeight(.light)
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    VStack(alignment: .leading) {
-                        timeView(recipe.prepTime, as: .prepTime)
-                        timeView(recipe.cookTime, as: .cookTime)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    headerView(.ingredients) {
-                        withAnimation {
-                            proxy.scrollTo(ingredientsID, anchor: .top)
-                        }
-                    }
-                    .id(ingredientsID)
-                    
-                    ForEach(recipe.ingredients) { ingredient in
-                        ingredientView(ingredient)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    headerView(.instructions) {
-                        withAnimation {
-                            proxy.scrollTo(instructionsID, anchor: .top)
-                        }
-                    }
-                    .id(instructionsID)
-                    
-                    ForEach(recipe.instructions, id: \.self) { instruction in
-                        instructionsView(instruction)
-                    }
-                }
-                .padding()
-            }
-            .scrollBounceBehavior(.basedOnSize)
-            .padding(.bottom, 30)
-            .background(Color.appBackground)
+    @ViewBuilder private func navButtonsView() -> some View {
+        VStack(spacing: 10) {
+            Symbol.arrowUp.image
+                .frame(width: 40, height: 40)
+            
+            Symbol.arrowDown.image
+                .frame(width: 40, height: 40)
         }
+    }
+    
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(spacing: 10, pinnedViews: .sectionHeaders) {
+                        Section {
+                            Text(recipe.cuisineCategory)
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                            
+                            Text(recipe.detail)
+                                .fontWeight(.light)
+                            
+                            Divider()
+                                .asStandard()
+                                .padding(.vertical, 5)
+                            
+                            VStack(alignment: .leading) {
+                                timeView(recipe.prepTimeMeasurement, as: .prepTime)
+                                timeView(recipe.cookTimeMeasurement, as: .cookTime)
+                            }
+                            
+                            Divider()
+                                .asStandard()
+                                .padding(.vertical, 5)
+                        } header: {
+                            Text(recipe.name)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .padding(.vertical, 10)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.appBackground)
+                        
+                        Section {
+                            ForEach(recipe.ingredients) { ingredient in
+                                ingredientView(ingredient)
+                            }
+                        } header: {
+                            headerView(.ingredients) {
+                                withAnimation {
+                                    proxy.scrollTo(ingredientsID, anchor: .top)
+                                }
+                            }
+                            .id(ingredientsID)
+                        }
+                        
+                        Divider()
+                            .asStandard()
+                            .padding(.vertical, 5)
+                        
+                        Section {
+                            ForEach(recipe.instructions, id: \.self) { instruction in
+                                instructionsView(instruction)
+                            }
+                        } header: {
+                            headerView(.instructions) {
+                                withAnimation {
+                                    proxy.scrollTo(instructionsID, anchor: .top)
+                                }
+                            }
+                            .id(instructionsID)
+                        }
+                    }
+                    .padding()
+                }
+                .scrollBounceBehavior(.basedOnSize)
+                .padding(.bottom, 30)
+            }
+            
+            navButtonsView()
+                .background(Color.teal)
+                .offset(x: -20, y: -30)
+        }
+        .background(Color.appBackground)
     }
 }
 

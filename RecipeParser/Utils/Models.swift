@@ -52,8 +52,12 @@ final class Recipe: AppModel {
     var cuisineCategory: String {
         return "\(cuisine) • \(category)"
     }
-    var cookTime: Double {
-        return totalTime - prepTime
+    
+    var prepTimeMeasurement: Measurement<UnitDuration> {
+        return Measurement(value: prepTime, unit: .minutes)
+    }
+    var cookTimeMeasurement: Measurement<UnitDuration> {
+        return Measurement(value: totalTime - prepTime, unit: .minutes)
     }
     
     private var image: String
