@@ -10,15 +10,13 @@ import SwiftUI
 struct CompactButton: View {
     var icon: Icon = .init(.plus)
     var color: Color = .appBackground
-    @ScaledMetric(relativeTo: .body) var size: CGFloat = 45
     var action: @MainActor () -> Void
     
     var body: some View {
         Button(action: action) {
             icon.sfSymbol.image
-                .frame(width: size, height: size)
         }
-        .font(.body)
+        .scale(.heightWidth(), value: 45)
         .background(color.brightness(0.1))
         .tint(icon.tint)
         .clipTo(.circle)

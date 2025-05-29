@@ -102,6 +102,7 @@
 				Views/LoadableView.swift,
 				Views/Modifiers/EmptyViewModifier.swift,
 				Views/Modifiers/HiddenViewModifier.swift,
+				Views/Modifiers/ScaledModifier.swift,
 				Views/Modifiers/ShapeAndBorderModifier.swift,
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,

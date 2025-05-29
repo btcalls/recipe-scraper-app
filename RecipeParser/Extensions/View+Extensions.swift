@@ -105,6 +105,17 @@ extension View {
     }
 }
 
+extension View {
+    /// Modifier to apply scaling to this view with given value.
+    /// - Parameters:
+    ///   - scaleType: The type in which the scaling is applied to.
+    ///   - value: The value to be scaled.
+    /// - Returns: Modified view with scaled value.
+    func scale(_ scaleType: ScaledModifier.Kind, value: CGFloat) -> some View {
+        return modifier(ScaledModifier(scaleType: scaleType, value: value))
+    }
+}
+
 // MARK: Views
 
 extension Divider {
@@ -112,7 +123,7 @@ extension Divider {
     /// - Returns: Modified divider.
     func asStandard() -> some View {
         return self
-            .frame(height: 1)
+            .scale(.height(), value: 1)
             .background(.secondary.opacity(0.5))
     }
 }
@@ -131,9 +142,9 @@ extension Label where Title == Text, Icon == Image  {
 
 extension RoundedRectangle {
     init(
-        cornerRadius val: CornerRadius,
+        cornerRadius value: CornerRadius,
         style: RoundedCornerStyle = .continuous
     ) {
-        self.init(cornerRadius: val.rawValue, style: style)
+        self.init(cornerRadius: value.rawValue, style: style)
     }
 }

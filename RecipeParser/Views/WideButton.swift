@@ -12,6 +12,8 @@ struct WideButton: View {
     var role: ButtonRole? = .none
     var action: @MainActor () -> Void
     
+    @ScaledMetric private var spacing: CGFloat = 8
+    
     @ViewBuilder private func imageAndLabelView() -> some View {
         switch state {
         case .idle(let title, let sfSymbol):
@@ -23,7 +25,7 @@ struct WideButton: View {
             }
         
         case .loading(let title):
-            HStack(alignment: .center, spacing: 8) {
+            HStack(alignment: .center, spacing: spacing) {
                 ProgressView()
                     .tint(Color.white)
                 
@@ -35,9 +37,10 @@ struct WideButton: View {
     var body: some View {
         Button(role: role, action: action) {
             imageAndLabelView()
-                .frame(maxWidth: .infinity, maxHeight: 40)
+                .frame(maxWidth: .infinity)
                 .bold()
-                .padding(.vertical, 5)
+                .scale(.height(isMinimum: true), value: 45)
+                .scale(.padding(.vertical), value: 5)
         }
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))

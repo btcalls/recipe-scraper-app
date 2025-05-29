@@ -26,7 +26,7 @@ struct RecipeView: View {
             .fontWeight(.semibold)
             .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.vertical, 10)
+            .scale(.padding(.vertical), value: 10)
             .background(Color.appBackground)
     }
     
@@ -39,10 +39,9 @@ struct RecipeView: View {
     @ViewBuilder private func instructionsView(_ value: String) -> some View {
         HStack(alignment: .top, spacing: 10) {
             Symbol.bullet.image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 5, height: 5)
-                .offset(y: 7.5)
+                .font(.system(size: 7.5))
+                .imageScale(.small)
+                .offset(y: 7)
             
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -54,7 +53,8 @@ struct RecipeView: View {
                                        as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
-                .frame(width: 90, alignment: .leading)
+                .scale(.width(), value: 90)
+                .frame(alignment: .leading)
             
             Text(measurement, format: .measurement(width: .wide))
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -108,13 +108,14 @@ struct RecipeView: View {
                             Text(recipe.cuisineCategory)
                                 .font(.headline)
                                 .fontWeight(.semibold)
+                                .lineLimit(2)
                             
                             Text(recipe.detail)
                                 .fontWeight(.light)
                             
                             Divider()
                                 .asStandard()
-                                .padding(.vertical, 5)
+                                .scale(.padding(.vertical), value: 5)
                             
                             VStack(alignment: .leading) {
                                 timeView(recipe.prepTimeMeasurement, as: .prepTime)
@@ -123,12 +124,12 @@ struct RecipeView: View {
                             
                             Divider()
                                 .asStandard()
-                                .padding(.vertical, 5)
+                                .scale(.padding(.vertical), value: 5)
                         } header: {
                             Text(recipe.name)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                                .padding(.vertical, 10)
+                                .scale(.padding(.vertical), value: 10)
                                 .id(titleID)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -145,7 +146,7 @@ struct RecipeView: View {
                         
                         Divider()
                             .asStandard()
-                            .padding(.vertical, 5)
+                            .scale(.padding(.vertical), value: 5)
                         
                         Section {
                             ForEach(recipe.instructions, id: \.self) {
@@ -159,7 +160,7 @@ struct RecipeView: View {
                     .padding()
                 }
                 .scrollBounceBehavior(.basedOnSize)
-                .padding(.bottom, 55)
+                .scale(.padding(.bottom), value: 55)
                 
                 scrollToView(proxy)
                     .offset(x: -20, y: 0)
