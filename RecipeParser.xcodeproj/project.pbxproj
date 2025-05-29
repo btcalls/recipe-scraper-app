@@ -72,7 +72,7 @@
 				API/Endpoints/RecipeEndpoints.swift,
 				Extensions/Bundle.swift,
 				Extensions/Codable.swift,
-				Extensions/Color.swift,
+				"Extensions/Color+Extensions.swift",
 				Extensions/CustomError.swift,
 				Extensions/Data.swift,
 				Extensions/ModelContainer.swift,
@@ -96,7 +96,7 @@
 				Utils/Protocols.swift,
 				Utils/Utils.swift,
 				Views/BrowserView.swift,
-				Views/CustomButton.swift,
+				Views/CompactButton.swift,
 				Views/CustomImage.swift,
 				Views/LoadableView.swift,
 				Views/Modifiers/EmptyViewModifier.swift,
@@ -105,6 +105,7 @@
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
 				Views/ToastView.swift,
+				Views/WideButton.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;
 		};

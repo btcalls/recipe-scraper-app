@@ -107,13 +107,13 @@ extension Divider {
 }
 
 extension Label where Title == Text, Icon == Image  {
-    init(_ title: String = "", symbol: Symbol) {
-        self.init(title, systemImage: symbol.rawValue )
+    init(_ title: String = "", sfSymbol: Symbol) {
+        self.init(title, systemImage: sfSymbol.rawValue )
     }
     
-    init(_ symbol: Symbol, title: () -> Text) {
+    init(_ sfSymbol: Symbol, title: () -> Text) {
         self.init(title: title) {
-            Icon(systemName: symbol.rawValue)
+            Icon(systemName: sfSymbol.rawValue)
         }
     }
 }

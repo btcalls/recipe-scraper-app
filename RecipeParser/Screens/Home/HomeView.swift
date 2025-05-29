@@ -36,7 +36,7 @@ struct HomeView: View {
             .navigationTitle(String.yourRecipes)
             .emptyView(
                 if: items.isEmpty,
-                label: Label(.noRecipes, symbol: .forkKnife),
+                label: Label(.noRecipes, sfSymbol: .forkKnife),
                 description: .noRecipesDescription
             )
         }

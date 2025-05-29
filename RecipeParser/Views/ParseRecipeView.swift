@@ -35,7 +35,7 @@ struct ParseRecipeView: View {
                     
                     Divider().asStandard()
                     
-                    CustomButton(.saveRecipe) {
+                    WideButton(.saveRecipe) {
                         Task {
                             await processRecipe()
                         }

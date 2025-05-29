@@ -1,8 +1,8 @@
 //
-//  Color.swift
+//  Color+Extensions.swift
 //  RecipeParser
 //
-//  Created by Jason Jon Carreos on 25/5/2025.
+//  Created by Jason Jon Carreos on 29/5/2025.
 //
 
 import SwiftUI
