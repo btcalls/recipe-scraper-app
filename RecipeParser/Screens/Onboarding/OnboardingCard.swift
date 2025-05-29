@@ -25,12 +25,12 @@ struct OnboardingCard<Content>: View where Content : View {
             
             Text(title)
                 .font(.largeTitle)
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .fontWeight(.semibold)
                 .shadow()
             
             caption
-                .foregroundColor(.white)
+                .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 20)
                 .frame(maxWidth: 480)

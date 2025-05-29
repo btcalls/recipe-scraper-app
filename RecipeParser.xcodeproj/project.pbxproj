@@ -70,6 +70,7 @@
 			membershipExceptions = (
 				API/APIClient.swift,
 				API/Endpoints/RecipeEndpoints.swift,
+				"Extensions/Array+Extensions.swift",
 				"Extensions/Bundle+Extensions.swift",
 				"Extensions/Codable+Extensions.swift",
 				"Extensions/Color+Extensions.swift",
@@ -100,6 +101,7 @@
 				Views/CustomImage.swift,
 				Views/LoadableView.swift,
 				Views/Modifiers/EmptyViewModifier.swift,
+				Views/Modifiers/HiddenViewModifier.swift,
 				Views/Modifiers/ShapeAndBorderModifier.swift,
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,

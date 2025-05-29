@@ -49,6 +49,7 @@ struct ToastView: View {
             
         case .loading(_:):
             ProgressView()
+                .tint(themeColor)
         }
     }
     
@@ -57,6 +58,8 @@ struct ToastView: View {
         case .info(_:), .error(_:), .success(_:):
             Button(action: onDismiss) {
                 Symbol.x.image
+                    .foregroundStyle(Color.appForeground.opacity(0.75))
+                    .imageScale(.medium)
                     .padding(10)
             }
             
@@ -68,8 +71,8 @@ struct ToastView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
             iconView()
-                .font(.system(size: 18))
-                .foregroundColor(themeColor)
+                .imageScale(.medium)
+                .foregroundStyle(themeColor)
             
             Text(caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -79,12 +82,12 @@ struct ToastView: View {
                 
             closeButton()
         }
-        .frame(minHeight: 30)
-        .font(.caption)
+        .frame(minHeight: 45)
+        .font(.system(size: 16))
         .fontWeight(.medium)
         .padding(.vertical, 12)
         .padding(.horizontal, 15)
-        .foregroundColor(Color.appForeground)
+        .foregroundStyle(Color.appForeground)
         .background(Color.appBackground)
         .rounded(cornerRadius: .regular, lineWidth: 1, color: themeColor)
         .shadow()

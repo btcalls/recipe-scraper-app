@@ -8,27 +8,26 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @Namespace var titleID
     @Namespace var ingredientsID
     @Namespace var instructionsID
     
     var recipe: Recipe
     
-    @ViewBuilder private func headerView(
-        _ value: String,
-        action: @escaping @MainActor () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Label(.link) {
-                Text(value)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
+    @State private var currentID: Namespace.ID? = nil
+    
+    private var ids: [Namespace.ID] {
+        return [titleID, ingredientsID, instructionsID]
+    }
+    
+    @ViewBuilder private func headerView(_ value: String) -> some View {
+        Text(value)
+            .font(.title2)
+            .fontWeight(.semibold)
             .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 10)
-        .tint(.primary)
-        .background(Color.appBackground)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.vertical, 10)
+            .background(Color.appBackground)
     }
     
     @ViewBuilder private func ingredientView(_ ingredient: Ingredient) -> some View {
@@ -64,21 +63,47 @@ struct RecipeView: View {
         }
     }
     
-    @ViewBuilder private func navButtonsView() -> some View {
-        VStack(spacing: 10) {
-            Symbol.arrowUp.image
-                .frame(width: 40, height: 40)
+    @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
+        HStack(spacing: 10) {
+            CompactButton(.init(.arrowUp)) {
+                withAnimation {
+                    if let id = currentID, let prevID = ids.prev(id) {
+                        currentID = prevID
+                    } else {
+                        currentID = titleID
+                    }
+                    
+                    proxy.scrollTo(currentID, anchor: .top)
+                }
+            }
+            .transition(.opacity)
+            .hidden(if: currentID == titleID || currentID == nil)
             
-            Symbol.arrowDown.image
-                .frame(width: 40, height: 40)
+            CompactButton(.init(.arrowDown)) {
+                withAnimation {
+                    if let id = currentID, let nextID = ids.next(id) {
+                        currentID = nextID
+                    } else {
+                        currentID = ingredientsID
+                    }
+                    
+                    proxy.scrollTo(currentID, anchor: .top)
+                }
+            }
+            .transition(.opacity)
+            .hidden(if: currentID == instructionsID, remove: true)
         }
     }
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            ScrollViewReader { proxy in
+        ScrollViewReader { proxy in
+            ZStack(alignment: .bottomTrailing) {
                 ScrollView {
-                    LazyVStack(spacing: 10, pinnedViews: .sectionHeaders) {
+                    LazyVStack(
+                        alignment: .leading,
+                        spacing: 10,
+                        pinnedViews: .sectionHeaders
+                    ) {
                         Section {
                             Text(recipe.cuisineCategory)
                                 .font(.headline)
@@ -104,21 +129,18 @@ struct RecipeView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .padding(.vertical, 10)
+                                .id(titleID)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.appBackground)
                         
                         Section {
-                            ForEach(recipe.ingredients) { ingredient in
-                                ingredientView(ingredient)
+                            ForEach(recipe.ingredients) {
+                                ingredientView($0)
                             }
                         } header: {
-                            headerView(.ingredients) {
-                                withAnimation {
-                                    proxy.scrollTo(ingredientsID, anchor: .top)
-                                }
-                            }
-                            .id(ingredientsID)
+                            headerView(.ingredients)
+                                .id(ingredientsID)
                         }
                         
                         Divider()
@@ -126,27 +148,22 @@ struct RecipeView: View {
                             .padding(.vertical, 5)
                         
                         Section {
-                            ForEach(recipe.instructions, id: \.self) { instruction in
-                                instructionsView(instruction)
+                            ForEach(recipe.instructions, id: \.self) {
+                                instructionsView($0)
                             }
                         } header: {
-                            headerView(.instructions) {
-                                withAnimation {
-                                    proxy.scrollTo(instructionsID, anchor: .top)
-                                }
-                            }
-                            .id(instructionsID)
+                            headerView(.instructions)
+                                .id(instructionsID)
                         }
                     }
                     .padding()
                 }
                 .scrollBounceBehavior(.basedOnSize)
-                .padding(.bottom, 30)
+                .padding(.bottom, 55)
+                
+                scrollToView(proxy)
+                    .offset(x: -20, y: 0)
             }
-            
-            navButtonsView()
-                .background(Color.teal)
-                .offset(x: -20, y: -30)
         }
         .background(Color.appBackground)
     }
@@ -159,5 +176,5 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(recipe: Recipe.sample)
+    RecipeView(.sample)
 }

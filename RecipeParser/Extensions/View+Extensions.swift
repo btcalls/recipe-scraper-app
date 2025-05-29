@@ -29,6 +29,15 @@ extension View {
                                           actions: actions))
     }
     
+    /// Modifier to hide `View` given a condition.
+    /// - Parameters:
+    ///   - condition: The condition to hide the view.
+    ///   - remove: Flag to remove view from parent view.
+    /// - Returns: Modified view.
+    func hidden(if condition: Bool, remove: Bool = false) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: remove))
+    }
+    
     /// Modifier to present a `ToastView` to this view.
     /// - Parameters:
     ///   - state: Optional. Binding state in which the toast will be based upon.
@@ -99,8 +108,10 @@ extension View {
 // MARK: Views
 
 extension Divider {
+    /// Apply app-standard modifiers to the `Divider`.
+    /// - Returns: Modified divider.
     func asStandard() -> some View {
-        self
+        return self
             .frame(height: 1)
             .background(.secondary.opacity(0.5))
     }
