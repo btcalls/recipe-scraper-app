@@ -29,6 +29,15 @@ extension View {
                                           actions: actions))
     }
     
+    /// Modifier to hide `View` given a condition.
+    /// - Parameters:
+    ///   - condition: The condition to hide the view.
+    ///   - remove: Flag to remove view from parent view.
+    /// - Returns: Modified view.
+    func hidden(if condition: Bool, remove: Bool = false) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: remove))
+    }
+    
     /// Modifier to present a `ToastView` to this view.
     /// - Parameters:
     ///   - state: Optional. Binding state in which the toast will be based upon.
@@ -67,7 +76,7 @@ extension View {
     ///   - lineWidth: Thickness of the border width.
     ///   - color: Color of the border.
     /// - Returns: Modified view clipped to a circle shape, and drawn border, if applicable.
-    func clipTo<S: Shape>(shape: S,
+    func clipTo<S: Shape>(_ shape: S,
                           lineWidth: CGFloat = 0,
                           color: Color = .clear) -> some View {
         return modifier(
@@ -89,40 +98,53 @@ extension View {
                  lineWidth: CGFloat = 0,
                  color: Color = .clear) -> some View {
         return clipTo(
-            shape: RoundedRectangle(cornerRadius: cornerRadius),
+            RoundedRectangle(cornerRadius: cornerRadius),
             lineWidth: lineWidth,
             color: color
         )
     }
 }
 
+extension View {
+    /// Modifier to apply scaling to this view with given value.
+    /// - Parameters:
+    ///   - scaleType: The type in which the scaling is applied to.
+    ///   - value: The value to be scaled.
+    /// - Returns: Modified view with scaled value.
+    func scale(_ scaleType: ScaledModifier.Kind, _ value: CGFloat) -> some View {
+        return modifier(ScaledModifier(scaleType: scaleType, value: value))
+    }
+}
+
 // MARK: Views
 
 extension Divider {
+    /// Apply app-standard modifiers to the `Divider`.
+    /// - Returns: Modified divider.
     func asStandard() -> some View {
-        self
-            .frame(height: 1)
+        return self
+            .scale(.height(), 1)
             .background(.secondary.opacity(0.5))
     }
 }
 
 extension Label where Title == Text, Icon == Image  {
-    init(_ title: String = "", symbol: Symbol) {
-        self.init(title, systemImage: symbol.rawValue )
+    init(_ title: String = "", sfSymbol: Symbol) {
+        self.init(title, systemImage: sfSymbol.rawValue )
     }
     
-    init(_ symbol: Symbol, title: () -> Text) {
+    init(_ sfSymbol: Symbol, title: () -> Text) {
         self.init(title: title) {
-            Icon(systemName: symbol.rawValue)
+            Icon(systemName: sfSymbol.rawValue)
         }
     }
 }
 
 extension RoundedRectangle {
     init(
-        cornerRadius val: CornerRadius,
+        cornerRadius value: CornerRadius,
         style: RoundedCornerStyle = .continuous
     ) {
-        self.init(cornerRadius: val.rawValue, style: style)
+        self.init(cornerRadius: value.rawValue, style: style)
     }
 }

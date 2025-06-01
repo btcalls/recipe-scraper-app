@@ -6,15 +6,27 @@
 //
 
 import Foundation
+import SwiftUI
 
-final class AppSettings: ObservableObject {
+// MARK: Observables
+
+@Observable
+final class AppSettings {
     enum RootView {
         case onboarding
         case home
     }
     
-    @Published var rootView: RootView = .onboarding
+    var rootView: RootView = .onboarding
 }
+
+@Observable
+final class ViewState {
+    var isProcessing = false
+    var toast: ToastView.State?
+}
+
+// MARK: Settings
 
 final class AppValues {
     static var shared = AppValues()
@@ -28,9 +40,4 @@ final class AppValues {
         storage: .init(suiteName: .extensionGroup) ?? .standard
     )
     var isOnboardingComplete: Bool = false
-}
-
-final class ViewState: ObservableObject {
-    @Published var isProcessing = false
-    @Published var toast: ToastView.State?
 }

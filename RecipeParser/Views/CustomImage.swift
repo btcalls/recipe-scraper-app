@@ -120,8 +120,8 @@ private extension CustomImage {
 
 #Preview {
     CustomImage(content: .url(URL(string: "https://www.recipetineats.com/tachyon/2024/07/Baked-Beef-Quasadillas-51259.jpg")))
-        .frame(width: 200, height: 200)
-        .clipTo(shape: Circle(),
+        .scale(.heightWidth(), 100)
+        .clipTo(Circle(),
                 lineWidth: 1,
                 color: .primary)
 }

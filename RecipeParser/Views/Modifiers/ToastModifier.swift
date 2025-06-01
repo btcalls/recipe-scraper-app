@@ -15,7 +15,7 @@ struct ToastModifier: ViewModifier {
     var duration: ToastView.Duration
     var onDismiss: @MainActor () -> Void
     
-    @ViewBuilder private func backgroundView () -> some View {
+    @ViewBuilder private func backgroundView() -> some View {
         switch state {
         case .loading(_:):
             Color.secondary
@@ -28,14 +28,14 @@ struct ToastModifier: ViewModifier {
         }
     }
     
-    @ViewBuilder private func mainToastView () -> some View {
+    @ViewBuilder private func mainToastView() -> some View {
         if let state {
             VStack {
                 Spacer()
                 
                 ToastView(state: state, onDismiss: onDismiss)
             }
-            .padding(.horizontal, 10)
+            .scale(.padding(.horizontal), 10)
             .transition(.asymmetric(insertion: .move(edge: .bottom),
                                     removal: .opacity))
         }
@@ -47,7 +47,7 @@ struct ToastModifier: ViewModifier {
             .overlay {
                 ZStack {
                     mainToastView()
-                        .padding(.bottom, 20)
+                        .scale(.padding(.bottom), 20)
                 }
                 .background(backgroundView())
                 .animation(.snappy, value: state)

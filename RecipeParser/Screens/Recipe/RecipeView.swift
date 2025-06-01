@@ -8,34 +8,30 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @Namespace var titleID
     @Namespace var ingredientsID
     @Namespace var instructionsID
     
     var recipe: Recipe
     
-    private func measurement(of value: Double) -> String {
-        let measurement = Measurement(value: value, unit: UnitDuration.minutes)
-        let formatter = MeasurementFormatter()
-        formatter.unitOptions = .providedUnit
-        
-        return formatter.string(from: measurement)
+    @State private var currentID: Namespace.ID? = nil
+    @ScaledMetric private var buttonXOffset: CGFloat = -20
+    @ScaledMetric private var bulletFont: CGFloat = 7.5
+    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
+    @ScaledMetric private var spacing: CGFloat = 10
+    
+    private var ids: [Namespace.ID] {
+        return [titleID, ingredientsID, instructionsID]
     }
     
-    @ViewBuilder private func headerView(
-        _ value: String,
-        action: @escaping @MainActor () -> Void
-    ) -> some View {
-        Button(action: action) {
-            Label(.link) {
-                Text(value)
-                    .font(.title2)
-                    .fontWeight(.semibold)
-            }
+    @ViewBuilder private func headerView(_ value: String) -> some View {
+        Text(value)
+            .font(.title2)
+            .fontWeight(.semibold)
             .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 10)
-        .tint(.primary)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .scale(.padding(.vertical), 10)
+            .background(Color.appBackground)
     }
     
     @ViewBuilder private func ingredientView(_ ingredient: Ingredient) -> some View {
@@ -45,12 +41,11 @@ struct RecipeView: View {
     }
     
     @ViewBuilder private func instructionsView(_ value: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: spacing) {
             Symbol.bullet.image
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 5, height: 5)
-                .offset(y: 7.5)
+                .font(.system(size: bulletFont))
+                .imageScale(.small)
+                .offset(y: bulletYOffset)
             
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -58,82 +53,124 @@ struct RecipeView: View {
         }
     }
     
-    @ViewBuilder private func timeView(_ value: Double,
+    @ViewBuilder private func timeView(_ measurement: Measurement<UnitDuration>,
                                        as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
-                .frame(width: 90, alignment: .leading)
+                .scale(.width(), 90)
+                .frame(alignment: .leading)
             
-            Text(measurement(of: value))
+            Text(measurement, format: .measurement(width: .wide))
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
                 .italic()
         }
     }
     
+    @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
+        HStack(spacing: spacing) {
+            CompactButton(.init(.arrowUp)) {
+                withAnimation {
+                    if let id = currentID, let prevID = ids.prev(id) {
+                        currentID = prevID
+                    } else {
+                        currentID = titleID
+                    }
+                    
+                    proxy.scrollTo(currentID, anchor: .top)
+                }
+            }
+            .transition(.opacity)
+            .hidden(if: currentID == titleID || currentID == nil)
+            
+            CompactButton(.init(.arrowDown)) {
+                withAnimation {
+                    if let id = currentID, let nextID = ids.next(id) {
+                        currentID = nextID
+                    } else {
+                        currentID = ingredientsID
+                    }
+                    
+                    proxy.scrollTo(currentID, anchor: .top)
+                }
+            }
+            .transition(.opacity)
+            .hidden(if: currentID == instructionsID, remove: true)
+        }
+    }
+    
     var body: some View {
         ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: 10) {
-                    Text(recipe.name)
+            ZStack(alignment: .bottomTrailing) {
+                ScrollView {
+                    LazyVStack(
+                        alignment: .leading,
+                        spacing: spacing,
+                        pinnedViews: .sectionHeaders
+                    ) {
+                        Section {
+                            Text(recipe.cuisineCategory)
+                                .font(.headline)
+                                .fontWeight(.semibold)
+                                .lineLimit(2)
+                            
+                            Text(recipe.detail)
+                                .fontWeight(.light)
+                            
+                            Divider()
+                                .asStandard()
+                                .scale(.padding(.vertical), 5)
+                            
+                            VStack(alignment: .leading) {
+                                timeView(recipe.prepTimeMeasurement, as: .prepTime)
+                                timeView(recipe.cookTimeMeasurement, as: .cookTime)
+                            }
+                            
+                            Divider()
+                                .asStandard()
+                                .scale(.padding(.vertical), 5)
+                        } header: {
+                            Text(recipe.name)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .scale(.padding(.vertical), 10)
+                                .id(titleID)
+                        }
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                    
-                    Text(recipe.cuisineCategory)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                    
-                    Text(recipe.detail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .fontWeight(.light)
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    VStack(alignment: .leading) {
-                        timeView(recipe.prepTime, as: .prepTime)
-                        timeView(recipe.cookTime, as: .cookTime)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    headerView(.ingredients) {
-                        withAnimation {
-                            proxy.scrollTo(ingredientsID, anchor: .top)
+                        .background(Color.appBackground)
+                        
+                        Section {
+                            ForEach(recipe.ingredients) {
+                                ingredientView($0)
+                            }
+                        } header: {
+                            headerView(.ingredients)
+                                .id(ingredientsID)
+                        }
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                        
+                        Section {
+                            ForEach(recipe.instructions, id: \.self) {
+                                instructionsView($0)
+                            }
+                        } header: {
+                            headerView(.instructions)
+                                .id(instructionsID)
                         }
                     }
-                    .id(ingredientsID)
-                    
-                    ForEach(recipe.ingredients) { ingredient in
-                        ingredientView(ingredient)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .padding(.vertical, 5)
-                    
-                    headerView(.instructions) {
-                        withAnimation {
-                            proxy.scrollTo(instructionsID, anchor: .top)
-                        }
-                    }
-                    .id(instructionsID)
-                    
-                    ForEach(recipe.instructions, id: \.self) { instruction in
-                        instructionsView(instruction)
-                    }
+                    .padding()
                 }
-                .padding()
+                .scrollBounceBehavior(.basedOnSize)
+                .scale(.padding(.bottom), 55)
+                
+                scrollToView(proxy)
+                    .offset(x: buttonXOffset, y: 0)
             }
-            .scrollBounceBehavior(.basedOnSize)
-            .padding(.bottom, 30)
-            .background(Color.appBackground)
         }
+        .background(Color.appBackground)
     }
 }
 
@@ -144,5 +181,5 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(recipe: Recipe.sample)
+    RecipeView(.sample)
 }

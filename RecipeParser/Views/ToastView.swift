@@ -11,6 +11,8 @@ struct ToastView: View {
     var state: State
     var onDismiss: @MainActor () -> Void
     
+    @ScaledMetric private var spacing: CGFloat = 10
+    
     private var caption: String {
         switch state {
         case .error(let error):
@@ -49,6 +51,7 @@ struct ToastView: View {
             
         case .loading(_:):
             ProgressView()
+                .tint(themeColor)
         }
     }
     
@@ -57,7 +60,9 @@ struct ToastView: View {
         case .info(_:), .error(_:), .success(_:):
             Button(action: onDismiss) {
                 Symbol.x.image
-                    .padding(10)
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(Color.appForeground.opacity(0.75))
+                    .imageScale(.medium)
             }
             
         default:
@@ -66,25 +71,23 @@ struct ToastView: View {
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: 10) {
+        HStack(alignment: .center, spacing: spacing) {
             iconView()
-                .font(.system(size: 18))
-                .foregroundColor(themeColor)
+                .imageScale(.medium)
+                .foregroundStyle(themeColor)
             
             Text(caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(2)
-            
-            Spacer(minLength: 10)
+                .lineLimit(3)
                 
             closeButton()
         }
-        .frame(minHeight: 30)
+        .frame(minHeight: 45)
         .font(.caption)
         .fontWeight(.medium)
-        .foregroundColor(Color.appForeground)
-        .padding(.vertical, 12)
-        .padding(.horizontal, 15)
+        .scale(.padding(.vertical), 12)
+        .scale(.padding(.horizontal), 15)
+        .foregroundStyle(Color.appForeground)
         .background(Color.appBackground)
         .rounded(cornerRadius: .regular, lineWidth: 1, color: themeColor)
         .shadow()

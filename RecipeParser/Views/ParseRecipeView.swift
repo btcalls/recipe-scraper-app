@@ -11,7 +11,9 @@ import SwiftData
 struct ParseRecipeView: View {
     @Environment(\.modelContext) private var context
     @State private var recipeMetadata: RecipeMetadata?
-    @StateObject private var viewState = ViewState()
+    @State private var viewState = ViewState()
+    
+    @ScaledMetric private var spacing: CGFloat = 20
     
     var sharedURL: URL
     
@@ -19,23 +21,17 @@ struct ParseRecipeView: View {
         sharedURL = url
     }
     
-    private var urlText: Text {
-        Text(sharedURL.absoluteString)
-            .fontWeight(.medium)
-            .foregroundStyle(.blue)
-    }
-    
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: spacing) {
                     RecipeMetadataView(metadata: recipeMetadata)
                     
                     Spacer()
                     
                     Divider().asStandard()
                     
-                    CustomButton(.saveRecipe) {
+                    WideButton(.saveRecipe) {
                         Task {
                             await processRecipe()
                         }

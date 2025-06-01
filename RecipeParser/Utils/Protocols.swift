@@ -37,6 +37,8 @@ extension APIEndpoint {
     }
 }
 
+// MARK: ViewModels
+
 /// Protocol for implementing a base view model where business logic and processes are performed.
 protocol ViewModel: ObservableObject {
     associatedtype Value

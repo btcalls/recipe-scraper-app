@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoadableView<Content: View>: View {
-    @ObservedObject var viewState: ViewState
+    @Bindable var viewState: ViewState
     
     @ViewBuilder let content: Content
     
