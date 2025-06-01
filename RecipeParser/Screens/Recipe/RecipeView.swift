@@ -15,6 +15,10 @@ struct RecipeView: View {
     var recipe: Recipe
     
     @State private var currentID: Namespace.ID? = nil
+    @ScaledMetric private var buttonXOffset: CGFloat = -20
+    @ScaledMetric private var bulletFont: CGFloat = 7.5
+    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
+    @ScaledMetric private var spacing: CGFloat = 10
     
     private var ids: [Namespace.ID] {
         return [titleID, ingredientsID, instructionsID]
@@ -26,7 +30,7 @@ struct RecipeView: View {
             .fontWeight(.semibold)
             .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
             .frame(maxWidth: .infinity, alignment: .leading)
-            .scale(.padding(.vertical), value: 10)
+            .scale(.padding(.vertical), 10)
             .background(Color.appBackground)
     }
     
@@ -37,11 +41,11 @@ struct RecipeView: View {
     }
     
     @ViewBuilder private func instructionsView(_ value: String) -> some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .top, spacing: spacing) {
             Symbol.bullet.image
-                .font(.system(size: 7.5))
+                .font(.system(size: bulletFont))
                 .imageScale(.small)
-                .offset(y: 7)
+                .offset(y: bulletYOffset)
             
             Text(value)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -53,7 +57,7 @@ struct RecipeView: View {
                                        as label: String) -> some View {
         HStack(alignment: .center) {
             Text(label)
-                .scale(.width(), value: 90)
+                .scale(.width(), 90)
                 .frame(alignment: .leading)
             
             Text(measurement, format: .measurement(width: .wide))
@@ -64,7 +68,7 @@ struct RecipeView: View {
     }
     
     @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
-        HStack(spacing: 10) {
+        HStack(spacing: spacing) {
             CompactButton(.init(.arrowUp)) {
                 withAnimation {
                     if let id = currentID, let prevID = ids.prev(id) {
@@ -101,7 +105,7 @@ struct RecipeView: View {
                 ScrollView {
                     LazyVStack(
                         alignment: .leading,
-                        spacing: 10,
+                        spacing: spacing,
                         pinnedViews: .sectionHeaders
                     ) {
                         Section {
@@ -115,7 +119,7 @@ struct RecipeView: View {
                             
                             Divider()
                                 .asStandard()
-                                .scale(.padding(.vertical), value: 5)
+                                .scale(.padding(.vertical), 5)
                             
                             VStack(alignment: .leading) {
                                 timeView(recipe.prepTimeMeasurement, as: .prepTime)
@@ -124,12 +128,12 @@ struct RecipeView: View {
                             
                             Divider()
                                 .asStandard()
-                                .scale(.padding(.vertical), value: 5)
+                                .scale(.padding(.vertical), 5)
                         } header: {
                             Text(recipe.name)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
-                                .scale(.padding(.vertical), value: 10)
+                                .scale(.padding(.vertical), 10)
                                 .id(titleID)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -146,7 +150,7 @@ struct RecipeView: View {
                         
                         Divider()
                             .asStandard()
-                            .scale(.padding(.vertical), value: 5)
+                            .scale(.padding(.vertical), 5)
                         
                         Section {
                             ForEach(recipe.instructions, id: \.self) {
@@ -160,10 +164,10 @@ struct RecipeView: View {
                     .padding()
                 }
                 .scrollBounceBehavior(.basedOnSize)
-                .scale(.padding(.bottom), value: 55)
+                .scale(.padding(.bottom), 55)
                 
                 scrollToView(proxy)
-                    .offset(x: -20, y: 0)
+                    .offset(x: buttonXOffset, y: 0)
             }
         }
         .background(Color.appBackground)

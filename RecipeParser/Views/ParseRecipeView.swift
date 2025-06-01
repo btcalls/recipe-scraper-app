@@ -13,22 +13,18 @@ struct ParseRecipeView: View {
     @State private var recipeMetadata: RecipeMetadata?
     @State private var viewState = ViewState()
     
+    @ScaledMetric private var spacing: CGFloat = 20
+    
     var sharedURL: URL
     
     init(url: URL) {
         sharedURL = url
     }
     
-    private var urlText: Text {
-        Text(sharedURL.absoluteString)
-            .fontWeight(.medium)
-            .foregroundStyle(.blue)
-    }
-    
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
-                VStack(alignment: .leading, spacing: 20) {
+                VStack(alignment: .leading, spacing: spacing) {
                     RecipeMetadataView(metadata: recipeMetadata)
                     
                     Spacer()

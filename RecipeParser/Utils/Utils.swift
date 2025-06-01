@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+// MARK: Observables
+
 @Observable
 final class AppSettings {
     enum RootView {
@@ -17,6 +19,14 @@ final class AppSettings {
     
     var rootView: RootView = .onboarding
 }
+
+@Observable
+final class ViewState {
+    var isProcessing = false
+    var toast: ToastView.State?
+}
+
+// MARK: Settings
 
 final class AppValues {
     static var shared = AppValues()
@@ -30,10 +40,4 @@ final class AppValues {
         storage: .init(suiteName: .extensionGroup) ?? .standard
     )
     var isOnboardingComplete: Bool = false
-}
-
-@Observable
-final class ViewState {
-    var isProcessing = false
-    var toast: ToastView.State?
 }

@@ -17,7 +17,7 @@ struct CustomLabelStyle: LabelStyle {
     
     var kind: Kind = .iconTitle()
     
-    private var spacing: CGFloat = 8
+    @ScaledMetric private var spacing: CGFloat = 8
     
     func makeBody(configuration: Configuration) -> some View {
         switch kind {

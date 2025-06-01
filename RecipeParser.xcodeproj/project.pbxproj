@@ -89,7 +89,6 @@
 				Screens/Onboarding/OnboardingView.swift,
 				Screens/Recipe/RecipeView.swift,
 				Utils/Constants.swift,
-				Utils/CustomLabelStyle.swift,
 				Utils/Debugger.swift,
 				Utils/ExtractRecipeMetadata.swift,
 				Utils/Models.swift,
@@ -107,6 +106,7 @@
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
+				Views/Styles/CustomLabelStyle.swift,
 				Views/ToastView.swift,
 				Views/WideButton.swift,
 			);

@@ -111,7 +111,7 @@ extension View {
     ///   - scaleType: The type in which the scaling is applied to.
     ///   - value: The value to be scaled.
     /// - Returns: Modified view with scaled value.
-    func scale(_ scaleType: ScaledModifier.Kind, value: CGFloat) -> some View {
+    func scale(_ scaleType: ScaledModifier.Kind, _ value: CGFloat) -> some View {
         return modifier(ScaledModifier(scaleType: scaleType, value: value))
     }
 }
@@ -123,7 +123,7 @@ extension Divider {
     /// - Returns: Modified divider.
     func asStandard() -> some View {
         return self
-            .scale(.height(), value: 1)
+            .scale(.height(), 1)
             .background(.secondary.opacity(0.5))
     }
 }

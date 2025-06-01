@@ -16,7 +16,7 @@ struct CompactButton: View {
         Button(action: action) {
             icon.sfSymbol.image
         }
-        .scale(.heightWidth(), value: 45)
+        .scale(.heightWidth(), 45)
         .background(color.brightness(0.1))
         .tint(icon.tint)
         .clipTo(.circle)

@@ -39,8 +39,8 @@ struct WideButton: View {
             imageAndLabelView()
                 .frame(maxWidth: .infinity)
                 .bold()
-                .scale(.height(isMinimum: true), value: 45)
-                .scale(.padding(.vertical), value: 5)
+                .scale(.height(isMinimum: true), 45)
+                .scale(.padding(.vertical), 5)
         }
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))

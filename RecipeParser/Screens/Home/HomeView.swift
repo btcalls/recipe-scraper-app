@@ -10,7 +10,8 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+//    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+    private var items: [Recipe] = [.sample]
     
     var body: some View {
         NavigationStack {

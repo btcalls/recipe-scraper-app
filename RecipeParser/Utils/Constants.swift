@@ -49,6 +49,13 @@ enum CornerRadius: CGFloat {
     case lg = 24
 }
 
+enum Spacing: CGFloat {
+    case xs = 5
+    case sm = 8
+    case regular = 10
+    case lg = 20
+}
+
 @SFSymbol
 enum Symbol: String {
     case documentOnClipboard = "document.on.clipboard"
