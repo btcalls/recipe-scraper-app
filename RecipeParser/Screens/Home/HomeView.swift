@@ -11,7 +11,7 @@ import SwiftData
 struct HomeView: View {
     @Environment(\.modelContext) private var context
 //    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
-    private var items: [Recipe] = [.sample]
+    private var items: [Recipe] = [.sample, .sample, .sample, .sample, .sample, .sample, .sample, .sample]
     
     var body: some View {
         NavigationStack {
@@ -26,8 +26,8 @@ struct HomeView: View {
                             }
                             .opacity(0)
                         }
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 }
             }
             .background(Color.appBackground)
@@ -46,5 +46,4 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .modelContainer(.shared(inMemoryOnly: true))
 }
