@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-// MARK: Modifiers
+// MARK: New Views
 
 extension View {
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
@@ -48,15 +48,6 @@ extension View {
                                           actions: actions))
     }
     
-    /// Modifier to hide `View` given a condition.
-    /// - Parameters:
-    ///   - condition: The condition to hide the view.
-    ///   - remove: Flag to remove view from parent view.
-    /// - Returns: Modified view.
-    func hidden(if condition: Bool, remove: Bool = false) -> some View {
-        return modifier(HiddenViewModifier(condition: condition, remove: remove))
-    }
-    
     /// Modifier to present a `ToastView` to this view.
     /// - Parameters:
     ///   - state: Optional. Binding state in which the toast will be based upon.
@@ -69,6 +60,20 @@ extension View {
         return modifier(ToastModifier(state: state,
                                       duration: duration,
                                       onDismiss: onDismiss))
+    }
+    
+}
+
+// MARK: View Modifiers
+
+extension View {
+    /// Modifier to hide `View` given a condition.
+    /// - Parameters:
+    ///   - condition: The condition to hide the view.
+    ///   - remove: Flag to remove view from parent view.
+    /// - Returns: Modified view.
+    func hidden(if condition: Bool, remove: Bool = false) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: remove))
     }
     
     /// Modifier for conditional application of `.redacted()` modifier based on `condition`.
@@ -133,6 +138,8 @@ extension View {
     }
 }
 
+// MARK: Actions
+
 extension View {
     /// Adds an action to perform when a notification from `NotificationCenter` is received.
     /// - Parameters:
@@ -151,6 +158,17 @@ extension View {
             center.publisher(for: name, object: object),
             perform: action
         )
+    }
+}
+
+// MARK: Navigation
+
+extension View {
+    /// Modifier to apply navigation capabilities to this view.
+    /// - Parameter destination: The destination view.
+    /// - Returns: Modifed view with navigation in place.
+    func navigate<Destination>(to destination: Destination) -> some View where Destination : View {
+        modifier(NavigableViewModifier(destination: { destination }))
     }
 }
 

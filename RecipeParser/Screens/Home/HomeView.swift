@@ -10,25 +10,17 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+//    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+    private var items: [Recipe] = [.sample]
     
     @State private var isBrowserPresented = false
     
     var body: some View {
         NavigationStack {
-            List {
+            ScrollView {
                 ForEach(items, id: \.id) { recipe in
                     RecipeRow(recipe)
-                        .overlay {
-                            NavigationLink {
-                                RecipeView(recipe)
-                            } label: {
-                                EmptyView()
-                            }
-                            .opacity(0)
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+                        .navigate(to: RecipeView(recipe))
                 }
             }
             .background(Color.appBackground)
