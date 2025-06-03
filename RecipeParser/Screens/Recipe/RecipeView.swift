@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct RecipeView: View {
-    @Namespace var titleID
-    @Namespace var ingredientsID
-    @Namespace var instructionsID
-    
     var recipe: Recipe
     
+    @Namespace private var titleID
+    @Namespace private var ingredientsID
+    @Namespace private var instructionsID
     @State private var currentID: Namespace.ID? = nil
     @ScaledMetric private var buttonXOffset: CGFloat = -20
     @ScaledMetric private var bulletFont: CGFloat = 7.5
@@ -70,32 +69,30 @@ struct RecipeView: View {
     @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
         HStack(spacing: spacing) {
             CompactButton(.init(.arrowUp)) {
+                if let id = currentID, let prevID = ids.prev(id) {
+                    currentID = prevID
+                } else {
+                    currentID = titleID
+                }
+                
                 withAnimation {
-                    if let id = currentID, let prevID = ids.prev(id) {
-                        currentID = prevID
-                    } else {
-                        currentID = titleID
-                    }
-                    
                     proxy.scrollTo(currentID, anchor: .top)
                 }
             }
-            .transition(.opacity)
-            .hidden(if: currentID == titleID || currentID == nil)
+            .disabled(currentID == titleID || currentID == nil)
             
             CompactButton(.init(.arrowDown)) {
+                if let id = currentID, let nextID = ids.next(id) {
+                    currentID = nextID
+                } else {
+                    currentID = ingredientsID
+                }
+                
                 withAnimation {
-                    if let id = currentID, let nextID = ids.next(id) {
-                        currentID = nextID
-                    } else {
-                        currentID = ingredientsID
-                    }
-                    
                     proxy.scrollTo(currentID, anchor: .top)
                 }
             }
-            .transition(.opacity)
-            .hidden(if: currentID == instructionsID, remove: true)
+            .disabled(currentID == instructionsID)
         }
     }
     

@@ -10,8 +10,9 @@ import SwiftData
 
 struct HomeView: View {
     @Environment(\.modelContext) private var context
-//    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
-    private var items: [Recipe] = [.sample]
+    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+    
+    @State private var isBrowserPresented = false
     
     var body: some View {
         NavigationStack {
@@ -26,25 +27,54 @@ struct HomeView: View {
                             }
                             .opacity(0)
                         }
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .listRowSeparator(.hidden)
                 }
             }
             .background(Color.appBackground)
             .scrollContentBackground(.hidden)
             .listStyle(.plain)
             .refreshable {}
-            .navigationTitle(String.yourRecipes)
+            .navigationTitle("")
+            .toolbar {
+                if !items.isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isBrowserPresented = true
+                        } label: {
+                            Symbol.plus.image
+                        }
+                    }
+                }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Text(String.yourRecipes)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                }
+            }
             .emptyView(
                 if: items.isEmpty,
                 label: Label(.noRecipes, sfSymbol: .forkKnife),
-                description: .noRecipesDescription
+                description: {
+                    Text(String.noRecipesDescription)
+                },
+                actions: {
+                    WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
+                        isBrowserPresented = true
+                    }
+                }
             )
+            .sheet(isPresented: $isBrowserPresented) {
+                isBrowserPresented = false
+            } content: {
+                BrowserView()
+                    .ignoresSafeArea()
+            }
         }
     }
 }
 
 #Preview {
     HomeView()
-        .modelContainer(.shared(inMemoryOnly: true))
 }

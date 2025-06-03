@@ -8,10 +8,9 @@
 import SwiftUI
 
 struct RecipeMetadataView: View {
-    private let size: CGFloat = 150
-    
     var metadata: RecipeMetadata?
     
+    @ScaledMetric private var size: CGFloat = 150
     @ScaledMetric private var spacing: CGFloat = 30
     @ScaledMetric private var bodySpacing: CGFloat = 10
     
@@ -34,6 +33,7 @@ struct RecipeMetadataView: View {
                 Text(metadata?.title ?? .placeholder(length: 30))
                     .font(.title2)
                     .fontWeight(.medium)
+                    .multilineTextAlignment(.center)
 
                 Text(metadata?.description ?? .placeholder(length: 80))
                     .lineLimit(3)

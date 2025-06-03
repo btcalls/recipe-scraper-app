@@ -9,13 +9,16 @@ import Foundation
 import SwiftData
 
 final class APIClient<E: APIEndpoint>: NSObject {
+    /// Configures and sends a URL request based on provided endpoint.
+    /// - Parameter endpoint: The endpoint details in which to base the request.
+    /// - Returns: The decoded response from the API endpoint.
     func send<D: AppModel>(_ endpoint: E) async throws -> D {
         do {
             let urlRequest = try getURLRequest(from: endpoint)
             let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
-        
+            
             try getHttpError(urlResponse)
-        
+            
             return try data.decoded()
         } catch let e as CustomError {
             Debugger.critical(e)
@@ -26,6 +29,11 @@ final class APIClient<E: APIEndpoint>: NSObject {
         }
     }
     
+    /// Configures and sends a URL request based on provided endpoint. Saves decoded response to the model context provided.
+    /// - Parameters:
+    ///   - endpoint: The endpoint details in which to base the request.
+    ///   - context: The model context where the response is to be saved.
+    /// - Returns: The decoded response wrapped in `Model` instance.
     func send<T: AppModel>(_ endpoint: E,
                            storeTo context: ModelContext? = nil) async throws -> Model<T> {
         let obj: T = try await send(endpoint)
