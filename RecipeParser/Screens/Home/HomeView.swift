@@ -9,24 +9,24 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @Environment(\.modelContext) private var context
 //    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
     private var items: [Recipe] = [.sample]
     
+    @ScaledMetric private var spacing: CGFloat = 20
     @State private var isBrowserPresented = false
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                ForEach(items, id: \.id) { recipe in
-                    RecipeRow(recipe)
-                        .navigate(to: RecipeView(recipe))
+                VStack(spacing: spacing) {
+                    RecipeListView()
+                    
+                    Spacer()
                 }
+                .padding()
             }
             .background(Color.appBackground)
-            .scrollContentBackground(.hidden)
-            .listStyle(.plain)
-            .refreshable {}
+            .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("")
             .toolbar {
                 if !items.isEmpty {

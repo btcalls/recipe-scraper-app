@@ -84,6 +84,7 @@
 				"Extensions/View+Extensions.swift",
 				RecipeParserApp.swift,
 				Screens/Home/HomeView.swift,
+				Screens/Home/RecipeListView.swift,
 				Screens/Home/RecipeRow.swift,
 				Screens/Onboarding/OnboardingCard.swift,
 				Screens/Onboarding/OnboardingView.swift,
@@ -117,6 +118,7 @@
 		49B19D532DB0F9EE008F9B9E /* Exceptions for "RecipeParser" folder in "RecipeParser" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Configs/Config.xcconfig,
 				Info.plist,
 			);
 			target = 49B19D2F2DB0F9EC008F9B9E /* RecipeParser */;
@@ -322,7 +324,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1630;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					492BD7D12DC9A07F0020485B = {
 						CreatedOnToolsVersion = 16.3;
