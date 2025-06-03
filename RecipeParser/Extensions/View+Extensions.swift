@@ -21,8 +21,27 @@ extension View {
         if condition: @autoclosure () -> Bool,
         label: Label,
         description: String? = nil,
-        @ViewBuilder actions: () -> Actions = { EmptyView() }
+        @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Actions : View  {
+        return modifier(EmptyViewModifier(label,
+                                          if: condition(),
+                                          description: description,
+                                          actions: actions))
+    }
+    
+    /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
+    /// - Parameters:
+    ///   - condition: The condition to display the view.
+    ///   - label: `Label` that makes up the main title of the view.
+    ///   - description: Optional. The description displayed as a configured view.
+    ///   - actions: Optional. Actions to display along the view.
+    /// - Returns: Modified view with unavailable view option.
+    func emptyView<Label, Description, Actions>(
+        if condition: @autoclosure () -> Bool,
+        label: Label,
+        @ViewBuilder description: () -> Description = EmptyView.init,
+        @ViewBuilder actions: () -> Actions = EmptyView.init
+    ) -> some View where Label : View, Description: View, Actions : View  {
         return modifier(EmptyViewModifier(label,
                                           if: condition(),
                                           description: description,

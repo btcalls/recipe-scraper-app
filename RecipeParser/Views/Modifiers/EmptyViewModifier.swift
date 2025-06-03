@@ -7,24 +7,12 @@
 
 import SwiftUI
 
-struct EmptyViewModifier<Label, Actions>: ViewModifier where Label : View, Actions: View {
+struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label : View, Description: View, Actions: View {
+    var condition: Bool
+    
     @ViewBuilder var label: Label
     @ViewBuilder var actions: Actions
-    
-    var condition: Bool
-    var description: String? = nil
-    
-    init(
-        _ label: Label,
-        if condition: Bool,
-        description: String? = nil,
-        @ViewBuilder actions: () -> Actions = { EmptyView() }
-    ) {
-        self.label = label
-        self.condition = condition
-        self.description = description
-        self.actions = actions()
-    }
+    @ViewBuilder var description: Description
     
     func body(content: Content) -> some View {
         switch condition {
@@ -37,13 +25,37 @@ struct EmptyViewModifier<Label, Actions>: ViewModifier where Label : View, Actio
                     ContentUnavailableView(label: {
                         label
                     }, description: {
-                        if let description {
-                            Text(description)
-                        } else {
-                            EmptyView()
-                        }
+                        description
                     }) { actions }
                 }
         }
+    }
+}
+
+extension EmptyViewModifier {
+    init(
+        _ label: Label,
+        if condition: Bool,
+        @ViewBuilder description: () -> Description = EmptyView.init,
+        @ViewBuilder actions: () -> Actions = EmptyView.init
+    ) {
+        self.label = label
+        self.condition = condition
+        self.description = description()
+        self.actions = actions()
+    }
+}
+
+extension EmptyViewModifier where Description == Text {
+    init(
+        _ label: Label,
+        if condition: Bool,
+        description: String? = nil,
+        @ViewBuilder actions: () -> Actions = EmptyView.init
+    ) {
+        self.label = label
+        self.condition = condition
+        self.description = { Text(description ?? "") }()
+        self.actions = actions()
     }
 }
