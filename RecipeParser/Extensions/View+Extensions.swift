@@ -103,9 +103,7 @@ extension View {
             color: color
         )
     }
-}
-
-extension View {
+    
     /// Modifier to apply scaling to this view with given value.
     /// - Parameters:
     ///   - scaleType: The type in which the scaling is applied to.
@@ -113,6 +111,27 @@ extension View {
     /// - Returns: Modified view with scaled value.
     func scale(_ scaleType: ScaledModifier.Kind, _ value: CGFloat) -> some View {
         return modifier(ScaledModifier(scaleType: scaleType, value: value))
+    }
+}
+
+extension View {
+    /// Adds an action to perform when a notification from `NotificationCenter` is received.
+    /// - Parameters:
+    ///   - name: The notification received.
+    ///   - center: The center to subscribe to.
+    ///   - object: Optional. The object sent by the notification.
+    ///   - action: The action to perform upon receiving the notification.
+    /// - Returns: Modified view after receiving and processing the notification.
+    func onReceive(
+        _ name: Notification.Name,
+        center: NotificationCenter = .default,
+        object: AnyObject? = nil,
+        perform action: @escaping (Notification) -> Void
+    ) -> some View {
+        onReceive(
+            center.publisher(for: name, object: object),
+            perform: action
+        )
     }
 }
 
