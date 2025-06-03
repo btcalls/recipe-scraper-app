@@ -9,5 +9,4 @@ import Foundation
 
 extension NSNotification.Name {
     static let closeShareView = NSNotification.Name("closeShareView")
-    static let closeAddRecipeView = NSNotification.Name("closeAddRecipeView")
 }

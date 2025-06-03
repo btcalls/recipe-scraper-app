@@ -14,6 +14,16 @@ struct WideButton: View {
     
     @ScaledMetric private var spacing: CGFloat = 8
     
+    private var isDisabled: Bool {
+        switch state {
+        case .idle(_, _):
+            return false
+        
+        case .loading(_:):
+            return true
+        }
+    }
+    
     @ViewBuilder private func imageAndLabelView() -> some View {
         switch state {
         case .idle(let title, let sfSymbol):
@@ -27,7 +37,7 @@ struct WideButton: View {
         case .loading(let title):
             HStack(alignment: .center, spacing: spacing) {
                 ProgressView()
-                    .tint(Color.white)
+                    .tint(Color.secondary)
                 
                 Text(title)
             }
@@ -39,9 +49,11 @@ struct WideButton: View {
             imageAndLabelView()
                 .frame(maxWidth: .infinity)
                 .bold()
-                .scale(.height(isMinimum: true), 45)
-                .scale(.padding(.vertical), 5)
+                .scale(.height(isMinimum: true), 40)
+                .scale(.padding(.horizontal), 5)
+                .scale(.padding(.vertical), 2.5)
         }
+        .disabled(isDisabled)
         .buttonStyle(.borderedProminent)
         .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))
         .compositingGroup()

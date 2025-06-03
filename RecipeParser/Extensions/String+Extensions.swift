@@ -17,10 +17,9 @@ extension String {
     static let parsingRecipe = "Parsing Recipe..."
     
     // MARK: Navigation/View Titles
-    static let addNewRecipe = "Add New Recipe"
+    static let addRecipe = "Add Recipe"
     static let yourRecipes = "Your Recipes"
     static let noRecipes = "No Recipes"
-    static let noRecipesDescription = "You haven't saved any recipes yet."
     
     // MARK: Onboarding
     static let onboardingItemOneTitle = "Search Recipe"
@@ -31,6 +30,17 @@ extension String {
         var attrString = AttributedString("Using the browser's Share option, select the \(displayName) to save it.")
         
         if let range = attrString.range(of: displayName) {
+            attrString[range].font = Font.system(size: 16, weight: .bold)
+        }
+        
+        return attrString
+    }
+    
+    // MARK: Descriptions
+    static var noRecipesDescription: AttributedString {
+        var attrString = AttributedString("You haven't saved any recipes yet. Start by pressing the \(String.addRecipe) button.")
+        
+        if let range = attrString.range(of: String.addRecipe) {
             attrString[range].font = Font.system(size: 16, weight: .bold)
         }
         

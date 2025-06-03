@@ -42,7 +42,7 @@ struct ParseRecipeView: View {
                         close()
                     }
                 }
-                .navigationTitle(String.addNewRecipe)
+                .navigationTitle(String.addRecipe)
                 .padding()
                 .task {
                     await parseSharedURL()

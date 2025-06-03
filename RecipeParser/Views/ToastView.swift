@@ -99,7 +99,7 @@ extension ToastView {
         case info(String)
         case error(CustomError)
         case success(String)
-        case loading(String)
+        case loading(String = .processing)
     }
     
     enum Duration {

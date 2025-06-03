@@ -19,7 +19,7 @@ struct ToastModifier: ViewModifier {
         switch state {
         case .loading(_:):
             Color.secondary
-                .opacity(0.3)
+                .opacity(0.5)
                 .ignoresSafeArea(.all)
                 .transition(.opacity)
         
@@ -105,7 +105,7 @@ struct PreviewView: View {
     
     var body: some View {
         Button("Show Toast") {
-            state = .info("Test toast")
+            state = .loading(.processing)
         }
         .presentToast(as: $state) {
             state = nil
