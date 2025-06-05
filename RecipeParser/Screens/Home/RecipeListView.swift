@@ -38,12 +38,12 @@ struct RecipeListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
-    var body: some View {
+    @ViewBuilder private func baseView() -> some View {
         ScrollView {
             switch mode {
             case .first(_:):
                 listView()
-            
+                
             case .full:
                 listView()
                     .padding()
@@ -60,16 +60,29 @@ struct RecipeListView: View {
             if: isEmpty || searchResults.isEmpty,
             for: emptyViewType
         )
-        .searchable(
-            text: $searchContext.query,
-            placement: .navigationBarDrawer,
-            prompt: Text(String.searchRecipe)
-        )
+        .onAppear {
+            isEmpty = items.isEmpty
+        }
         .onChange(of: items) {
             isEmpty = items.isEmpty
         }
         .onChange(of: searchResults) {
             emptyViewType = searchResults.isEmpty ? .search : .generic
+        }
+    }
+    
+    var body: some View {
+        switch mode {
+        case .first(_:):
+            baseView()
+        
+        case .full:
+            baseView()
+                .searchable(
+                    text: $searchContext.query,
+                    placement: .navigationBarDrawer,
+                    prompt: Text(String.searchRecipe)
+                )
         }
     }
 }

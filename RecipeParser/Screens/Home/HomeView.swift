@@ -9,17 +9,29 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-//    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
-    private var items: [Recipe] = [.sample]
-    
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var isBrowserPresented = false
+    @State private var isEmpty: Bool = false
+    
+    private func seeAllButton() -> some View {
+        NavigationLink {
+            RecipeListView(.full, isEmpty: $isEmpty)
+        } label: {
+            Label(.seeAll, sfSymbol: .chevronRight)
+                .labelStyle(CustomLabelStyle(.titleIcon()))
+        }
+        .buttonStyle(PressableStyle())
+    }
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: spacing) {
-                    RecipeListView()
+                VStack(alignment: .trailing, spacing: spacing) {
+                    if !isEmpty {
+                        seeAllButton()
+                    }
+                    
+                    RecipeListView(.first(1), isEmpty: $isEmpty)
                     
                     Spacer()
                 }
@@ -29,13 +41,12 @@ struct HomeView: View {
             .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("")
             .toolbar {
-                if !items.isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isBrowserPresented = true
-                        } label: {
-                            Symbol.plus.image
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isBrowserPresented = true
+                    } label: {
+                        Symbol.plus.image
+                            .bold()
                     }
                 }
                 
@@ -46,15 +57,10 @@ struct HomeView: View {
                 }
             }
             .emptyView(
-                if: items.isEmpty,
+                if: isEmpty,
                 label: Label(.noRecipes, sfSymbol: .forkKnife),
                 description: {
                     Text(String.noRecipesDescription)
-                },
-                actions: {
-                    WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
-                        isBrowserPresented = true
-                    }
                 }
             )
             .sheet(isPresented: $isBrowserPresented) {
