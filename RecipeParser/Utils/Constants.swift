@@ -56,6 +56,11 @@ enum Spacing: CGFloat {
     case lg = 20
 }
 
+enum EmptyViewType {
+    case generic
+    case search
+}
+
 @SFSymbol
 enum Symbol: String {
     case documentOnClipboard = "document.on.clipboard"
@@ -71,4 +76,5 @@ enum Symbol: String {
     case link
     case arrowUp = "arrow.up"
     case arrowDown = "arrow.down"
+    case chevronRight = "chevron.right.circle.fill"
 }

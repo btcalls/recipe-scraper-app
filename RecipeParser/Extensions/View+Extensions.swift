@@ -20,13 +20,15 @@ extension View {
     func emptyView<Label, Actions>(
         _ label: Label,
         if condition: Bool,
+        for type: EmptyViewType = .generic,
         description: String? = nil,
-        @ViewBuilder actionsBuilder: () -> Actions = EmptyView.init
+        @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Actions : View  {
-        return modifier(EmptyViewModifier(if: condition,
+        return modifier(EmptyViewModifier(for: type,
+                                          if: condition,
                                           label: label,
                                           description: description,
-                                          actions: actionsBuilder))
+                                          actions: actions))
     }
     
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
@@ -37,12 +39,14 @@ extension View {
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Description, Actions>(
+        for type: EmptyViewType = .generic,
         if condition: Bool,
         label: Label,
         @ViewBuilder description: () -> Description = EmptyView.init,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Description: View, Actions : View  {
-        return modifier(EmptyViewModifier(if: condition,
+        return modifier(EmptyViewModifier(for: type,
+                                          if: condition,
                                           label: label,
                                           description: description,
                                           actions: actions))

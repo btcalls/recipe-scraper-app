@@ -13,33 +13,63 @@ struct RecipeListView: View {
     
     @Binding var isEmpty: Bool
     
-    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
+    private var searchResults: [Recipe] {
+        if searchContext.debouncedQuery.isEmpty {
+            return items
+        }
+        
+        return items.filter {
+            $0.name.contains(searchContext.debouncedQuery)
+        }
+    }
+    
+    @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
+    @State private var emptyViewType = EmptyViewType.generic
+    @StateObject private var searchContext = SearchContext()
+    
+    @ViewBuilder private func listView() -> some View {
+        VStack(spacing: spacing) {
+            ForEach(searchResults, id: \.id) { recipe in
+                RecipeRow(recipe)
+                    .navigate(to: RecipeView(recipe))
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
     
     var body: some View {
         ScrollView {
-            VStack(spacing: spacing) {
-                ForEach(items, id: \.id) { recipe in
-                    RecipeRow(recipe)
-                        .navigate(to: RecipeView(recipe))
-                }
+            switch mode {
+            case .first(_:):
+                listView()
+            
+            case .full:
+                listView()
+                    .padding()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color.appBackground)
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
         .refreshable {}
+        .navigationTitle("")
         .emptyView(
             Label(.noRecipes, sfSymbol: .forkKnife),
-            if: isEmpty
+            if: isEmpty || searchResults.isEmpty,
+            for: emptyViewType
         )
-        .onAppear {
-            isEmpty = items.isEmpty
-        }
+        .searchable(
+            text: $searchContext.query,
+            placement: .navigationBarDrawer,
+            prompt: Text(String.searchRecipe)
+        )
         .onChange(of: items) {
             isEmpty = items.isEmpty
+        }
+        .onChange(of: searchResults) {
+            emptyViewType = searchResults.isEmpty ? .search : .generic
         }
     }
 }

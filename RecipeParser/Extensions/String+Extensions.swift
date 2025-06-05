@@ -15,11 +15,11 @@ extension String {
     static let getStarted = "Get Started"
     static let processing = "Processing..."
     static let parsingRecipe = "Parsing Recipe..."
+    static let seeAll = "See All"
     
     // MARK: Navigation/View Titles
     static let addRecipe = "Add Recipe"
     static let yourRecipes = "Your Recipes"
-    static let noRecipes = "No Recipes"
     
     // MARK: Onboarding
     static let onboardingItemOneTitle = "Search Recipe"
@@ -38,10 +38,11 @@ extension String {
     
     // MARK: Descriptions
     static var noRecipesDescription: AttributedString {
-        var attrString = AttributedString("You haven't saved any recipes yet. Start by pressing the \(String.addRecipe) button.")
+        var attrString = AttributedString("You haven't saved any recipes yet. Start by pressing the + button.")
         
-        if let range = attrString.range(of: String.addRecipe) {
+        if let range = attrString.range(of: "+") {
             attrString[range].font = Font.system(size: 16, weight: .bold)
+            attrString[range].foregroundColor = Color.accentColor
         }
         
         return attrString
@@ -55,6 +56,8 @@ extension String {
     static let instructions = "Instructions"
     static let prepTime = "Prep. Time:"
     static let cookTime = "Cook Time:"
+    static let noRecipes = "No Recipes"
+    static let searchRecipe = "Search Recipe"
 }
 
 // MARK: Functions
