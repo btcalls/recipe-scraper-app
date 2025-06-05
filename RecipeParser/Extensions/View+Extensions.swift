@@ -12,21 +12,21 @@ import SwiftUI
 extension View {
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
     /// - Parameters:
-    ///   - condition: The condition to display the view.
     ///   - label: `Label` that makes up the main title of the view.
+    ///   - condition: The condition to display the view.
     ///   - description: Optional. The details of the view.
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Actions>(
-        if condition: @autoclosure () -> Bool,
-        label: Label,
+        _ label: Label,
+        if condition: Bool,
         description: String? = nil,
-        @ViewBuilder actions: () -> Actions = EmptyView.init
+        @ViewBuilder actionsBuilder: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Actions : View  {
-        return modifier(EmptyViewModifier(label,
-                                          if: condition(),
+        return modifier(EmptyViewModifier(if: condition,
+                                          label: label,
                                           description: description,
-                                          actions: actions))
+                                          actions: actionsBuilder))
     }
     
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
@@ -37,13 +37,13 @@ extension View {
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Description, Actions>(
-        if condition: @autoclosure () -> Bool,
+        if condition: Bool,
         label: Label,
         @ViewBuilder description: () -> Description = EmptyView.init,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Description: View, Actions : View  {
-        return modifier(EmptyViewModifier(label,
-                                          if: condition(),
+        return modifier(EmptyViewModifier(if: condition,
+                                          label: label,
                                           description: description,
                                           actions: actions))
     }
@@ -80,8 +80,8 @@ extension View {
     /// - Parameter condition: Condition in which if true, will apply a `.placeholder` reason.
     /// - Returns: Modified view with redacted application.
     func redacted(as reason: RedactionReasons,
-                  if condition: @autoclosure () -> Bool) -> some View {
-        return redacted(reason: condition() ? reason : [])
+                  if condition: Bool) -> some View {
+        return redacted(reason: condition ? reason : [])
     }
     
     /// Modifier to implement default `shadow()` across views.
@@ -186,7 +186,7 @@ extension Divider {
 
 extension Label where Title == Text, Icon == Image  {
     init(_ title: String = "", sfSymbol: Symbol) {
-        self.init(title, systemImage: sfSymbol.rawValue )
+        self.init(title, systemImage: sfSymbol.rawValue)
     }
     
     init(_ sfSymbol: Symbol, title: () -> Text) {

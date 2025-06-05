@@ -21,7 +21,7 @@ struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label 
         
         case true:
             content
-                .overlay {
+                .overlay(alignment: .center) {
                     ContentUnavailableView(label: {
                         label
                     }, description: {
@@ -34,13 +34,13 @@ struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label 
 
 extension EmptyViewModifier {
     init(
-        _ label: Label,
         if condition: Bool,
+        label: Label,
         @ViewBuilder description: () -> Description = EmptyView.init,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) {
-        self.label = label
         self.condition = condition
+        self.label = label
         self.description = description()
         self.actions = actions()
     }
@@ -48,13 +48,13 @@ extension EmptyViewModifier {
 
 extension EmptyViewModifier where Description == Text {
     init(
-        _ label: Label,
         if condition: Bool,
+        label: Label,
         description: String? = nil,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) {
-        self.label = label
         self.condition = condition
+        self.label = label
         self.description = { Text(description ?? "") }()
         self.actions = actions()
     }
