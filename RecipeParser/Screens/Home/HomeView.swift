@@ -9,41 +9,45 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
-    @Environment(\.modelContext) private var context
-    @Query(sort: \Recipe.createdOn, order: .reverse) private var items: [Recipe]
-    
+    @ScaledMetric private var spacing: CGFloat = 20
     @State private var isBrowserPresented = false
+    @State private var isEmpty: Bool = false
+    
+    private func seeAllButton() -> some View {
+        NavigationLink {
+            RecipeListView(.full, isEmpty: $isEmpty)
+        } label: {
+            Label(.seeAll, sfSymbol: .chevronRight)
+                .labelStyle(CustomLabelStyle(.titleIcon()))
+        }
+        .buttonStyle(PressableStyle())
+        .foregroundStyle(Color.accentColor)
+    }
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(items, id: \.id) { recipe in
-                    RecipeRow(recipe)
-                        .overlay {
-                            NavigationLink {
-                                RecipeView(recipe)
-                            } label: {
-                                EmptyView()
-                            }
-                            .opacity(0)
-                        }
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
+            ScrollView {
+                VStack(alignment: .trailing, spacing: spacing) {
+                    if !isEmpty {
+                        seeAllButton()
+                    }
+                    
+                    RecipeListView(.first(1), isEmpty: $isEmpty)
+                    
+                    Spacer()
                 }
+                .padding()
             }
             .background(Color.appBackground)
-            .scrollContentBackground(.hidden)
-            .listStyle(.plain)
-            .refreshable {}
+            .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("")
             .toolbar {
-                if !items.isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isBrowserPresented = true
-                        } label: {
-                            Symbol.plus.image
-                        }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        isBrowserPresented = true
+                    } label: {
+                        Symbol.plus.image
+                            .bold()
                     }
                 }
                 
@@ -54,17 +58,16 @@ struct HomeView: View {
                 }
             }
             .emptyView(
-                if: items.isEmpty,
+                if: isEmpty,
                 label: Label(.noRecipes, sfSymbol: .forkKnife),
                 description: {
                     Text(String.noRecipesDescription)
-                },
-                actions: {
-                    WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
-                        isBrowserPresented = true
-                    }
                 }
-            )
+            ) {
+                WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
+                    isBrowserPresented = true
+                }
+            }
             .sheet(isPresented: $isBrowserPresented) {
                 isBrowserPresented = false
             } content: {

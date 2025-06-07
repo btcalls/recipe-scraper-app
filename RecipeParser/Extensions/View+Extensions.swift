@@ -7,24 +7,26 @@
 
 import SwiftUI
 
-// MARK: Modifiers
+// MARK: New Views
 
 extension View {
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
     /// - Parameters:
-    ///   - condition: The condition to display the view.
     ///   - label: `Label` that makes up the main title of the view.
+    ///   - condition: The condition to display the view.
     ///   - description: Optional. The details of the view.
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Actions>(
-        if condition: @autoclosure () -> Bool,
-        label: Label,
+        _ label: Label,
+        if condition: Bool,
+        for type: EmptyViewType = .generic,
         description: String? = nil,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Actions : View  {
-        return modifier(EmptyViewModifier(label,
-                                          if: condition(),
+        return modifier(EmptyViewModifier(for: type,
+                                          if: condition,
+                                          label: label,
                                           description: description,
                                           actions: actions))
     }
@@ -37,24 +39,17 @@ extension View {
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Description, Actions>(
-        if condition: @autoclosure () -> Bool,
+        for type: EmptyViewType = .generic,
+        if condition: Bool,
         label: Label,
         @ViewBuilder description: () -> Description = EmptyView.init,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Description: View, Actions : View  {
-        return modifier(EmptyViewModifier(label,
-                                          if: condition(),
+        return modifier(EmptyViewModifier(for: type,
+                                          if: condition,
+                                          label: label,
                                           description: description,
                                           actions: actions))
-    }
-    
-    /// Modifier to hide `View` given a condition.
-    /// - Parameters:
-    ///   - condition: The condition to hide the view.
-    ///   - remove: Flag to remove view from parent view.
-    /// - Returns: Modified view.
-    func hidden(if condition: Bool, remove: Bool = false) -> some View {
-        return modifier(HiddenViewModifier(condition: condition, remove: remove))
     }
     
     /// Modifier to present a `ToastView` to this view.
@@ -71,12 +66,26 @@ extension View {
                                       onDismiss: onDismiss))
     }
     
+}
+
+// MARK: View Modifiers
+
+extension View {
+    /// Modifier to hide `View` given a condition.
+    /// - Parameters:
+    ///   - condition: The condition to hide the view.
+    ///   - remove: Flag to remove view from parent view.
+    /// - Returns: Modified view.
+    func hidden(if condition: Bool, remove: Bool = false) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: remove))
+    }
+    
     /// Modifier for conditional application of `.redacted()` modifier based on `condition`.
     /// - Parameter condition: Condition in which if true, will apply a `.placeholder` reason.
     /// - Returns: Modified view with redacted application.
     func redacted(as reason: RedactionReasons,
-                  if condition: @autoclosure () -> Bool) -> some View {
-        return redacted(reason: condition() ? reason : [])
+                  if condition: Bool) -> some View {
+        return redacted(reason: condition ? reason : [])
     }
     
     /// Modifier to implement default `shadow()` across views.
@@ -133,6 +142,8 @@ extension View {
     }
 }
 
+// MARK: Actions
+
 extension View {
     /// Adds an action to perform when a notification from `NotificationCenter` is received.
     /// - Parameters:
@@ -154,6 +165,17 @@ extension View {
     }
 }
 
+// MARK: Navigation
+
+extension View {
+    /// Modifier to apply navigation capabilities to this view.
+    /// - Parameter destination: The destination view.
+    /// - Returns: Modifed view with navigation in place.
+    func navigate<Destination>(to destination: Destination) -> some View where Destination : View {
+        modifier(NavigableViewModifier(destination: { destination }))
+    }
+}
+
 // MARK: Views
 
 extension Divider {
@@ -168,7 +190,7 @@ extension Divider {
 
 extension Label where Title == Text, Icon == Image  {
     init(_ title: String = "", sfSymbol: Symbol) {
-        self.init(title, systemImage: sfSymbol.rawValue )
+        self.init(title, systemImage: sfSymbol.rawValue)
     }
     
     init(_ sfSymbol: Symbol, title: () -> Text) {
