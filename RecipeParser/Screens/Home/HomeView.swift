@@ -21,6 +21,7 @@ struct HomeView: View {
                 .labelStyle(CustomLabelStyle(.titleIcon()))
         }
         .buttonStyle(PressableStyle())
+        .foregroundStyle(Color.accentColor)
     }
     
     var body: some View {
@@ -62,7 +63,11 @@ struct HomeView: View {
                 description: {
                     Text(String.noRecipesDescription)
                 }
-            )
+            ) {
+                WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
+                    isBrowserPresented = true
+                }
+            }
             .sheet(isPresented: $isBrowserPresented) {
                 isBrowserPresented = false
             } content: {

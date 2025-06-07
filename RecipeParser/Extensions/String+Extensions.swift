@@ -38,10 +38,13 @@ extension String {
     
     // MARK: Descriptions
     static var noRecipesDescription: AttributedString {
-        var attrString = AttributedString("You haven't saved any recipes yet. Start by pressing the + button.")
+        let actionString = "Add Recipe"
+        var attrString = AttributedString(
+            "You haven't saved any recipes yet. Start by pressing the \(actionString) button."
+        )
         
-        if let range = attrString.range(of: "+") {
-            attrString[range].font = Font.system(size: 16, weight: .bold)
+        if let range = attrString.range(of: actionString) {
+            attrString[range].font = .system(size: 16, weight: .bold)
             attrString[range].foregroundColor = Color.accentColor
         }
         
