@@ -45,7 +45,7 @@ final class Recipe: AppModel {
     var prepTime: Double
     var totalTime: Double
     var instructions: [String]
-    var _description: String
+    var label: String
     var createdOn: Date
     var modifiedOn: Date
     
@@ -70,7 +70,7 @@ final class Recipe: AppModel {
         case id, name, category, cuisine, prepTime, totalTime, instructions, ingredients
         case image = "imageUrl"
         case detail = "description"
-        case _description = "instanceDescription"
+        case label = "instanceDescription"
     }
     
     init(
@@ -84,7 +84,7 @@ final class Recipe: AppModel {
         totalTime: Double,
         instructions: [String],
         ingredients: [Ingredient],
-        _description: String
+        label: String
     ) {
         self.id = id
         self.name = name
@@ -96,7 +96,7 @@ final class Recipe: AppModel {
         self.totalTime = totalTime
         self.instructions = instructions
         self.ingredients = ingredients
-        self._description = _description
+        self.label = label
         self.createdOn = .init()
         self.modifiedOn = .init()
     }
@@ -113,7 +113,7 @@ final class Recipe: AppModel {
         totalTime = try container.decode(Double.self, forKey: .totalTime)
         instructions = try container.decode([String].self, forKey: .instructions)
         ingredients = try container.decode([Ingredient].self, forKey: .ingredients)
-        _description = try container.decode(String.self, forKey: ._description)
+        label = try container.decode(String.self, forKey: .label)
         createdOn = .init()
         modifiedOn = .init()
     }
@@ -131,7 +131,7 @@ final class Recipe: AppModel {
         try container.encode(totalTime, forKey: .totalTime)
         try container.encode(instructions, forKey: .instructions)
         try container.encode(ingredients, forKey: .ingredients)
-        try container.encode(_description, forKey: ._description)
+        try container.encode(label, forKey: .label)
     }
 }
 
@@ -152,7 +152,7 @@ extension Recipe {
             totalTime: 40,
             instructions: [""],
             ingredients: [],
-            _description: ""
+            label: ""
         )
     }
 }
