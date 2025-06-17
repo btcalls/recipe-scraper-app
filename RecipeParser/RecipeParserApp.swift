@@ -14,22 +14,21 @@ struct RecipeParserApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ParseRecipeView(url: URL(string: .sampleRecipeURL)!)
-//            if AppValues.shared.isOnboardingComplete {
-//                HomeView()
-//                    .tint(.accentColor)
-//            } else {
-//                switch appSettings.rootView {
-//                case .onboarding:
-//                    OnboardingView()
-//                        .tint(.accentColor)
-//                    
-//                case .home:
-//                    HomeView()
-//                        .tint(.accentColor)
-//                        .transition(.opacity.animation(.bouncy(duration: 0.5)))
-//                }
-//            }
+            if AppValues.shared.isOnboardingComplete {
+                HomeView()
+                    .tint(.accentColor)
+            } else {
+                switch appSettings.rootView {
+                case .onboarding:
+                    OnboardingView()
+                        .tint(.accentColor)
+                    
+                case .home:
+                    HomeView()
+                        .tint(.accentColor)
+                        .transition(.opacity.animation(.bouncy(duration: 0.5)))
+                }
+            }
         }
         .environment(appSettings)
         .modelContainer(.shared())

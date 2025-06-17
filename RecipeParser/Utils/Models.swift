@@ -40,7 +40,7 @@ final class Recipe: AppModel {
     
     var name: String
     var categories: [Category]
-    var cuisines: [String]
+    var cuisines: [Cuisine]
     var detail: String
     var prepTime: Double
     var totalTime: Double
@@ -74,7 +74,7 @@ final class Recipe: AppModel {
         name: String,
         image: String,
         categories: [Category],
-        cuisines: [String],
+        cuisines: [Cuisine],
         detail: String,
         prepTime: Double,
         totalTime: Double,
@@ -103,7 +103,7 @@ final class Recipe: AppModel {
         name = try container.decode(String.self, forKey: .name)
         image = try container.decode(String.self, forKey: .image)
         categories = try container.decode([Category].self, forKey: .categories)
-        cuisines = try container.decode([String].self, forKey: .cuisines)
+        cuisines = try container.decode([Cuisine].self, forKey: .cuisines)
         detail = try container.decode(String.self, forKey: .detail)
         prepTime = try container.decode(Double.self, forKey: .prepTime)
         totalTime = try container.decode(Double.self, forKey: .totalTime)
@@ -136,6 +136,29 @@ final class Category: AppModel {
     @Attribute(.unique)
     var name: String
     @Relationship(deleteRule: .cascade, inverse: \Recipe.categories)
+    var parent: [Recipe]?
+    
+    init(_ name: String) {
+        self.name = name
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        name = try container.decode(String.self)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        
+        try container.encode(name)
+    }
+}
+
+@Model
+final class Cuisine: AppModel {
+    @Attribute(.unique)
+    var name: String
+    @Relationship(deleteRule: .cascade, inverse: \Recipe.cuisines)
     var parent: [Recipe]?
     
     init(_ name: String) {
@@ -231,7 +254,7 @@ extension Recipe {
             name: "Homemade Burger",
             image: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
             categories: [.init("Main"), .init("Afternoon Tea")],
-            cuisines: ["American", "Pacific"],
+            cuisines: [.init("American"), .init("Pacific")],
             detail: "Tasty burger",
             prepTime: 20,
             totalTime: 40,
