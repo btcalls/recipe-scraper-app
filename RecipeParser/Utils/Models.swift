@@ -39,7 +39,7 @@ final class Recipe: AppModel {
     var ingredients: [Ingredient]
     
     var name: String
-    var categories: [String]
+    var categories: [Category]
     var cuisines: [String]
     var detail: String
     var prepTime: Double
@@ -73,7 +73,7 @@ final class Recipe: AppModel {
         id: String,
         name: String,
         image: String,
-        categories: [String],
+        categories: [Category],
         cuisines: [String],
         detail: String,
         prepTime: Double,
@@ -102,7 +102,7 @@ final class Recipe: AppModel {
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
         image = try container.decode(String.self, forKey: .image)
-        categories = try container.decode([String].self, forKey: .categories)
+        categories = try container.decode([Category].self, forKey: .categories)
         cuisines = try container.decode([String].self, forKey: .cuisines)
         detail = try container.decode(String.self, forKey: .detail)
         prepTime = try container.decode(Double.self, forKey: .prepTime)
@@ -128,6 +128,29 @@ final class Recipe: AppModel {
         try container.encode(instructions, forKey: .instructions)
         try container.encode(ingredients, forKey: .ingredients)
         try container.encode(label, forKey: .label)
+    }
+}
+
+@Model
+final class Category: AppModel {
+    @Attribute(.unique)
+    var name: String
+    @Relationship(deleteRule: .cascade, inverse: \Recipe.categories)
+    var parent: [Recipe]?
+    
+    init(_ name: String) {
+        self.name = name
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        name = try container.decode(String.self)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.singleValueContainer()
+        
+        try container.encode(name)
     }
 }
 
@@ -207,7 +230,7 @@ extension Recipe {
             id: "asdf-dfd",
             name: "Homemade Burger",
             image: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
-            categories: ["Main", "Afternoon Tea"],
+            categories: [.init("Main"), .init("Afternoon Tea")],
             cuisines: ["American", "Pacific"],
             detail: "Tasty burger",
             prepTime: 20,
