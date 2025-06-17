@@ -9,19 +9,39 @@ import Foundation
 import SwiftData
 
 extension ModelContainer {
-    static func shared(inMemoryOnly: Bool = false) -> ModelContainer {
-        let schema = Schema([
-            Recipe.self,
-            Ingredient.self
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema,
-                                                    isStoredInMemoryOnly: inMemoryOnly,
+    static private let schema = Schema([
+        Recipe.self,
+        Ingredient.self,
+        BaseIngredient.self
+    ])
+    
+    static func shared() -> ModelContainer {
+        let modelConfiguration = ModelConfiguration(schema: ModelContainer.schema,
                                                     groupContainer: .identifier(.extensionGroup))
         
         do {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
+        }
+    }
+    
+    @MainActor
+    static func mock(withSample: Bool = false) -> ModelContainer {
+        let modelConfiguration = ModelConfiguration(schema: ModelContainer.schema,
+                                                    isStoredInMemoryOnly: true,
+                                                    groupContainer: .identifier(.extensionGroup))
+        
+        do {
+            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
+            
+            if withSample {
+                container.mainContext.insert(Recipe.sample)
+            }
+            
+            return container
+        } catch {
+            fatalError("Failed to create mock ModelContainer: \(error)")
         }
     }
 }

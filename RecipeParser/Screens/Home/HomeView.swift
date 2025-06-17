@@ -32,7 +32,7 @@ struct HomeView: View {
                         seeAllButton()
                     }
                     
-                    RecipeListView(.first(1), isEmpty: $isEmpty)
+                    RecipeListView(.first(3), isEmpty: $isEmpty)
                     
                     Spacer()
                 }
