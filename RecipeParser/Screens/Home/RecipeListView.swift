@@ -120,5 +120,5 @@ extension RecipeListView {
     @Previewable @State var isEmpty: Bool = false
     
     RecipeListView(isEmpty: $isEmpty)
-        .modelContainer(.mock(withSample: true))
+        .modelContainer(.mock(withSample: !isEmpty))
 }

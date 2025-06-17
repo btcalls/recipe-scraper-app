@@ -12,11 +12,11 @@ extension ModelContainer {
     static private let schema = Schema([
         Recipe.self,
         Ingredient.self,
-        BaseIngredient.self
+        BaseIngredient.self,
     ])
     
     static func shared() -> ModelContainer {
-        let modelConfiguration = ModelConfiguration(schema: ModelContainer.schema,
+        let modelConfiguration = ModelConfiguration(schema: Self.schema,
                                                     groupContainer: .identifier(.extensionGroup))
         
         do {
@@ -27,8 +27,8 @@ extension ModelContainer {
     }
     
     @MainActor
-    static func mock(withSample: Bool = false) -> ModelContainer {
-        let modelConfiguration = ModelConfiguration(schema: ModelContainer.schema,
+    static func mock(withSample: Bool = true) -> ModelContainer {
+        let modelConfiguration = ModelConfiguration(schema: Self.schema,
                                                     isStoredInMemoryOnly: true,
                                                     groupContainer: .identifier(.extensionGroup))
         

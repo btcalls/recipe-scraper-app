@@ -96,6 +96,7 @@
 				Utils/PropertyWrappers.swift,
 				Utils/Protocols.swift,
 				Utils/SearchContext.swift,
+				Utils/SwiftData/DatabaseActor.swift,
 				Utils/Utils.swift,
 				Views/BrowserView.swift,
 				Views/CompactButton.swift,

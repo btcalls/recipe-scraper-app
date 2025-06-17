@@ -106,11 +106,6 @@ struct RecipeView: View {
                         pinnedViews: .sectionHeaders
                     ) {
                         Section {
-                            Text(recipe.cuisineCategory)
-                                .font(.headline)
-                                .fontWeight(.semibold)
-                                .lineLimit(2)
-                            
                             Text(recipe.detail)
                                 .fontWeight(.light)
                             
