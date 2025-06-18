@@ -28,10 +28,10 @@ extension JSONDecoder {
 }
 
 extension Decodable {
-    /// Decodes an instance of type `T` from a JSON file.
+    /// Decodes an instance of decodable type from a JSON file.
     /// - Parameter filename: The filename of the JSON file.
-    /// - Returns: Optional. Decoded instance `T`.
-    static func fromJSONFile<T: Decodable>(_ filename: String) throws -> T? {
+    /// - Returns: Optional. Decoded instance.
+    static func fromJSONFile(_ filename: String) throws -> Self? {
         let path = Bundle.main.path(forResource: filename, ofType: "json")
         
         guard let path, let data = try? Data(

@@ -8,11 +8,11 @@
 import Foundation
 import SwiftData
 
-final class APIClient<E: APIEndpoint>: NSObject {
+final class APIClient<E: APIEndpoint>: Sendable {
     /// Configures and sends a URL request based on provided endpoint.
     /// - Parameter endpoint: The endpoint details in which to base the request.
     /// - Returns: The decoded response from the API endpoint.
-    func send<D: AppModel>(_ endpoint: E) async throws -> D {
+    func request<T: AppModel>(_ endpoint: E) async throws -> T {
         do {
             let urlRequest = try getURLRequest(from: endpoint)
             let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
@@ -32,19 +32,23 @@ final class APIClient<E: APIEndpoint>: NSObject {
     /// Configures and sends a URL request based on provided endpoint. Saves decoded response to the model context provided.
     /// - Parameters:
     ///   - endpoint: The endpoint details in which to base the request.
-    ///   - context: The model context where the response is to be saved.
+    ///   - container: The model container in which the model database is generated.
     /// - Returns: The decoded response wrapped in `Model` instance.
-    func send<T: AppModel>(_ endpoint: E,
-                           storeTo context: ModelContext? = nil) async throws -> Model<T> {
-        let obj: T = try await send(endpoint)
-        
+    func request<T: AppModel>(_ endpoint: E,
+                              storeTo container: ModelContainer) async throws -> Model<T> {
+        let databaseActor = DatabaseActor(modelContainer: container)
+
         do {
-            if let context {
-                context.insert(obj)
-                try context.save()
-            }
+            let urlRequest = try getURLRequest(from: endpoint)
+            let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
             
-            return .init(obj)
+            try getHttpError(
+                urlResponse,
+                details: data.toJSON()?["detail"] as? String
+            )
+            try await databaseActor.save(data: data, as: T.self)
+            
+            return try .init(data.decoded())
         } catch let e as CustomError {
             Debugger.critical(e)
             throw e
@@ -56,7 +60,7 @@ final class APIClient<E: APIEndpoint>: NSObject {
 }
 
 private extension APIClient {
-    func getHttpError(_ response: URLResponse?) throws {
+    func getHttpError(_ response: URLResponse?, details: String? = nil) throws {
         let response = try (response as? HTTPURLResponse).orThrow(
             CustomError.network(.failed)
         )
@@ -66,10 +70,18 @@ private extension APIClient {
             return
             
         case 401...500:
-            throw CustomError.network(.authError)
+            if let details {
+                throw CustomError.custom(details)
+            } else {
+                throw CustomError.network(.authError)
+            }
             
         case 501...599:
-            throw CustomError.network(.badRequest)
+            if let details {
+                throw CustomError.custom(details)
+            } else {
+                throw CustomError.network(.badRequest)
+            }
             
         default:
             throw CustomError.network(.failed)

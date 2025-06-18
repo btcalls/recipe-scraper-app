@@ -24,10 +24,6 @@ struct RecipeRow: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.headline)
                     .lineLimit(2)
-                
-                Text(recipe.cuisineCategory)
-                    .font(.caption)
-                    .fontWeight(.medium)
             }
         }
         .scale(.padding(.vertical), 15)
