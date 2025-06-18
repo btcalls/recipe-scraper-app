@@ -42,7 +42,10 @@ final class APIClient<E: APIEndpoint>: Sendable {
             let urlRequest = try getURLRequest(from: endpoint)
             let (data, urlResponse) = try await URLSession.shared.data(for: urlRequest)
             
-            try getHttpError(urlResponse)
+            try getHttpError(
+                urlResponse,
+                details: data.toJSON()?["detail"] as? String
+            )
             try await databaseActor.save(data: data, as: T.self)
             
             return try .init(data.decoded())
@@ -57,7 +60,7 @@ final class APIClient<E: APIEndpoint>: Sendable {
 }
 
 private extension APIClient {
-    func getHttpError(_ response: URLResponse?) throws {
+    func getHttpError(_ response: URLResponse?, details: String? = nil) throws {
         let response = try (response as? HTTPURLResponse).orThrow(
             CustomError.network(.failed)
         )
@@ -67,10 +70,18 @@ private extension APIClient {
             return
             
         case 401...500:
-            throw CustomError.network(.authError)
+            if let details {
+                throw CustomError.custom(details)
+            } else {
+                throw CustomError.network(.authError)
+            }
             
         case 501...599:
-            throw CustomError.network(.badRequest)
+            if let details {
+                throw CustomError.custom(details)
+            } else {
+                throw CustomError.network(.badRequest)
+            }
             
         default:
             throw CustomError.network(.failed)
