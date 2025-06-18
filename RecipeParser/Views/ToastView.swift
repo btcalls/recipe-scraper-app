@@ -78,7 +78,7 @@ struct ToastView: View {
             
             Text(caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .lineLimit(3)
+                .lineLimit(5)
                 
             closeButton()
         }

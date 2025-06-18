@@ -26,7 +26,7 @@ struct ParseRecipeView: View {
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
-                VStack(alignment: .leading, spacing: spacing) {
+                VStack(alignment: .center, spacing: spacing) {
                     RecipeMetadataView(metadata: recipeMetadata)
                     
                     Spacer()
