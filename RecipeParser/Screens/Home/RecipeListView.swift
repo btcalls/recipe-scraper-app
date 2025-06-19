@@ -53,7 +53,6 @@ struct RecipeListView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
-        .refreshable {}
         .navigationTitle("")
         .emptyView(
             Label(.noRecipes, sfSymbol: .forkKnife),
@@ -83,6 +82,11 @@ struct RecipeListView: View {
                     placement: .navigationBarDrawer,
                     prompt: Text(String.searchRecipe)
                 )
+                .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                    ControlsView(query: $searchContext.query)
+                        .scale(.padding(.horizontal), 20)
+                        .scale(.padding(.bottom), 10)
+                }
         }
     }
 }

@@ -84,6 +84,7 @@
 				"Extensions/String+Extensions.swift",
 				"Extensions/View+Extensions.swift",
 				RecipeParserApp.swift,
+				Screens/Home/ControlsView.swift,
 				Screens/Home/HomeView.swift,
 				Screens/Home/RecipeListView.swift,
 				Screens/Home/RecipeRow.swift,

@@ -76,5 +76,9 @@ enum Symbol: String {
     case link
     case arrowUp = "arrow.up"
     case arrowDown = "arrow.down"
-    case chevronRight = "chevron.right.circle.fill"
+    case chevronLeft = "chevron.left"
+    case chevronRightCircle = "chevron.right.circle.fill"
+    case search = "magnifyingglass"
+    case filter = "line.3.horizontal.decrease"
+    case clear = "x.circle"
 }
