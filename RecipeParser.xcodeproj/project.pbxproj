@@ -111,8 +111,8 @@
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
+				Views/Styles/AppButtonStyle.swift,
 				Views/Styles/CustomLabelStyle.swift,
-				Views/Styles/PressableStyle.swift,
 				Views/ToastView.swift,
 				Views/WideButton.swift,
 			);

@@ -15,11 +15,12 @@ struct CompactButton: View {
     var body: some View {
         Button(action: action) {
             icon.sfSymbol.image
+                .scale(.heightWidth(), 45)
+                .background(color.brightness(0.1))
+                .tint(icon.tint)
+                .clipTo(.circle)
         }
-        .scale(.heightWidth(), 45)
-        .background(color.brightness(0.1))
-        .tint(icon.tint)
-        .clipTo(.circle)
+        .buttonStyle(AppButtonStyle())
         .shadow()
     }
 }

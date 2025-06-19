@@ -23,6 +23,26 @@ struct WideButton: View {
             return true
         }
     }
+    private var color: (bg: Color, tint: Color) {
+        if case .loading(_:) = state {
+            return (Color(uiColor: .lightGray), .secondary)
+        }
+        
+        guard let role else {
+            return (.accentColor, .white)
+        }
+        
+        switch role {
+        case .destructive:
+            return (.red, .white)
+            
+        case .cancel:
+            return (.appBackground, .appForeground)
+        
+        default:
+            return (.accentColor, .white)
+        }
+    }
     
     @ViewBuilder private func imageAndLabelView() -> some View {
         switch state {
@@ -37,8 +57,7 @@ struct WideButton: View {
         case .loading(let title):
             HStack(alignment: .center, spacing: spacing) {
                 ProgressView()
-                    .tint(Color.secondary)
-                
+                    
                 Text(title)
             }
         }
@@ -52,10 +71,13 @@ struct WideButton: View {
                 .scale(.height(isMinimum: true), 40)
                 .scale(.padding(.horizontal), 5)
                 .scale(.padding(.vertical), 2.5)
+                .background(color.bg)
+                .foregroundStyle(color.tint)
+                .tint(color.tint)
+                .clipTo(RoundedRectangle(cornerRadius: CornerRadius.sm.rawValue))
         }
         .disabled(isDisabled)
-        .buttonStyle(.borderedProminent)
-        .buttonBorderShape(.roundedRectangle(radius: CornerRadius.sm.rawValue))
+        .buttonStyle(AppButtonStyle())
         .compositingGroup()
         .shadow()
     }
@@ -91,5 +113,6 @@ extension WideButton {
 #Preview {
     WideButton("Sample") {}
     WideButton(.idle("Delete", sfSymbol: .x), role: .destructive) {}
+    WideButton(.idle("Cancel"), role: .cancel) {}
     WideButton(.loading("Testing Button")) {}
 }
