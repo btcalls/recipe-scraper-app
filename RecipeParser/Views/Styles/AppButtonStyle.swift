@@ -8,9 +8,19 @@
 import SwiftUI
 
 struct AppButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    
+    private func brightness(_ isPressed: Bool) -> Double {
+        if !isEnabled {
+            return -0.25
+        }
+        
+        return isPressed ? -0.10 : 0
+    }
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .brightness(configuration.isPressed ? -0.10 : 0)
+            .brightness(brightness(configuration.isPressed))
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
     }
@@ -20,4 +30,16 @@ struct AppButtonStyle: ButtonStyle {
     WideButton("Test") {
         //
     }
+    WideButton("Test") {
+        //
+    }
+    .disabled(true)
+    
+    CompactButton(.init(.x), color: .red) {
+        //
+    }
+    CompactButton(.init(.x), color: .red) {
+        //
+    }
+    .disabled(true)
 }
