@@ -44,7 +44,7 @@ struct ToastView: View {
             Symbol.info.image
             
         case .error(_:):
-            Symbol.error.image
+            Symbol.xmarkCircle.image
             
         case .success(_:):
             Symbol.success.image

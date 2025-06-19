@@ -70,7 +70,7 @@ enum Symbol: String {
     case info = "info.circle.fill"
     case warning = "exclamationmark.triangle.fill"
     case success = "checkmark.circle.fill"
-    case error = "xmark.circle.fill"
+    case xmarkCircle = "xmark.circle.fill"
     case plus
     case bullet = "circle.fill"
     case link
@@ -80,5 +80,4 @@ enum Symbol: String {
     case chevronRightCircle = "chevron.right.circle.fill"
     case search = "magnifyingglass"
     case filter = "line.3.horizontal.decrease"
-    case clear = "x.circle"
 }

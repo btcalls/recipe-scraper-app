@@ -27,19 +27,13 @@ struct AppButtonStyle: ButtonStyle {
 }
 
 #Preview {
-    WideButton("Test") {
-        //
-    }
-    WideButton("Test") {
-        //
-    }
-    .disabled(true)
+    WideButton("Test") {}
     
-    CompactButton(.init(.x), color: .red) {
-        //
-    }
-    CompactButton(.init(.x), color: .red) {
-        //
-    }
-    .disabled(true)
+    WideButton("Test") {}
+        .disabled(true)
+    
+    CompactButton(.init(.x), color: .red) {}
+    
+    CompactButton(.init(.x), color: .red) {}
+        .disabled(true)
 }

@@ -14,11 +14,7 @@ struct CompactButton: View {
     var action: @MainActor () -> Void
     
     private var isMuted: Bool {
-        if case .muted = kind {
-            return true
-        } else {
-            return false
-        }
+        return kind == .muted
     }
     private var bg: some View {
         let bgColor = isMuted ? Color.clear : color

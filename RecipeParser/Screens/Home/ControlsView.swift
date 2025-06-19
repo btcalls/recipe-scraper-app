@@ -26,7 +26,7 @@ struct ControlsView: View {
                         .focused($focusedField, equals: .search)
                         .scale(.padding(.leading), 10)
                     
-                    CompactButton(.init(.clear), kind: .muted) {
+                    CompactButton(.init(.xmarkCircle), kind: .muted) {
                         query = ""
                     }
                     .disabled(query.isEmpty)
