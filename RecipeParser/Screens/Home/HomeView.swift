@@ -14,14 +14,11 @@ struct HomeView: View {
     @State private var isEmpty: Bool = false
     
     private func seeAllButton() -> some View {
-        NavigationLink {
-            RecipeListView(.full, isEmpty: $isEmpty)
-        } label: {
-            Label(.seeAll, sfSymbol: .chevronRight)
-                .labelStyle(CustomLabelStyle(.titleIcon()))
-        }
-        .buttonStyle(PressableStyle())
-        .foregroundStyle(Color.accentColor)
+        Label(.seeAll, sfSymbol: .chevronRightCircle)
+            .labelStyle(CustomLabelStyle(.titleIcon()))
+            .navigate(to: RecipeListView(.full, isEmpty: $isEmpty))
+            .buttonStyle(AppButtonStyle())
+            .foregroundStyle(Color.accentColor)
     }
     
     var body: some View {

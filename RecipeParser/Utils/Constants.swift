@@ -70,11 +70,14 @@ enum Symbol: String {
     case info = "info.circle.fill"
     case warning = "exclamationmark.triangle.fill"
     case success = "checkmark.circle.fill"
-    case error = "xmark.circle.fill"
+    case xmarkCircle = "xmark.circle.fill"
     case plus
     case bullet = "circle.fill"
     case link
     case arrowUp = "arrow.up"
     case arrowDown = "arrow.down"
-    case chevronRight = "chevron.right.circle.fill"
+    case chevronLeft = "chevron.left"
+    case chevronRightCircle = "chevron.right.circle.fill"
+    case search = "magnifyingglass"
+    case filter = "line.3.horizontal.decrease"
 }

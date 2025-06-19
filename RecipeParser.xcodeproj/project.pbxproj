@@ -84,6 +84,7 @@
 				"Extensions/String+Extensions.swift",
 				"Extensions/View+Extensions.swift",
 				RecipeParserApp.swift,
+				Screens/Home/ControlsView.swift,
 				Screens/Home/HomeView.swift,
 				Screens/Home/RecipeListView.swift,
 				Screens/Home/RecipeRow.swift,
@@ -111,8 +112,8 @@
 				Views/Modifiers/ToastModifier.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
+				Views/Styles/AppButtonStyle.swift,
 				Views/Styles/CustomLabelStyle.swift,
-				Views/Styles/PressableStyle.swift,
 				Views/ToastView.swift,
 				Views/WideButton.swift,
 			);
