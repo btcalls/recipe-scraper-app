@@ -61,7 +61,7 @@ struct HomeView: View {
                     Text(String.noRecipesDescription)
                 }
             ) {
-                WideButton(.idle(.addRecipe, sfSymbol: .plus)) {
+                WideButton(.addRecipe, icon: .plus) {
                     isBrowserPresented = true
                 }
             }

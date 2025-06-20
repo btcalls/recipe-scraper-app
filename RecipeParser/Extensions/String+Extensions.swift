@@ -44,7 +44,6 @@ extension String {
         )
         
         if let range = attrString.range(of: actionString) {
-            attrString[range].font = .system(size: 16, weight: .bold)
             attrString[range].foregroundColor = Color.accentColor
         }
         

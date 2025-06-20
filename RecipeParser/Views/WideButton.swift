@@ -7,24 +7,29 @@
 
 import SwiftUI
 
-struct WideButton: View {
-    var state: State
+struct WideButton: AppButton {
+    typealias Display = (title: String, icon: Symbol?)
+    typealias ButtonKind = Kind
+    
+    var display: (title: String, icon: Symbol?)
+    var kind: Kind
+    var tint: Color?
     var role: ButtonRole? = .none
     var action: @MainActor () -> Void
     
     @ScaledMetric private var spacing: CGFloat = 8
     
     private var isDisabled: Bool {
-        switch state {
-        case .idle(_, _):
-            return false
-        
+        switch kind {
         case .loading(_:):
             return true
+            
+        default:
+            return false
         }
     }
     private var color: (bg: Color, tint: Color) {
-        if case .loading(_:) = state {
+        if case .loading(_:) = kind {
             return (Color(uiColor: .lightGray), .secondary)
         }
         
@@ -45,13 +50,13 @@ struct WideButton: View {
     }
     
     @ViewBuilder private func imageAndLabelView() -> some View {
-        switch state {
-        case .idle(let title, let sfSymbol):
-            if let sfSymbol {
-                Label(title, sfSymbol: sfSymbol)
-                    .labelStyle(CustomLabelStyle())
+        switch kind {
+        case .regular(let styleKind), .wrapped(let styleKind):
+            if let sfSymbol = display.icon, let styleKind {
+                Label(display.title, sfSymbol: sfSymbol)
+                    .labelStyle(CustomLabelStyle(styleKind))
             } else {
-                Text(title)
+                Text(display.title)
             }
         
         case .loading(let title):
@@ -69,7 +74,7 @@ struct WideButton: View {
                 .frame(maxWidth: .infinity)
                 .bold()
                 .scale(.height(isMinimum: true), 40)
-                .scale(.padding(.horizontal), 5)
+                .scale(.padding(.horizontal), 15)
                 .scale(.padding(.vertical), 2.5)
                 .background(color.bg)
                 .foregroundStyle(color.tint)
@@ -84,17 +89,21 @@ struct WideButton: View {
 }
 
 extension WideButton {
-    enum State {
-        case idle(String, sfSymbol: Symbol? = nil)
+    enum Kind {
+        case regular(CustomLabelStyle.Kind? = .iconTitle())
+        case wrapped(CustomLabelStyle.Kind? = .iconTitle())
         case loading(String = .processing)
     }
     
     internal init(
-        _ state: State,
+        _ title: String,
+        icon: Symbol? = nil,
+        kind: Kind = .regular(),
         role: ButtonRole? = .none,
         action: @escaping @MainActor () -> Void
     ) {
-        self.state = state
+        self.display = (title, icon)
+        self.kind = kind
         self.role = role
         self.action = action
     }
@@ -104,15 +113,27 @@ extension WideButton {
         role: ButtonRole? = .none,
         action: @escaping @MainActor () -> Void
     ) {
-        self.state = .idle(title)
+        self.display = (title, .none)
+        self.kind = .regular()
         self.role = role
         self.action = action
     }
 }
 
+extension WideButton {
+    static func loading(
+        _ title: String = .processing,
+        action: @escaping @MainActor () -> Void
+    ) -> Self {
+        return Self.init("",
+                         kind: .loading(title),
+                         action: action)
+    }
+}
+
 #Preview {
     WideButton("Sample") {}
-    WideButton(.idle("Delete", sfSymbol: .x), role: .destructive) {}
-    WideButton(.idle("Cancel"), role: .cancel) {}
-    WideButton(.loading("Testing Button")) {}
+    WideButton("Delete", icon: .x, role: .destructive) {}
+    WideButton("Cancel", role: .cancel) {}
+    WideButton.loading("Testing Button") {}
 }

@@ -7,10 +7,13 @@
 
 import SwiftUI
 
-struct IconButton: View {
-    var icon: Symbol
-    var tint: Color = .primary
+struct IconButton: AppButton {
+    typealias Display = Symbol
+    typealias ButtonKind = Kind
+    
+    var display: Symbol
     var kind: Kind = .regular
+    var tint: Color? = .primary
     var action: @MainActor () -> Void
     
     private var isMuted: Bool {
@@ -24,11 +27,11 @@ struct IconButton: View {
     
     @ViewBuilder private func buttonView() -> some View {
         Button(action: action) {
-            icon.image
+            display.image
                 .fontWeight(.medium)
                 .scale(.heightWidth(), 45)
                 .background(bg)
-                .foregroundStyle(tint)
+                .foregroundStyle(tint ?? Color.appForeground)
                 .clipTo(.circle)
         }
         .buttonStyle(AppButtonStyle())
@@ -53,12 +56,12 @@ extension IconButton {
     }
     
     init(
-        _ icon: Symbol,
+        _ display: Symbol,
         tint: Color = .primary,
         kind: Kind = .regular,
         action: @escaping @MainActor () -> Void
     ) {
-        self.icon = icon
+        self.display = display
         self.tint = tint
         self.kind = kind
         self.action = action

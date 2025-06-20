@@ -26,7 +26,7 @@ struct ControlsView: View {
                         .focused($focusedField, equals: .search)
                         .scale(.padding(.leading), 10)
                     
-                    CompactButton(.init(.xmarkCircle), kind: .muted) {
+                    IconButton(.xmarkCircle, kind: .muted) {
                         query = ""
                     }
                     .disabled(query.isEmpty)
@@ -34,7 +34,7 @@ struct ControlsView: View {
                 .transition(.opacity)
             }
             
-            CompactButton(.init(isSearching ? .chevronLeft : .search)) {
+            IconButton(isSearching ? .chevronLeft : .search) {
                 withAnimation {
                     isSearching.toggle()
                     

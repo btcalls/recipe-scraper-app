@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 // MARK: Networking
 
@@ -73,4 +74,17 @@ protocol ProcessViewModel: LoadableViewModel {
     /// Add @MainActor wrapper upon implementation.
     /// - Parameter body: The instance to process.
     func process(_ body: Body) async
+}
+
+// MARK: UI
+
+/// Protocol for implementing a custom button with option to specify type of display (e.g. icon-only, label).
+protocol AppButton: View {
+    associatedtype Display
+    associatedtype ButtonKind
+    
+    var display: Display { get }
+    var kind: ButtonKind { get }
+    var tint: Color? { get }
+    var action: @MainActor () -> Void { get }
 }
