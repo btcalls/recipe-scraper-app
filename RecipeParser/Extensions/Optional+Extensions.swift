@@ -19,7 +19,7 @@ extension Optional {
     }
 }
 
-extension Optional where Wrapped: Collection {
+extension Optional where Wrapped : Collection {
     /// Checks whether optional collection is `nil` or empty.
     var isNilOrEmpty: Bool {
         return self?.isEmpty ?? true
