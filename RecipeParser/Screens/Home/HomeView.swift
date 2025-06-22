@@ -25,9 +25,8 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    if !isEmpty {
-                        seeAllButton()
-                    }
+                    seeAllButton()
+                        .remove(if: isEmpty)
                     
                     RecipeListView(.first(3), isEmpty: $isEmpty)
                     

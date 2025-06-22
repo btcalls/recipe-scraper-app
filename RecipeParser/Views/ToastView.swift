@@ -85,7 +85,7 @@ struct ToastView: View {
         .frame(minHeight: 45)
         .font(.caption)
         .fontWeight(.medium)
-        .scale(.padding(.vertical), 12)
+        .scale(.padding(.vertical), 10)
         .scale(.padding(.horizontal), 15)
         .foregroundStyle(Color.appForeground)
         .background(Color.appBackground)

@@ -9,8 +9,9 @@ import SwiftUI
 
 struct ShapeAndBorderModifier<S>: ViewModifier where S : Shape {
     var shape: S
-    @ScaledMetric var lineWidth: CGFloat = 0
     var color: Color = .clear
+    
+    @ScaledMetric var lineWidth: CGFloat = 0
     
     private var stroke: (width: CGFloat, color: Color)? {
         guard lineWidth > 0 && color != .clear else {

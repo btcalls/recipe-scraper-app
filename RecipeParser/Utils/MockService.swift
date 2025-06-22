@@ -1,49 +1,12 @@
 //
-//  Utils.swift
+//  MockService.swift
 //  RecipeParser
 //
-//  Created by Jason Jon Carreos on 21/5/2025.
+//  Created by Jason Jon Carreos on 22/6/2025.
 //
 
 import Foundation
-import SwiftUI
 import SwiftData
-
-// MARK: Observables
-
-@Observable
-final class AppSettings {
-    enum RootView {
-        case onboarding
-        case home
-    }
-    
-    var rootView: RootView = .onboarding
-}
-
-@Observable
-final class ViewState {
-    var isProcessing = false
-    var toast: ToastView.State?
-}
-
-// MARK: Settings
-
-final class AppValues {
-    static var shared = AppValues()
-    
-    @UserDefaultsWrapper(
-        key: "accessToken",
-    )
-    var accessToken: String? = nil
-    @UserDefaultsWrapper(
-        key: "isOnboardingComplete",
-        storage: .init(suiteName: .extensionGroup) ?? .standard
-    )
-    var isOnboardingComplete: Bool = false
-}
-
-// MARK: Mock Services
 
 final class MockService {
     private struct Recipes: Decodable {
