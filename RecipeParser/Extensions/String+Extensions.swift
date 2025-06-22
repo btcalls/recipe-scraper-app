@@ -57,7 +57,7 @@ extension String {
     static let prepTime = "Prep. Time:"
     static let cookTime = "Cook Time:"
     static let noRecipes = "No Recipes"
-    static let searchRecipe = "Search Recipe"
+    static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
 }
 
 // MARK: Functions

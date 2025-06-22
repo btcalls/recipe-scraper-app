@@ -25,3 +25,11 @@ extension Optional where Wrapped : Collection {
         return self?.isEmpty ?? true
     }
 }
+
+extension Optional where Wrapped : Equatable {
+    /// Toggles between provided value and `nil`.
+    /// - Parameter value: The value to toggle to.
+    mutating func toggle(between value: Wrapped) {
+        self = self == value ? nil : value
+    }
+}
