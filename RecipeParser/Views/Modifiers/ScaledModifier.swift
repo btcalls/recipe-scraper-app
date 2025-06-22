@@ -8,13 +8,6 @@
 import SwiftUI
 
 struct ScaledModifier: ViewModifier {
-    enum Kind {
-        case padding(Edge.Set)
-        case height(isMinimum: Bool = false)
-        case width(isMinimum: Bool = false)
-        case heightWidth(isMinimum: Bool = false)
-    }
-    
     var scaleType: Kind
     
     @ScaledMetric var value: CGFloat
@@ -45,5 +38,14 @@ struct ScaledModifier: ViewModifier {
                 content.frame(width: value, height: value)
             }
         }
+    }
+}
+
+extension ScaledModifier {
+    enum Kind {
+        case padding(Edge.Set)
+        case height(isMinimum: Bool = false)
+        case width(isMinimum: Bool = false)
+        case heightWidth(isMinimum: Bool = false)
     }
 }

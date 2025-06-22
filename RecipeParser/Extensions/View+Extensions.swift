@@ -117,8 +117,8 @@ extension View {
         return modifier(
             ShapeAndBorderModifier(
                 shape: shape,
-                lineWidth: lineWidth,
-                color: color
+                color: color,
+                lineWidth: lineWidth
             )
         )
     }

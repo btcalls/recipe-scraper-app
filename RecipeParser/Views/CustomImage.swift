@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: Handle async loading of image
-
 struct CustomImage: View {
     enum Content {
         case resource(String)
@@ -121,7 +119,5 @@ private extension CustomImage {
 #Preview {
     CustomImage(content: .url(MockService.shared.imageURL))
         .scale(.heightWidth(), 100)
-        .clipTo(Circle(),
-                lineWidth: 1,
-                color: .primary)
+        .clipTo(Circle(), lineWidth: 1, color: .primary)
 }
