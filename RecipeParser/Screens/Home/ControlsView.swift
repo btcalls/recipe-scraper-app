@@ -46,13 +46,14 @@ struct ControlsView: View {
                         Button("Saved Date") {}
                     }
                     .frame(maxWidth: .infinity)
-                    .clipTo(.capsule)
                     
                     Menu("Latest") {
                         Button("Oldest") {}
                         Button("Latest") {}
                     }
                 }
+                .menuStyle(AppMenuStyle())
+                .font(.subheadline)
                 .scale(.padding(.horizontal), 10)
                 .transition(.opacity)
                 
@@ -87,7 +88,7 @@ struct ControlsView: View {
         }
         .buttonStyle(AppButtonStyle())
         .scale(.padding(.all), 10)
-        .background(Color.appBackground.brightness(0.1))
+        .background(Color.appBackground)
         .clipTo(RoundedRectangle(cornerRadius: 27))
         .shadow()
     }

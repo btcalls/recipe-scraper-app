@@ -113,6 +113,7 @@
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
 				Views/Styles/AppButtonStyle.swift,
+				Views/Styles/AppMenuStyle.swift,
 				Views/Styles/CustomLabelStyle.swift,
 				Views/ToastView.swift,
 				Views/WideButton.swift,
