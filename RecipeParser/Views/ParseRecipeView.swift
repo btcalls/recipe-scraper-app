@@ -94,5 +94,5 @@ struct ParseRecipeView: View {
 }
 
 #Preview {
-    ParseRecipeView(url: URL(string: .sampleRecipeURL)!)
+    ParseRecipeView(url: MockService.shared.recipeURL)
 }

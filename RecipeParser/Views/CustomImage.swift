@@ -119,7 +119,7 @@ private extension CustomImage {
 }
 
 #Preview {
-    CustomImage(content: .url(URL(string: "https://www.recipetineats.com/tachyon/2024/07/Baked-Beef-Quasadillas-51259.jpg")))
+    CustomImage(content: .url(MockService.shared.imageURL))
         .scale(.heightWidth(), 100)
         .clipTo(Circle(),
                 lineWidth: 1,

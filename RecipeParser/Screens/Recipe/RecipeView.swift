@@ -173,5 +173,5 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(.sample)
+    RecipeView(MockService.shared.getRecipe())
 }
