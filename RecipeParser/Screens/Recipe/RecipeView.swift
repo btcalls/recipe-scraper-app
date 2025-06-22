@@ -68,7 +68,7 @@ struct RecipeView: View {
     
     @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
         HStack(spacing: spacing) {
-            CompactButton(.init(.arrowUp)) {
+            IconButton(.arrowUp) {
                 if let id = currentID, let prevID = ids.prev(id) {
                     currentID = prevID
                 } else {
@@ -81,7 +81,7 @@ struct RecipeView: View {
             }
             .disabled(currentID == titleID || currentID == nil)
             
-            CompactButton(.init(.arrowDown)) {
+            IconButton(.arrowDown) {
                 if let id = currentID, let nextID = ids.next(id) {
                     currentID = nextID
                 } else {

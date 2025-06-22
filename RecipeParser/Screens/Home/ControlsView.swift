@@ -16,43 +16,88 @@ struct ControlsView: View {
     
     @FocusState private var focusedField: FocusedField?
     @ScaledMetric private var spacing: CGFloat = 10
-    @State private var isSearching: Bool = false
+    @State private var activeControl: ActiveControl?
     
-    @ViewBuilder private func panelView() -> some View {
-        HStack(spacing: spacing) {
-            if isSearching {
+    @ViewBuilder private func activeControlView() -> some View {
+        VStack(spacing: spacing) {
+            switch activeControl {
+            case .search:
                 HStack(alignment: .center) {
                     TextField(String.searchRecipe, text: $query)
+                        .autocorrectionDisabled()
                         .focused($focusedField, equals: .search)
                         .scale(.padding(.leading), 10)
                     
-                    CompactButton(.init(.xmarkCircle), kind: .muted) {
+                    IconButton(.xmarkCircle, kind: .muted) {
                         query = ""
                     }
                     .disabled(query.isEmpty)
                 }
                 .transition(.opacity)
-            }
-            
-            CompactButton(.init(isSearching ? .chevronLeft : .search)) {
-                withAnimation {
-                    isSearching.toggle()
+                
+            case .sort:
+                HStack(alignment: .center) {
+                    Text("Sort By:")
+                        .foregroundStyle(.secondary)
+                        .fontWeight(.semibold)
                     
-                    focusedField = isSearching ? .search : nil
+                    Menu("Saved Date") {
+                        Button("Name") {}
+                        Button("Saved Date") {}
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    Menu("Latest") {
+                        Button("Oldest") {}
+                        Button("Latest") {}
+                    }
                 }
+                .menuStyle(AppMenuStyle())
+                .font(.subheadline)
+                .scale(.padding(.horizontal), 10)
+                .transition(.opacity)
+                
+            default:
+                EmptyView()
             }
         }
     }
     
+    @ViewBuilder private func controlView() -> some View {
+        IconButton(activeControl == .sort ? .chevronLeft : .sort) {
+            withAnimation {
+                activeControl.toggle(between: .sort)
+            }
+        }.remove(if: activeControl == .search)
+        
+        IconButton(activeControl == .search ? .chevronLeft : .search) {
+            withAnimation {
+                activeControl.toggle(between: .search)
+                
+                focusedField = activeControl == .search ? .search : nil
+            }
+        }
+        .remove(if: activeControl == .sort)
+    }
+    
     var body: some View {
-        VStack(spacing: spacing) {
-            panelView()
+        HStack(alignment: .center) {
+            activeControlView()
+            
+            controlView()
         }
         .buttonStyle(AppButtonStyle())
         .scale(.padding(.all), 10)
-        .background(Color.appBackground.brightness(0.1))
+        .background(Color.appBackground)
         .clipTo(RoundedRectangle(cornerRadius: 27))
         .shadow()
+    }
+}
+
+extension ControlsView {
+    enum ActiveControl: String {
+        case search
+        case sort
     }
 }
 

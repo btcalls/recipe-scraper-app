@@ -7,27 +7,31 @@
 
 import SwiftUI
 
-struct CompactButton: View {
-    var icon: Icon = .init(.plus)
-    var color: Color = .appBackground
+struct IconButton: AppButton {
+    typealias Display = Symbol
+    typealias ButtonKind = Kind
+    
+    var display: Symbol
     var kind: Kind = .regular
+    var tint: Color? = .primary
     var action: @MainActor () -> Void
     
     private var isMuted: Bool {
         return kind == .muted
     }
     private var bg: some View {
-        let bgColor = isMuted ? Color.clear : color
+        let bgColor = isMuted ? Color.clear : .appBackground
         
         return bgColor.brightness(isMuted ? 0 : 0.1)
     }
     
     @ViewBuilder private func buttonView() -> some View {
         Button(action: action) {
-            icon.sfSymbol.image
+            display.image
+                .fontWeight(.medium)
                 .scale(.heightWidth(), 45)
                 .background(bg)
-                .tint(icon.tint)
+                .foregroundStyle(tint ?? Color.appForeground)
                 .clipTo(.circle)
         }
         .buttonStyle(AppButtonStyle())
@@ -45,38 +49,26 @@ struct CompactButton: View {
     }
 }
 
-extension CompactButton {
-    struct Icon {
-        let sfSymbol: Symbol
-        let tint: Color
-    }
-    
+extension IconButton {
     enum Kind {
         case regular
         case muted
     }
     
     init(
-        _ icon: Icon,
-        color: Color = .appBackground,
+        _ display: Symbol,
+        tint: Color = .primary,
         kind: Kind = .regular,
         action: @escaping @MainActor () -> Void
     ) {
-        self.icon = icon
-        self.color = color
+        self.display = display
+        self.tint = tint
         self.kind = kind
         self.action = action
     }
 }
 
-extension CompactButton.Icon {
-    init(_ sfSymbol: Symbol, tint: Color = .primary) {
-        self.sfSymbol = sfSymbol
-        self.tint = tint
-    }
-}
-
 #Preview {
-    CompactButton(.init(.plus), color: .orange) {}
-    CompactButton(.init(.x), kind: .muted) {}
+    IconButton(.plus) {}
+    IconButton(.x, tint: .red, kind: .muted) {}
 }

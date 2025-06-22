@@ -44,7 +44,6 @@ extension String {
         )
         
         if let range = attrString.range(of: actionString) {
-            attrString[range].font = .system(size: 16, weight: .bold)
             attrString[range].foregroundColor = Color.accentColor
         }
         
@@ -58,7 +57,7 @@ extension String {
     static let prepTime = "Prep. Time:"
     static let cookTime = "Cook Time:"
     static let noRecipes = "No Recipes"
-    static let searchRecipe = "Search Recipe"
+    static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
 }
 
 // MARK: Functions

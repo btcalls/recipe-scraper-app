@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label : View, Description: View, Actions: View {
+struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label : View, Description : View, Actions : View {
     var condition: Bool
     var type: EmptyViewType
     
