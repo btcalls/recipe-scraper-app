@@ -28,7 +28,7 @@ extension JSONDecoder {
 }
 
 extension Decodable {
-    /// Decodes an instance of decodable type from a JSON file.
+    /// Decodes a single instance of a decodable type from a JSON file.
     /// - Parameter filename: The filename of the JSON file.
     /// - Returns: Optional. Decoded instance.
     static func fromJSONFile(_ filename: String) throws -> Self? {

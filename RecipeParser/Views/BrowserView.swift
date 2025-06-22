@@ -9,10 +9,8 @@ import SwiftUI
 import SafariServices
 
 struct BrowserView: UIViewControllerRepresentable {
-    let url: URL = .init(string: .googleURL)!
-    
     func makeUIViewController(context: UIViewControllerRepresentableContext<Self>) -> SFSafariViewController {
-        let controller = SFSafariViewController(url: url)
+        let controller = SFSafariViewController(url: MockService.shared.homeBrowserURL)
         
         return controller
     }

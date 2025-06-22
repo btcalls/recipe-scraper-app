@@ -9,8 +9,10 @@ import Foundation
 import SwiftData
 
 extension ModelContainer {
-    static private let schema = Schema([
+    static let schema = Schema([
         Recipe.self,
+        Category.self,
+        Cuisine.self,
         Ingredient.self,
         BaseIngredient.self,
     ])
@@ -23,25 +25,6 @@ extension ModelContainer {
             return try ModelContainer(for: schema, configurations: [modelConfiguration])
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
-        }
-    }
-    
-    @MainActor
-    static func mock(withSample: Bool = true) -> ModelContainer {
-        let modelConfiguration = ModelConfiguration(schema: Self.schema,
-                                                    isStoredInMemoryOnly: true,
-                                                    groupContainer: .identifier(.extensionGroup))
-        
-        do {
-            let container = try ModelContainer(for: schema, configurations: [modelConfiguration])
-            
-            if withSample {
-                container.mainContext.insert(Recipe.sample)
-            }
-            
-            return container
-        } catch {
-            fatalError("Failed to create mock ModelContainer: \(error)")
         }
     }
 }

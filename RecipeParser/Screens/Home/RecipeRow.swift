@@ -41,5 +41,5 @@ extension RecipeRow {
 }
 
 #Preview {
-    RecipeRow(recipe: .sample)
+    RecipeRow(recipe: MockService.shared.getRecipe())
 }

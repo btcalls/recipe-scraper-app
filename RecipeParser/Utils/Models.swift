@@ -242,25 +242,3 @@ final class Ingredient: AppModel {
         try container.encode(label, forKey: .label)
     }
 }
-
-extension Recipe {
-    static var sample: Recipe {
-        if let obj = try? Recipe.fromJSONFile("sample_data") {
-            return obj
-        }
-        
-        return .init(
-            id: "asdf-dfd",
-            name: "Homemade Burger",
-            image: "https://realfood.tesco.com/media/images/1400x919HawaiianBurger-39059ab5-b8bb-4147-b927-70fc1a88bfc5-0-1400x919.jpg",
-            categories: [.init("Main"), .init("Afternoon Tea")],
-            cuisines: [.init("American"), .init("Pacific")],
-            detail: "Tasty burger",
-            prepTime: 20,
-            totalTime: 40,
-            instructions: [""],
-            ingredients: [],
-            label: ""
-        )
-    }
-}
