@@ -74,10 +74,17 @@ extension View {
     /// Modifier to hide `View` given a condition.
     /// - Parameters:
     ///   - condition: The condition to hide the view.
-    ///   - remove: Flag to remove view from parent view.
     /// - Returns: Modified view.
-    func hidden(if condition: Bool, remove: Bool = false) -> some View {
-        return modifier(HiddenViewModifier(condition: condition, remove: remove))
+    func hidden(if condition: Bool) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: false))
+    }
+    
+    /// Modifier to hide `View` given a condition and remove it from the current hierarchy.
+    /// - Parameters:
+    ///   - condition: The condition to hide and remove the view.
+    /// - Returns: Modified view.
+    func remove(if condition: Bool) -> some View {
+        return modifier(HiddenViewModifier(condition: condition, remove: true))
     }
     
     /// Modifier for conditional application of `.redacted()` modifier based on `condition`.

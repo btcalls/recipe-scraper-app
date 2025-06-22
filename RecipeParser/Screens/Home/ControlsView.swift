@@ -34,7 +34,7 @@ struct ControlsView: View {
                     .disabled(query.isEmpty)
                 }
                 .transition(.opacity)
-            
+                
             case .sort:
                 HStack(alignment: .center) {
                     Text("Sort By:")
@@ -67,7 +67,7 @@ struct ControlsView: View {
             withAnimation {
                 activeControl.toggle(between: .sort)
             }
-        }.hidden(if: activeControl == .search, remove: true)
+        }.remove(if: activeControl == .search)
         
         IconButton(activeControl == .search ? .chevronLeft : .search) {
             withAnimation {
@@ -76,11 +76,11 @@ struct ControlsView: View {
                 focusedField = activeControl == .search ? .search : nil
             }
         }
-        .hidden(if: activeControl == .sort, remove: true)
+        .remove(if: activeControl == .sort)
     }
     
     var body: some View {
-        HStack(alignment: .center, spacing: spacing) {
+        HStack(alignment: .center) {
             activeControlView()
             
             controlView()
