@@ -104,6 +104,7 @@
 				Utils/SwiftData/DatabaseModels.swift,
 				Views/BrowserView.swift,
 				Views/CustomImage.swift,
+				Views/CustomTextField.swift,
 				Views/IconButton.swift,
 				Views/LoadableView.swift,
 				Views/Modifiers/EmptyViewModifier.swift,
