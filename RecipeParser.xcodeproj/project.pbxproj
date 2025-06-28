@@ -101,6 +101,7 @@
 				Utils/Settings.swift,
 				Utils/SwiftData/DatabaseActor.swift,
 				Utils/SwiftData/DatabaseModels.swift,
+				Views/BottomControlView.swift,
 				Views/BrowserView.swift,
 				Views/CustomImage.swift,
 				Views/CustomTextField.swift,
