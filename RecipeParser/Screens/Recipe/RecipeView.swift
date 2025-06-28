@@ -67,13 +67,11 @@ struct RecipeView: View {
     }
     
     @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
-        HStack(spacing: spacing) {
+        BottomControlView {
             IconButton(.arrowUp) {
-                if let id = currentID, let prevID = ids.prev(id) {
-                    currentID = prevID
-                } else {
-                    currentID = titleID
-                }
+                currentID = ids.cycle(currentID,
+                                      fallback: titleID,
+                                      reverse: true)
                 
                 withAnimation {
                     proxy.scrollTo(currentID, anchor: .top)
@@ -82,11 +80,7 @@ struct RecipeView: View {
             .disabled(currentID == titleID || currentID == nil)
             
             IconButton(.arrowDown) {
-                if let id = currentID, let nextID = ids.next(id) {
-                    currentID = nextID
-                } else {
-                    currentID = ingredientsID
-                }
+                currentID = ids.cycle(currentID, fallback: ingredientsID)
                 
                 withAnimation {
                     proxy.scrollTo(currentID, anchor: .top)
@@ -94,6 +88,7 @@ struct RecipeView: View {
             }
             .disabled(currentID == instructionsID)
         }
+        .buttonStyle(AppButtonStyle())
     }
     
     var body: some View {
@@ -156,10 +151,10 @@ struct RecipeView: View {
                     .padding()
                 }
                 .scrollBounceBehavior(.basedOnSize)
-                .scale(.padding(.bottom), 55)
-                
+            }
+            .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 scrollToView(proxy)
-                    .offset(x: buttonXOffset, y: 0)
+                    .scale(.padding(.all), 10)
             }
         }
         .background(Color.appBackground)
