@@ -24,8 +24,12 @@ struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label 
                 description
             }) { actions }
         
-        case .search:
-            ContentUnavailableView.search
+        case .search(let text):
+            if let text {
+                ContentUnavailableView.search(text: text)
+            } else {
+                ContentUnavailableView.search
+            }
         }
     }
     

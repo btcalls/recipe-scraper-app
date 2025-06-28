@@ -20,6 +20,7 @@ extension String {
     // MARK: Navigation/View Titles
     static let addRecipe = "Add Recipe"
     static let yourRecipes = "Your Recipes"
+    static let allRecipes = "All Recipes"
     
     // MARK: Onboarding
     static let onboardingItemOneTitle = "Search Recipe"
@@ -58,6 +59,7 @@ extension String {
     static let cookTime = "Cook Time:"
     static let noRecipes = "No Recipes"
     static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
+    static let sortBy = "Sort By:"
 }
 
 // MARK: Functions

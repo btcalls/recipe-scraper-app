@@ -10,18 +10,18 @@ import SwiftData
 
 typealias AppModel = Codable & Identifiable
 
-struct Model<T: PersistentModel>: Sendable {
+struct ModelDTO<T: PersistentModel>: Sendable {
     let persistentId: PersistentIdentifier
 }
 
-extension Model {
+extension ModelDTO {
     init(_ model: T) {
         self.init(persistentId: model.persistentModelID)
     }
 }
 
 @Model
-final class Recipe: AppModel {
+final class Recipe: AppModel, SortableModel {
     @Attribute(.unique)
     var id: String
     @Relationship(deleteRule: .cascade)
@@ -117,6 +117,25 @@ final class Recipe: AppModel {
         try container.encode(instructions, forKey: .instructions)
         try container.encode(ingredients, forKey: .ingredients)
         try container.encode(label, forKey: .label)
+    }
+}
+
+extension Recipe {
+    static var sortItems: [SortItem<Recipe>: [SortOrderItem]] {
+        [
+            .init(\.createdOn, as: "Save Date"): [.latest, .oldest],
+            .init(\.name, as: "Name"): [.az, .za],
+        ]
+    }
+    
+    static func getSortDescriptor(for keyPath: PartialKeyPath<Recipe>, order: SortOrder) -> SortDescriptor<Recipe> {
+        switch keyPath {
+        case \.name:
+            return .init(\.name, order: order)
+            
+        default:
+            return .init(\.createdOn, order: order)
+        }
     }
 }
 

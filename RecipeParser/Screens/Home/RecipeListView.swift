@@ -13,24 +13,29 @@ struct RecipeListView: View {
     
     @Binding var isEmpty: Bool
     
-    private var searchResults: [Recipe] {
+    private var updatedResults: [Recipe] {
+        let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
+                                                  order: sortOrder.value)
+        let sorted = items.sorted(using: descriptor)
+        
         if searchContext.debouncedQuery.isEmpty {
-            return items
+            return sorted
         }
         
-        return items.filter {
+        return sorted.filter {
             $0.name.contains(searchContext.debouncedQuery)
         }
     }
     
     @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
-    @State private var emptyViewType = EmptyViewType.generic
+    @State private var sortItem: SortItem<Recipe> = .createdOn
+    @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
     
     @ViewBuilder private func listView() -> some View {
         VStack(spacing: spacing) {
-            ForEach(searchResults, id: \.id) { recipe in
+            ForEach(updatedResults, id: \.id) { recipe in
                 RecipeRow(recipe)
                     .navigate(to: RecipeView(recipe))
             }
@@ -43,9 +48,11 @@ struct RecipeListView: View {
             switch mode {
             case .first(_:):
                 listView()
+                    .navigationTitle("")
                 
             case .full:
                 listView()
+                    .navigationTitle(String.allRecipes)
                     .padding()
             }
         }
@@ -53,20 +60,16 @@ struct RecipeListView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
-        .navigationTitle("")
         .emptyView(
             Label(.noRecipes, sfSymbol: .forkKnife),
-            if: isEmpty || searchResults.isEmpty,
-            for: emptyViewType
+            if: isEmpty || updatedResults.isEmpty,
+            for: updatedResults.isEmpty ? .search(searchContext.query) : .generic
         )
         .onAppear {
             isEmpty = items.isEmpty
         }
         .onChange(of: items) {
             isEmpty = items.isEmpty
-        }
-        .onChange(of: searchResults) {
-            emptyViewType = searchResults.isEmpty ? .search : .generic
         }
     }
     
@@ -83,9 +86,17 @@ struct RecipeListView: View {
                     prompt: Text(String.searchRecipe)
                 )
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    ControlsView(query: $searchContext.query)
-                        .scale(.padding(.horizontal), 20)
-                        .scale(.padding(.bottom), 10)
+                    HStack {
+                        SortControlView<Recipe>(
+                            sortItem: $sortItem.animation(.snappy),
+                            sortOrder: $sortOrder.animation(.snappy)
+                        )
+                    }
+                    .buttonStyle(AppButtonStyle())
+                    .scale(.padding(.all), 10)
+                    .background(Color.appBackground)
+                    .clipTo(RoundedRectangle(cornerRadius: 27))
+                    .shadow()
                 }
         }
     }
@@ -96,9 +107,10 @@ extension RecipeListView {
         self.mode = mode
         self._isEmpty = isEmpty
         
-        // Configure query
+        // Setup initial query for items
         var descriptor = FetchDescriptor<Recipe>(
-            sortBy: [SortDescriptor(\.createdOn, order: .reverse)]
+            sortBy: [Recipe.getSortDescriptor(for: self.sortItem.keyPath,
+                                              order: self.sortOrder.value)]
         )
         
         switch mode {

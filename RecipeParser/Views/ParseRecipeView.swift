@@ -67,7 +67,7 @@ struct ParseRecipeView: View {
         viewState.toast = .loading(.parsingRecipe)
 
         do {
-            let model: Model<Recipe> = try await client.request(
+            let model: ModelDTO<Recipe> = try await client.request(
                 .parseRecipe(sharedURL),
                 storeTo: .shared()
             )

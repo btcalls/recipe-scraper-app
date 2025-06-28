@@ -12,7 +12,7 @@ struct AppMenuStyle: MenuStyle {
         Menu(configuration)
             .scale(.padding(.vertical), 10)
             .scale(.padding(.horizontal), 15)
-            .background(Color.appBackground)
+            .background(Color.appBackground.brightness(0.1))
             .foregroundStyle(Color.accentColor)
             .clipTo(.capsule)
             .shadow()
