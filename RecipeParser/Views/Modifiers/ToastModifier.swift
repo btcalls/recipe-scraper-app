@@ -100,7 +100,7 @@ struct ToastModifier: ViewModifier {
     }
 }
 
-struct PreviewView: View {
+struct TMPreviewView: View {
     @State private var state: ToastView.State?
     
     var body: some View {
@@ -114,5 +114,5 @@ struct PreviewView: View {
 }
 
 #Preview {
-    PreviewView()
+    TMPreviewView()
 }

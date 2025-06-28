@@ -26,8 +26,8 @@ struct RecipeRow: View {
                     .lineLimit(2)
             }
         }
-        .scale(.padding(.vertical), 15)
-        .scale(.padding(.horizontal), 20)
+        .scale(.padding(.vertical), 10)
+        .scale(.padding(.horizontal), 15)
         .background(Color.appBackground.brightness(0.1))
         .rounded(cornerRadius: .regular)
         .shadow()

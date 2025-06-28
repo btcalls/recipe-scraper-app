@@ -33,14 +33,14 @@ extension ModelContext {
     /// Retrieves the `PersistentModel` instance.
     /// - Parameter model: `Model` instance in which the persistent model is wrapped.
     /// - Returns: Optional.  The model of type `T`.
-    func getModel<T>(_ model: Model<T>) throws -> T? where T : PersistentModel {
+    func getModel<T>(_ model: ModelDTO<T>) throws -> T? where T : PersistentModel {
         return try self.persistentModel(withID: model.persistentId)
     }
     
     /// Checks whether persistent model is available in current context.
     /// - Parameter model: `Model` in which the `persistentId` is used for lookup.
     /// - Returns: Boolean flag for instance availability.
-    func hasModel<T>(_ model: Model<T>) -> Bool where T : PersistentModel {
+    func hasModel<T>(_ model: ModelDTO<T>) -> Bool where T : PersistentModel {
         let obj: T? = try? getModel(model)
         
         return obj != nil

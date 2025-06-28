@@ -58,6 +58,10 @@ enum Spacing: CGFloat {
 
 enum EmptyViewType {
     case generic
+    case search(String?)
+}
+
+enum FocusedField {
     case search
 }
 
@@ -80,4 +84,5 @@ enum Symbol: String {
     case chevronRightCircle = "chevron.right.circle.fill"
     case search = "magnifyingglass"
     case sort = "arrow.up.arrow.down"
+    case checkmark
 }

@@ -14,6 +14,7 @@ extension View {
     /// - Parameters:
     ///   - label: `Label` that makes up the main title of the view.
     ///   - condition: The condition to display the view.
+    ///   - type: The type of empty view to display.
     ///   - description: Optional. The details of the view.
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
@@ -33,6 +34,7 @@ extension View {
     
     /// Modifier to display a `ContentUnavailableView` given the condition is fulfilled.
     /// - Parameters:
+    ///   - type: The type of empty content view to display.
     ///   - condition: The condition to display the view.
     ///   - label: `Label` that makes up the main title of the view.
     ///   - description: Optional. The description displayed as a configured view.
@@ -71,6 +73,14 @@ extension View {
 // MARK: View Modifiers
 
 extension View {
+    /// Removes animation for this `View`.
+    /// - Returns: `View` with no animation attached.
+    func disableAnimation() -> some View {
+        return transaction { value in
+            value.animation = nil
+        }
+    }
+    
     /// Modifier to hide `View` given a condition.
     /// - Parameters:
     ///   - condition: The condition to hide the view.
@@ -98,7 +108,7 @@ extension View {
     /// Modifier to implement default `shadow()` across views.
     /// - Returns: Modified view with shadow.
     func shadow() -> some View {
-        return shadow(color: .black.opacity(0.3), radius: 10, x: 2, y: 10)
+        return shadow(color: .black.opacity(0.3), radius: 5, x: 2, y: 5)
     }
 }
 

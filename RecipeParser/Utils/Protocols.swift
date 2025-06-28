@@ -88,3 +88,18 @@ protocol AppButton: View {
     var tint: Color? { get }
     var action: @MainActor () -> Void { get }
 }
+
+// MARK: Models
+
+protocol SortableModel {
+    /// List of items to be used as selection for types of sorting.
+    static var sortItems: [SortItem<Self>: [SortOrderItem]] { get }
+    
+    /// Retrieves the sort descriptor corresponding to the provided key path.
+    /// - Parameters:
+    ///   - keyPath: The key path corresponding to the conforming instance.
+    ///   - order: The sort order.
+    /// - Returns: `SortDescriptor` instance configured with given parameters.
+    static func getSortDescriptor(for keyPath: PartialKeyPath<Self>,
+                                  order: SortOrder) -> SortDescriptor<Self>
+}

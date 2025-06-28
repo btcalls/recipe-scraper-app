@@ -35,7 +35,7 @@ final class APIClient<E: APIEndpoint>: Sendable {
     ///   - container: The model container in which the model database is generated.
     /// - Returns: The decoded response wrapped in `Model` instance.
     func request<T: AppModel>(_ endpoint: E,
-                              storeTo container: ModelContainer) async throws -> Model<T> {
+                              storeTo container: ModelContainer) async throws -> ModelDTO<T> {
         let databaseActor = DatabaseActor(modelContainer: container)
 
         do {
