@@ -7,39 +7,55 @@
 
 import SwiftUI
 
-struct RecipeView: View {
-    var recipe: Recipe
-    
-    @Namespace private var titleID
-    @Namespace private var ingredientsID
-    @Namespace private var instructionsID
-    @State private var currentID: Namespace.ID? = nil
-    @ScaledMetric private var buttonXOffset: CGFloat = -20
-    @ScaledMetric private var bulletFont: CGFloat = 7.5
-    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
-    @ScaledMetric private var spacing: CGFloat = 10
-    
-    private var ids: [Namespace.ID] {
-        return [titleID, ingredientsID, instructionsID]
+private struct TimeView: View {
+    let measurement: Measurement<UnitDuration>
+    let label: String
+
+    var body: some View {
+        HStack(alignment: .center) {
+            Text(label)
+                .scale(.width(), 90)
+                .frame(alignment: .leading)
+            
+            Text(measurement, format: .measurement(width: .abbreviated))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fontWeight(.light)
+                .italic()
+        }
     }
+}
+
+private struct HeaderView: View {
+    let value: String
     
-    @ViewBuilder private func headerView(_ value: String) -> some View {
+    var body: some View {
         Text(value)
             .font(.title2)
             .fontWeight(.semibold)
-            .labelStyle(CustomLabelStyle(.titleIcon(.body, .small)))
             .frame(maxWidth: .infinity, alignment: .leading)
             .scale(.padding(.vertical), 10)
             .background(Color.appBackground)
     }
+}
+
+private struct IngredientView: View {
+    let ingredient: Ingredient
     
-    @ViewBuilder private func ingredientView(_ ingredient: Ingredient) -> some View {
+    var body: some View {
         Text(ingredient.label)
             .frame(maxWidth: .infinity, alignment: .leading)
             .fontWeight(.light)
     }
+}
+
+private struct InstructionView: View {
+    let value: String
     
-    @ViewBuilder private func instructionsView(_ value: String) -> some View {
+    @ScaledMetric private var bulletFont: CGFloat = 7.5
+    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
+    @ScaledMetric private var spacing: CGFloat = 10
+    
+    var body: some View {
         HStack(alignment: .top, spacing: spacing) {
             Symbol.bullet.image
                 .font(.system(size: bulletFont))
@@ -51,113 +67,71 @@ struct RecipeView: View {
                 .fontWeight(.light)
         }
     }
+}
+
+struct RecipeView: View {
+    var recipe: Recipe
     
-    @ViewBuilder private func timeView(_ measurement: Measurement<UnitDuration>,
-                                       as label: String) -> some View {
-        HStack(alignment: .center) {
-            Text(label)
-                .scale(.width(), 90)
-                .frame(alignment: .leading)
-            
-            Text(measurement, format: .measurement(width: .wide))
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fontWeight(.light)
-                .italic()
-        }
-    }
-    
-    @ViewBuilder private func scrollToView(_ proxy: ScrollViewProxy) -> some View {
-        BottomControlView {
-            IconButton(.arrowUp) {
-                currentID = ids.cycle(currentID,
-                                      fallback: titleID,
-                                      reverse: true)
-                
-                withAnimation {
-                    proxy.scrollTo(currentID, anchor: .top)
-                }
-            }
-            .disabled(currentID == titleID || currentID == nil)
-            
-            IconButton(.arrowDown) {
-                currentID = ids.cycle(currentID, fallback: ingredientsID)
-                
-                withAnimation {
-                    proxy.scrollTo(currentID, anchor: .top)
-                }
-            }
-            .disabled(currentID == instructionsID)
-        }
-        .buttonStyle(AppButtonStyle())
-    }
+    @ScaledMetric private var spacing: CGFloat = 10
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ZStack(alignment: .bottomTrailing) {
-                ScrollView {
-                    LazyVStack(
-                        alignment: .leading,
-                        spacing: spacing,
-                        pinnedViews: .sectionHeaders
-                    ) {
-                        Section {
-                            Text(recipe.detail)
-                                .fontWeight(.light)
-                            
-                            Divider()
-                                .asStandard()
-                                .scale(.padding(.vertical), 5)
-                            
-                            VStack(alignment: .leading) {
-                                timeView(recipe.prepTimeMeasurement, as: .prepTime)
-                                timeView(recipe.cookTimeMeasurement, as: .cookTime)
-                            }
-                            
-                            Divider()
-                                .asStandard()
-                                .scale(.padding(.vertical), 5)
-                        } header: {
-                            Text(recipe.name)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .scale(.padding(.vertical), 10)
-                                .id(titleID)
-                        }
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.appBackground)
-                        
-                        Section {
-                            ForEach(recipe.ingredients) {
-                                ingredientView($0)
-                            }
-                        } header: {
-                            headerView(.ingredients)
-                                .id(ingredientsID)
-                        }
-                        
-                        Divider()
-                            .asStandard()
-                            .scale(.padding(.vertical), 5)
-                        
-                        Section {
-                            ForEach(recipe.instructions, id: \.self) {
-                                instructionsView($0)
-                            }
-                        } header: {
-                            headerView(.instructions)
-                                .id(instructionsID)
-                        }
+        ScrollView {
+            LazyVStack(
+                alignment: .leading,
+                spacing: spacing,
+                pinnedViews: .sectionHeaders
+            ) {
+                Section {
+                    Text(recipe.detail)
+                        .fontWeight(.light)
+                    
+                    Divider()
+                        .asStandard()
+                        .scale(.padding(.vertical), 5)
+                    
+                    VStack(alignment: .leading) {
+                        TimeView(measurement: recipe.prepTimeMeasurement,
+                                 label: .prepTime)
+                        TimeView(measurement: recipe.cookTimeMeasurement,
+                                 label: .cookTime)
                     }
-                    .padding()
+                    
+                    Divider()
+                        .asStandard()
+                        .scale(.padding(.vertical), 5)
+                } header: {
+                    Text(recipe.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .scale(.padding(.vertical), 10)
                 }
-                .scrollBounceBehavior(.basedOnSize)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.appBackground)
+                
+                Section {
+                    ForEach(recipe.ingredients) {
+                        IngredientView(ingredient: $0)
+                    }
+                } header: {
+                    HeaderView(value: .ingredients)
+                }
+                
+                Divider()
+                    .asStandard()
+                    .scale(.padding(.vertical), 5)
+                
+                Section {
+                    ForEach(recipe.instructions, id: \.self) {
+                        InstructionView(value: $0)
+                    }
+                } header: {
+                    HeaderView(value: .instructions)
+                }
             }
-            .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                scrollToView(proxy)
-                    .scale(.padding(.all), 10)
-            }
+            .padding()
         }
         .background(Color.appBackground)
+        .scrollBounceBehavior(.basedOnSize)
     }
 }
 
