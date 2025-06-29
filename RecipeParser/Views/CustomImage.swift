@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CustomImage: View {
-    enum Content {
+    enum Kind {
         case resource(String)
         case url(URL?, toCache: Bool = true)
         case uiImage(UIImage)
     }
     
-    var content: Content
+    var kind: Kind
     
     @State private var isLoading = false
     @State private var urlImage: Image? = nil
@@ -25,10 +25,11 @@ struct CustomImage: View {
             // Image successfully fetched
             urlImage
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
+                .clipped()
         } else if let _ = error {
             // Failed image loading
-            Symbol.forkKnife.image
+            Symbol.xmarkCircle.image
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .imageScale(.large)
                 .background(.quaternary)
@@ -47,11 +48,12 @@ struct CustomImage: View {
     }
     
     var body: some View {
-        switch content {
+        switch kind {
         case .resource(let resource):
             Image(resource)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
+                .clipped()
         
         case .url(let url, let toCache):
             asyncImage(url, toCache: toCache)
@@ -59,7 +61,8 @@ struct CustomImage: View {
         case .uiImage(let uiImage):
             Image(uiImage: uiImage)
                 .resizable()
-                .aspectRatio(contentMode: .fill)
+                .scaledToFill()
+                .clipped()
         }
     }
 }
@@ -117,7 +120,7 @@ private extension CustomImage {
 }
 
 #Preview {
-    CustomImage(content: .url(MockService.shared.imageURL))
+    CustomImage(kind: .url(MockService.shared.imageURL))
         .scale(.heightWidth(), 100)
         .clipTo(Circle(), lineWidth: 1, color: .primary)
 }
