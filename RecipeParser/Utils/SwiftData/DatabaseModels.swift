@@ -37,6 +37,7 @@ final class Recipe: AppModel, SortableModel {
     var label: String
     var createdOn: Date
     var modifiedOn: Date
+    var isFavorite: Bool
     
     var prepTimeMeasurement: Measurement<UnitDuration> {
         return Measurement(value: prepTime, unit: .minutes)
@@ -69,7 +70,8 @@ final class Recipe: AppModel, SortableModel {
         totalTime: Double,
         instructions: [String],
         ingredients: [Ingredient],
-        label: String
+        label: String,
+        isFavorite: Bool
     ) {
         self.id = id
         self.name = name
@@ -84,6 +86,7 @@ final class Recipe: AppModel, SortableModel {
         self.label = label
         self.createdOn = .init()
         self.modifiedOn = .init()
+        self.isFavorite = isFavorite
     }
     
     required init(from decoder: any Decoder) throws {
@@ -101,6 +104,7 @@ final class Recipe: AppModel, SortableModel {
         label = try container.decode(String.self, forKey: .label)
         createdOn = .init()
         modifiedOn = .init()
+        isFavorite = false
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -128,7 +132,8 @@ extension Recipe {
         ]
     }
     
-    static func getSortDescriptor(for keyPath: PartialKeyPath<Recipe>, order: SortOrder) -> SortDescriptor<Recipe> {
+    static func getSortDescriptor(for keyPath: PartialKeyPath<Recipe>,
+                                  order: SortOrder) -> SortDescriptor<Recipe> {
         switch keyPath {
         case \.name:
             return .init(\.name, order: order)

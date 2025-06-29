@@ -85,4 +85,6 @@ enum Symbol: String {
     case search = "magnifyingglass"
     case sort = "arrow.up.arrow.down"
     case checkmark
+    case bookmark
+    case bookmarkFill = "bookmark.fill"
 }
