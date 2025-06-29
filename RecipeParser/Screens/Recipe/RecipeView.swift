@@ -72,70 +72,119 @@ private struct InstructionView: View {
 struct RecipeView: View {
     var recipe: Recipe
     
+    @Namespace private var headerID
+    @Namespace private var ingredientsID
+    @Namespace private var instructionsID
     @ScaledMetric private var spacing: CGFloat = 10
+    @State private var currentID: Namespace.ID? = nil
+    @State private var title: String = ""
+    
+    private var ids: [Namespace.ID] {
+        return [headerID, ingredientsID, instructionsID]
+    }
     
     var body: some View {
-        ScrollView {
-            CustomImage(kind: .url(recipe.imageURL, toCache: true))
-                .frame(height: 300)
-                .clipShape(.rect)
-            
-            LazyVStack(
-                alignment: .leading,
-                spacing: spacing,
-                pinnedViews: .sectionHeaders
-            ) {
-                Section {
-                    Text(recipe.detail)
-                        .fontWeight(.light)
+        ScrollViewReader { proxy in
+            ScrollView {
+                CustomImage(kind: .url(recipe.imageURL, toCache: true))
+                    .frame(height: 300)
+                    .clipShape(.rect)
+                
+                LazyVStack(
+                    alignment: .leading,
+                    spacing: spacing,
+                    pinnedViews: .sectionHeaders
+                ) {
+                    Section {
+                        Text(recipe.detail)
+                            .fontWeight(.light)
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                        
+                        VStack(alignment: .leading) {
+                            TimeView(measurement: recipe.prepTimeMeasurement,
+                                     label: .prepTime)
+                            TimeView(measurement: recipe.cookTimeMeasurement,
+                                     label: .cookTime)
+                        }
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                    } header: {
+                        Text(recipe.name)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .scale(.padding(.vertical), 10)
+                            .id(headerID)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color.appBackground)
                     
-                    Divider()
-                        .asStandard()
-                        .scale(.padding(.vertical), 5)
-                    
-                    VStack(alignment: .leading) {
-                        TimeView(measurement: recipe.prepTimeMeasurement,
-                                 label: .prepTime)
-                        TimeView(measurement: recipe.cookTimeMeasurement,
-                                 label: .cookTime)
+                    Section {
+                        ForEach(recipe.ingredients) {
+                            IngredientView(ingredient: $0)
+                        }
+                    } header: {
+                        HeaderView(value: .ingredients)
+                            .id(ingredientsID)
                     }
                     
                     Divider()
                         .asStandard()
                         .scale(.padding(.vertical), 5)
-                } header: {
-                    Text(recipe.name)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .scale(.padding(.vertical), 10)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.appBackground)
-                
-                Section {
-                    ForEach(recipe.ingredients) {
-                        IngredientView(ingredient: $0)
+                    
+                    Section {
+                        ForEach(recipe.instructions, id: \.self) {
+                            InstructionView(value: $0)
+                        }
+                    } header: {
+                        HeaderView(value: .instructions)
+                            .id(instructionsID)
                     }
-                } header: {
-                    HeaderView(value: .ingredients)
                 }
-                
-                Divider()
-                    .asStandard()
-                    .scale(.padding(.vertical), 5)
-                
-                Section {
-                    ForEach(recipe.instructions, id: \.self) {
-                        InstructionView(value: $0)
-                    }
-                } header: {
-                    HeaderView(value: .instructions)
-                }
+                .padding()
+                .scrollTargetLayout()
             }
-            .padding()
+            .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                BottomControlView {
+                    IconButton(.arrowUp) {
+                        currentID = ids.cycle(currentID,
+                                              fallback: headerID,
+                                              reverse: true)
+                        
+                        withAnimation {
+                            proxy.scrollTo(currentID, anchor: .top)
+                        }
+                    }
+                    .disabled(currentID == nil || currentID == headerID)
+                    
+                    IconButton(.arrowDown) {
+                        currentID = ids.cycle(currentID,
+                                              fallback: ingredientsID)
+                        
+                        withAnimation {
+                            proxy.scrollTo(currentID, anchor: .top)
+                        }
+                    }
+                    .disabled(currentID == instructionsID)
+                }
+                .buttonStyle(AppButtonStyle())
+                .scale(.padding(.trailing), 10)
+            }
         }
         .background(Color.appBackground)
+        .navigationTitle(title)
         .scrollBounceBehavior(.basedOnSize)
+        .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
+            title = ids.contains { $0 == headerID } ? "" : recipe.name
+            
+            if let first = ids.first {
+                currentID = first
+            }
+        }
     }
 }
 
