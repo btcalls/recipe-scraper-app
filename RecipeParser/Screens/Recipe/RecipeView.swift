@@ -76,6 +76,10 @@ struct RecipeView: View {
     
     var body: some View {
         ScrollView {
+            CustomImage(kind: .url(recipe.imageURL, toCache: true))
+                .frame(height: 300)
+                .clipShape(.rect)
+            
             LazyVStack(
                 alignment: .leading,
                 spacing: spacing,
