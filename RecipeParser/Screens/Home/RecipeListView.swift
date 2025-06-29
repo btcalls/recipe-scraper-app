@@ -82,11 +82,11 @@ struct RecipeListView: View {
             baseView()
                 .searchable(
                     text: $searchContext.query,
-                    placement: .navigationBarDrawer,
+                    placement: .navigationBarDrawer(displayMode: .always),
                     prompt: Text(String.searchRecipe)
                 )
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    HStack {
+                    BottomControlView {
                         SortControlView<Recipe>(
                             sortItem: $sortItem.animation(.snappy),
                             sortOrder: $sortOrder.animation(.snappy)
@@ -94,9 +94,6 @@ struct RecipeListView: View {
                     }
                     .buttonStyle(AppButtonStyle())
                     .scale(.padding(.all), 10)
-                    .background(Color.appBackground)
-                    .clipTo(RoundedRectangle(cornerRadius: 27))
-                    .shadow()
                 }
         }
     }
