@@ -39,7 +39,8 @@ final class MockService {
             totalTime: 40,
             instructions: [""],
             ingredients: [.init(base: "bun", amount: "2", label: "2 bun")],
-            label: ""
+            label: "",
+            isFavorite: false
         )
     }
     

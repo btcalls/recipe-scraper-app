@@ -93,7 +93,7 @@ struct RecipeListView: View {
                         )
                     }
                     .buttonStyle(AppButtonStyle())
-                    .scale(.padding(.all), 10)
+                    .scale(.padding(.trailing), 10)
                 }
         }
     }

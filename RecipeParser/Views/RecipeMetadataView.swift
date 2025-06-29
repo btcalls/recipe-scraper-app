@@ -16,10 +16,10 @@ struct RecipeMetadataView: View {
     
     private func recipeImage() -> CustomImage {
         guard let metadata, let image = metadata.image else {
-            return .init(content: .resource("Placeholder"))
+            return .init(kind: .resource("Placeholder"))
         }
         
-        return .init(content: .uiImage(image))
+        return .init(kind: .uiImage(image))
     }
     
     var body: some View {

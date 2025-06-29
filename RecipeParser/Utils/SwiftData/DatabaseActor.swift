@@ -15,9 +15,13 @@ actor DatabaseActor: Sendable {
     }
     
     func save<T: AppModel & PersistentModel>(data: Data, as type: T.Type) async throws {
-        let obj: T = try data.decoded()
+        let model: T = try data.decoded()
         
-        context.insert(obj)
+        try await save(model: model)
+    }
+    
+    func save<T: AppModel & PersistentModel>(model: T) async throws {
+        context.insert(model)
         try context.save()
     }
 }
