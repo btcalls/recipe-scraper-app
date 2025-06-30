@@ -8,6 +8,7 @@
 import Foundation
 
 extension Bundle {
+    /// Retrieves URL for base API service used.
     var apiURL: String? {
         let key = "CONFIG_API_URL"
         
@@ -17,6 +18,7 @@ extension Bundle {
         
         return "https://\(url)"
     }
+    /// Retrieves app's display name.
     var displayName: String? {
         return fetch("CFBundleDisplayName") as String?
     }

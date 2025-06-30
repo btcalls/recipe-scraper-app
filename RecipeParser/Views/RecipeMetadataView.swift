@@ -14,7 +14,7 @@ struct RecipeMetadataView: View {
     @ScaledMetric private var spacing: CGFloat = 30
     @ScaledMetric private var bodySpacing: CGFloat = 10
     
-    private func recipeImage() -> CustomImage {
+    private var recipeImage: CustomImage {
         guard let metadata, let image = metadata.image else {
             return .init(kind: .resource("Placeholder"))
         }
@@ -24,7 +24,7 @@ struct RecipeMetadataView: View {
     
     var body: some View {
         VStack(alignment: .center, spacing: spacing) {
-            recipeImage()
+            recipeImage
                 .frame(width: size, height: size)
                 .aspectRatio(contentMode: .fill)
                 .rounded(cornerRadius: .regular)

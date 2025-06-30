@@ -15,7 +15,6 @@ final class MockService {
     
     static let shared = MockService()
     
-    let homeBrowserURL = URL(string: "https://www.google.com")!
     let imageURL = URL(string: "https://www.recipetineats.com/tachyon/2024/07/Baked-Beef-Quasadillas-51259.jpg")!
     let recipeURL = URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!
     

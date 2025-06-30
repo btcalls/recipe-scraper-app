@@ -18,10 +18,12 @@ struct RecipeListView: View {
                                                   order: sortOrder.value)
         let sorted = items.sorted(using: descriptor)
         
+        // Sort results
         if searchContext.debouncedQuery.isEmpty {
             return sorted
         }
         
+        // Search results
         return sorted.filter {
             $0.name.contains(searchContext.debouncedQuery)
         }

@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 
 extension ModelContainer {
+    /// The schema used for configuring the app's model container.
     static let schema = Schema([
         Recipe.self,
         Category.self,
@@ -17,6 +18,8 @@ extension ModelContainer {
         BaseIngredient.self,
     ])
     
+    /// The `ModelContainer` instance configured and used across the application.
+    /// - Returns: Configured `ModelContainer` instance.
     static func shared() -> ModelContainer {
         let modelConfiguration = ModelConfiguration(schema: Self.schema,
                                                     groupContainer: .identifier(.extensionGroup))

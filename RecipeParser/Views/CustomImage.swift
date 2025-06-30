@@ -8,12 +8,6 @@
 import SwiftUI
 
 struct CustomImage: View {
-    enum Kind {
-        case resource(String)
-        case url(URL?, toCache: Bool = true)
-        case uiImage(UIImage)
-    }
-    
     var kind: Kind
     
     @State private var isLoading = false
@@ -67,7 +61,19 @@ struct CustomImage: View {
     }
 }
 
+extension CustomImage {
+    enum Kind {
+        case resource(String)
+        case url(URL?, toCache: Bool = true)
+        case uiImage(UIImage)
+    }
+}
+
 private extension CustomImage {
+    /// Starts loading an image from given URL.
+    /// - Parameters:
+    ///   - url: The image URL to load.
+    ///   - toCache: Flag whether to cache image or not.
     func loadImage(from url: URL?, toCache: Bool) async {
         guard let url, !isLoading else {
             return
@@ -106,7 +112,13 @@ private extension CustomImage {
         }
     }
     
-    func fetchImage(from request: URLRequest, toCache: Bool) async throws -> Data {
+    /// Perform data request for an image URL.
+    /// - Parameters:
+    ///   - request: The request to start.
+    ///   - toCache: Flag whether to cache data or not.
+    /// - Returns: The image data.
+    func fetchImage(from request: URLRequest,
+                    toCache: Bool) async throws -> Data {
         let (data, response) = try await URLSession.shared.data(for: request)
         
         if toCache {

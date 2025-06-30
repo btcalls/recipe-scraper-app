@@ -51,10 +51,10 @@ struct WideButton: AppButton {
     
     @ViewBuilder private func imageAndLabelView() -> some View {
         switch kind {
-        case .regular(let styleKind), .wrapped(let styleKind):
-            if let sfSymbol = display.icon, let styleKind {
+        case .regular(let style), .wrapped(let style):
+            if let sfSymbol = display.icon, let style {
                 Label(display.title, sfSymbol: sfSymbol)
-                    .labelStyle(CustomLabelStyle(styleKind))
+                    .labelStyle(CustomLabelStyle(style))
             } else {
                 Text(display.title)
             }

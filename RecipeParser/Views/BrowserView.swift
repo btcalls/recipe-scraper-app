@@ -10,7 +10,7 @@ import SafariServices
 
 struct BrowserView: UIViewControllerRepresentable {
     func makeUIViewController(context: UIViewControllerRepresentableContext<Self>) -> SFSafariViewController {
-        let controller = SFSafariViewController(url: MockService.shared.homeBrowserURL)
+        let controller = SFSafariViewController(url: URL(string: "https://www.google.com")!)
         
         return controller
     }

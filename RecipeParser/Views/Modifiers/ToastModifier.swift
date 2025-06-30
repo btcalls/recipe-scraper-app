@@ -80,6 +80,7 @@ struct ToastModifier: ViewModifier {
             if duration > 0 {
                 workItem?.cancel()
                 
+                // Assign task to dismiss toast after duration
                 let task = DispatchWorkItem {
                     dismissToast()
                 }
