@@ -8,5 +8,6 @@
 import Foundation
 
 extension NSNotification.Name {
+    /// Notification used to close the Share view.
     static let closeShareView = NSNotification.Name("closeShareView")
 }

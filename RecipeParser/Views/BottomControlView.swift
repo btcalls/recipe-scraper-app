@@ -30,6 +30,7 @@ struct BottomControlView<Content>: View where Content : View {
         .shadow()
     }
 }
+
 #Preview {
     BottomControlView {
         Text("Hello, world!")

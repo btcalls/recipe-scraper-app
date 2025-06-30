@@ -83,9 +83,13 @@ protocol AppButton: View {
     associatedtype Display
     associatedtype ButtonKind
     
+    /// The display view the conforming view will be presenting (e.g. Text).
     var display: Display { get }
+    /// Option to configure kinds of button to render.
     var kind: ButtonKind { get }
+    /// Optional. Tint of the button.
     var tint: Color? { get }
+    /// Closure called on button press.
     var action: @MainActor () -> Void { get }
 }
 

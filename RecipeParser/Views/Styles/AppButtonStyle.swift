@@ -28,12 +28,10 @@ struct AppButtonStyle: ButtonStyle {
 
 #Preview {
     WideButton("Test") {}
-    
     WideButton("Test") {}
         .disabled(true)
     
     IconButton(.x) {}
-    
     IconButton(.x) {}
         .disabled(true)
 }

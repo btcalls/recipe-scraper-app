@@ -10,6 +10,7 @@ import SwiftUI
 
 extension String {
     // MARK: Buttons
+    
     static let cancel = "Cancel"
     static let saveRecipe = "Save Recipe"
     static let getStarted = "Get Started"
@@ -18,11 +19,13 @@ extension String {
     static let seeAll = "See All"
     
     // MARK: Navigation/View Titles
+    
     static let addRecipe = "Add Recipe"
     static let yourRecipes = "Your Recipes"
     static let allRecipes = "All Recipes"
     
     // MARK: Onboarding
+    
     static let onboardingItemOneTitle = "Search Recipe"
     static let onboardingItemOneDesc = "Search your desired recipe using the in-built browser or Safari."
     static let onboardingItemTwoTitle = "Save it!"
@@ -38,6 +41,7 @@ extension String {
     }
     
     // MARK: Descriptions
+    
     static var noRecipesDescription: AttributedString {
         let actionString = "Add Recipe"
         var attrString = AttributedString(
@@ -52,6 +56,7 @@ extension String {
     }
     
     // MARK: Constants
+    
     static let extensionGroup = "group.JJC.RecipeParser"
     static let ingredients = "Ingredients"
     static let instructions = "Instructions"

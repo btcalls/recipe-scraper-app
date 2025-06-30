@@ -63,10 +63,12 @@ struct ParseRecipeView: View {
             viewState.isProcessing = false
         }
         
+        // Start loading state
         viewState.isProcessing = true
         viewState.toast = .loading(.parsingRecipe)
 
         do {
+            // Process request and save resulting model
             let model: ModelDTO<Recipe> = try await client.request(
                 .parseRecipe(sharedURL),
                 storeTo: .shared()
@@ -74,6 +76,7 @@ struct ParseRecipeView: View {
             
             viewState.toast = nil
             
+            // Check if model was successfully saved in storage
             if context.hasModel(model) {
                 close(hasCompleted: true)
             } else {
@@ -89,6 +92,7 @@ struct ParseRecipeView: View {
     private func close(hasCompleted: Bool = false) {
         AppValues.shared.isOnboardingComplete = hasCompleted
         
+        // Notify closing of Share view
         NotificationCenter.default.post(name: .closeShareView, object: nil)
     }
 }

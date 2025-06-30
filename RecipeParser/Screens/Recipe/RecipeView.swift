@@ -229,14 +229,10 @@ extension RecipeView {
     }
 }
 
-//#Preview {
-//    RecipeView(MockService.shared.getRecipe())
-//}
-
 #Preview {
-//    RecipeView(MockService.shared.getRecipe())
-    NavigationStack {
-        RecipeRow(MockService.shared.getRecipe())
-            .navigate(to: RecipeView(MockService.shared.getRecipe()))
-    }
+    RecipeView(MockService.shared.getRecipe())
+//    NavigationStack {
+//        RecipeRow(MockService.shared.getRecipe())
+//            .navigate(to: RecipeView(MockService.shared.getRecipe()))
+//    }
 }

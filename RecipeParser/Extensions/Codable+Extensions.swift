@@ -8,6 +8,7 @@
 import Foundation
 
 extension JSONEncoder {
+    /// The `JSONEncoder` instance with standard configuration such as encoding strategies.
     static var standard: JSONEncoder {
         let encoder = JSONEncoder()
         encoder.keyEncodingStrategy = .convertToSnakeCase
@@ -18,6 +19,7 @@ extension JSONEncoder {
 }
 
 extension JSONDecoder {
+    /// The `JSONDecoder` instance with standard configuration such as encoding strategies.
     static var standard: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase

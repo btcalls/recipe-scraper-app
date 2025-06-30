@@ -97,14 +97,17 @@ private extension APIClient {
             throw CustomError.network(.invalidPath)
         }
         
+        // Setup query parameters
         if let parameters = endpoint.parameters {
             urlComponents.queryItems = parameters
         }
         
+        // Setup request body
         var request = URLRequest(url: urlPath)
         request.httpMethod = endpoint.method.rawValue
         request.httpBody = endpoint.body
         
+        // Setup header
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         // TODO: Add auth headers

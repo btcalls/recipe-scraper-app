@@ -9,13 +9,6 @@ import Foundation
 import os
 
 struct Debugger {
-    enum `Type` {
-        case trace
-        case notice
-        case warning
-        case critical
-    }
-    
     /// Log messages to Xcode's debug console.
     /// - Parameters:
     ///   - message: The message to display.
@@ -90,6 +83,15 @@ struct Debugger {
         let pretty = "\(env) - \(file) \(function) at line #\(line)\(output)"
         
         Swift.print(pretty, terminator: terminator)
+    }
+}
+
+extension Debugger {
+    enum `Type` {
+        case trace
+        case notice
+        case warning
+        case critical
     }
 }
 
