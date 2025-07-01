@@ -10,11 +10,43 @@ import SwiftUI
 struct CustomImage: View {
     var kind: Kind
     
-    @State private var isLoading = false
-    @State private var urlImage: Image? = nil
-    @State private var error: Error?
+    var body: some View {
+        switch kind {
+        case .url(let url, let toCache):
+            AsyncLoadImage(url: url, toCache: toCache)
+            
+        case .resource(let resource):
+            Image(resource)
+                .resizable()
+                .scaledToFill()
+                .clipped()
+            
+        case .uiImage(let uiImage):
+            Image(uiImage: uiImage)
+                .resizable()
+                .scaledToFill()
+                .clipped()
+        }
+    }
+}
+
+extension CustomImage {
+    enum Kind {
+        case resource(String)
+        case url(URL?, toCache: Bool = true)
+        case uiImage(UIImage)
+    }
+}
+
+private struct AsyncLoadImage: View {
+    var url: URL?
+    var toCache: Bool
     
-    @ViewBuilder private func asyncImage(_ url: URL?, toCache: Bool) -> some View {
+    @State private var urlImage: Image?
+    @State private var error: Error?
+    @State private var isLoading = false
+    
+    var body: some View {
         if let urlImage {
             // Image successfully fetched
             urlImage
@@ -40,36 +72,9 @@ struct CustomImage: View {
                 }
         }
     }
-    
-    var body: some View {
-        switch kind {
-        case .resource(let resource):
-            Image(resource)
-                .resizable()
-                .scaledToFill()
-                .clipped()
-        
-        case .url(let url, let toCache):
-            asyncImage(url, toCache: toCache)
-            
-        case .uiImage(let uiImage):
-            Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .clipped()
-        }
-    }
 }
 
-extension CustomImage {
-    enum Kind {
-        case resource(String)
-        case url(URL?, toCache: Bool = true)
-        case uiImage(UIImage)
-    }
-}
-
-private extension CustomImage {
+private extension AsyncLoadImage {
     /// Starts loading an image from given URL.
     /// - Parameters:
     ///   - url: The image URL to load.

@@ -34,22 +34,21 @@ private struct NameFavoriteView: View {
         HStack(alignment: .center, spacing: spacing) {
             Text(recipe.name)
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.largeTitle)
+                .fontWeight(.bold)
             
             Spacer()
             
             IconButton(
                 recipe.isFavorite ? .bookmarkFill : .bookmark,
-                tint: .yellow,
-                kind: .muted
+                tint: .yellow
             ) {
                 Task {
                     try? await onToggleFavorite(recipe)
                 }
             }
         }
-        .font(.largeTitle)
-        .imageScale(.medium)
-        .fontWeight(.bold)
+        .imageScale(.large)
         .scale(.padding(.bottom), 10)
     }
     
@@ -78,10 +77,10 @@ private struct HeaderView: View {
 }
 
 private struct IngredientView: View {
-    let ingredient: Ingredient
+    let value: String
     
     var body: some View {
-        Text(ingredient.label)
+        Text(value)
             .frame(maxWidth: .infinity, alignment: .leading)
             .fontWeight(.light)
     }
@@ -108,10 +107,27 @@ private struct InstructionView: View {
     }
 }
 
+private struct ScrollControlView: View {
+    var up: (disabled: Bool, action: @MainActor () -> Void)
+    var down: (disabled: Bool, action: @MainActor () -> Void)
+    
+    var body: some View {
+        BottomControlView {
+            IconButton(.arrowUp, action: up.action)
+                .disabled(up.disabled)
+            
+            IconButton(.arrowDown, action: down.action)
+                .disabled(down.disabled)
+        }
+        .buttonStyle(AppButtonStyle())
+    }
+}
+
 struct RecipeView: View {
     var recipe: Recipe
     
     @Namespace private var headerID
+    @Namespace private var titleID
     @Namespace private var ingredientsID
     @Namespace private var instructionsID
     @ScaledMetric private var height: CGFloat = 250
@@ -126,20 +142,24 @@ struct RecipeView: View {
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
-                CustomImage(kind: .url(recipe.imageURL, toCache: true))
-                    .frame(height: height)
-                    .clipShape(.rect)
-                
                 LazyVStack(
                     alignment: .leading,
                     spacing: spacing,
                     pinnedViews: .sectionHeaders
                 ) {
-                    NameFavoriteView(recipe: recipe)
+                    CustomImage(kind: .url(recipe.imageURL, toCache: true))
+                        .frame(height: height)
+                        .clipShape(RoundedRectangle(cornerRadius: .lg))
+                        .scale(.padding(.bottom), 15)
+                        .shadow()
                         .id(headerID)
+                    
+                    NameFavoriteView(recipe: recipe)
+                        .id(titleID)
                     
                     Text(recipe.detail)
                         .fontWeight(.light)
+
                     
                     Divider()
                         .asStandard()
@@ -158,7 +178,7 @@ struct RecipeView: View {
                     
                     Section {
                         ForEach(recipe.ingredients) {
-                            IngredientView(ingredient: $0)
+                            IngredientView(value: $0.label)
                         }
                     } header: {
                         HeaderView(value: .ingredients)
@@ -182,28 +202,22 @@ struct RecipeView: View {
                 .scrollTargetLayout()
             }
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                BottomControlView {
-                    IconButton(.arrowUp) {
-                        currentID = ids.cycle(currentID,
-                                              fallback: headerID,
-                                              reverse: true)
-                        
-                        withAnimation {
-                            proxy.scrollTo(currentID, anchor: .top)
-                        }
-                    }
-                    .disabled(currentID == nil || currentID == headerID)
+                ScrollControlView(up: (currentID.isNil(or: headerID), {
+                    currentID = ids.cycle(currentID,
+                                          fallback: headerID,
+                                          reverse: true)
                     
-                    IconButton(.arrowDown) {
-                        currentID = ids.cycle(currentID,
-                                              fallback: ingredientsID)
-                        
-                        withAnimation {
-                            proxy.scrollTo(currentID, anchor: .top)
-                        }
+                    withAnimation {
+                        proxy.scrollTo(currentID, anchor: .top)
                     }
-                    .disabled(currentID == instructionsID)
-                }
+                }), down: (currentID == instructionsID, {
+                    currentID = ids.cycle(currentID,
+                                          fallback: ingredientsID)
+                    
+                    withAnimation {
+                        proxy.scrollTo(currentID, anchor: .top)
+                    }
+                }))
                 .buttonStyle(AppButtonStyle())
                 .scale(.padding(.trailing), 10)
             }
@@ -213,7 +227,7 @@ struct RecipeView: View {
         .scrollBounceBehavior(.basedOnSize)
         .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
             withAnimation {
-                title = ids.contains { $0 == headerID } ? "" : recipe.name
+                title = ids.contains { $0 == titleID } ? "" : recipe.name
                 
                 if let first = ids.first {
                     currentID = first
@@ -231,8 +245,4 @@ extension RecipeView {
 
 #Preview {
     RecipeView(MockService.shared.getRecipe())
-//    NavigationStack {
-//        RecipeRow(MockService.shared.getRecipe())
-//            .navigate(to: RecipeView(MockService.shared.getRecipe()))
-//    }
 }

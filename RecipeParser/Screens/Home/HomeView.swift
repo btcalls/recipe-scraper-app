@@ -8,24 +8,28 @@
 import SwiftUI
 import SwiftData
 
-struct HomeView: View {
-    @ScaledMetric private var spacing: CGFloat = 20
-    @State private var isBrowserPresented = false
-    @State private var isEmpty: Bool = false
+private struct SeeAllButton: View {
+    @Binding var isEmpty: Bool
     
-    private func seeAllButton() -> some View {
+    var body: some View {
         Label(.seeAll, sfSymbol: .chevronRightCircle)
             .labelStyle(CustomLabelStyle(.titleIcon()))
             .navigate(to: RecipeListView(.full, isEmpty: $isEmpty))
             .buttonStyle(AppButtonStyle())
             .foregroundStyle(Color.accentColor)
     }
+}
+
+struct HomeView: View {
+    @ScaledMetric private var spacing: CGFloat = 20
+    @State private var isBrowserPresented = false
+    @State private var isEmpty: Bool = false
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    seeAllButton()
+                    SeeAllButton(isEmpty: $isEmpty)
                         .remove(if: isEmpty)
                     
                     RecipeListView(.first(3), isEmpty: $isEmpty)

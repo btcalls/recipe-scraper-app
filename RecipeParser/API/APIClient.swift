@@ -60,6 +60,10 @@ final class APIClient<E: APIEndpoint>: Sendable {
 }
 
 private extension APIClient {
+    /// Checks network response for authentication, server, or other related errors.
+    /// - Parameters:
+    ///   - response: The `URLResponse` executed.
+    ///   - details: Optional. Descriptive error message from server.
     func getHttpError(_ response: URLResponse?, details: String? = nil) throws {
         let response = try (response as? HTTPURLResponse).orThrow(
             CustomError.network(.failed)
@@ -88,6 +92,9 @@ private extension APIClient {
         }
     }
     
+    /// Retrieves the corresponding `URLRequest` instance for a given endpoint.
+    /// - Parameter endpoint: The endpoint to configure request from.
+    /// - Returns: The configured `URLRequest` instance.
     func getURLRequest(from endpoint: E) throws -> URLRequest {
         guard
             let apiURL = Bundle.main.apiURL,

@@ -67,7 +67,6 @@ extension View {
                                       duration: duration,
                                       onDismiss: onDismiss))
     }
-    
 }
 
 // MARK: View Modifiers

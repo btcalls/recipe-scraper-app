@@ -8,11 +8,60 @@
 import SwiftUI
 import SwiftData
 
+private struct BaseListView: View {
+    var items: [Recipe]
+    
+    @ScaledMetric private var spacing: CGFloat = 15
+    
+    var body: some View {
+        VStack(spacing: spacing) {
+            ForEach(items, id: \.id) {
+                RecipeRow($0)
+                    .navigate(to: RecipeView($0))
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+private struct BaseView: View {
+    var mode: RecipeListView.Mode = .full
+    var items: [Recipe]
+    
+    @Binding var isEmpty: Bool
+    
+    var body: some View {
+        ScrollView {
+            switch mode {
+            case .first(_:):
+                BaseListView(items: items)
+                    .navigationTitle("")
+                
+            case .full:
+                BaseListView(items: items)
+                    .navigationTitle(String.allRecipes)
+                    .padding()
+            }
+        }
+        .background(Color.appBackground)
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollClipDisabled()
+        .listStyle(.plain)
+        .onAppear {
+            isEmpty = items.isEmpty
+        }
+        .onChange(of: items) {
+            isEmpty = items.isEmpty
+        }
+    }
+}
+
 struct RecipeListView: View {
     var mode: Mode = .full
     
     @Binding var isEmpty: Bool
     
+    /// Updated list of recipes based on search query and sorting selections.
     private var updatedResults: [Recipe] {
         let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
                                                   order: sortOrder.value)
@@ -35,53 +84,23 @@ struct RecipeListView: View {
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
     
-    @ViewBuilder private func listView() -> some View {
-        VStack(spacing: spacing) {
-            ForEach(updatedResults, id: \.id) { recipe in
-                RecipeRow(recipe)
-                    .navigate(to: RecipeView(recipe))
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-    
-    @ViewBuilder private func baseView() -> some View {
-        ScrollView {
-            switch mode {
-            case .first(_:):
-                listView()
-                    .navigationTitle("")
-                
-            case .full:
-                listView()
-                    .navigationTitle(String.allRecipes)
-                    .padding()
-            }
-        }
-        .background(Color.appBackground)
-        .scrollBounceBehavior(.basedOnSize)
-        .scrollClipDisabled()
-        .listStyle(.plain)
-        .emptyView(
-            Label(.noRecipes, sfSymbol: .forkKnife),
-            if: isEmpty || updatedResults.isEmpty,
-            for: updatedResults.isEmpty ? .search(searchContext.query) : .generic
-        )
-        .onAppear {
-            isEmpty = items.isEmpty
-        }
-        .onChange(of: items) {
-            isEmpty = items.isEmpty
-        }
-    }
-    
     var body: some View {
         switch mode {
         case .first(_:):
-            baseView()
+            BaseView(mode: mode, items: updatedResults, isEmpty: $isEmpty)
+                .emptyView(
+                    Label(.noRecipes, sfSymbol: .forkKnife),
+                    if: isEmpty,
+                    for: .generic
+                )
         
         case .full:
-            baseView()
+            BaseView(mode: mode, items: updatedResults, isEmpty: $isEmpty)
+                .emptyView(
+                    Label(.noRecipes, sfSymbol: .forkKnife),
+                    if: updatedResults.isEmpty,
+                    for: .search(searchContext.query)
+                )
                 .searchable(
                     text: $searchContext.query,
                     placement: .navigationBarDrawer(displayMode: .always),

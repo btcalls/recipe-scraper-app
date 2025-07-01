@@ -11,27 +11,9 @@ struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label 
     var condition: Bool
     var type: EmptyViewType
     
-    @ViewBuilder var label: Label
+    @ViewBuilder let label: Label
     @ViewBuilder var actions: Actions
     @ViewBuilder var description: Description
-    
-    @ViewBuilder private func unavailableView() -> some View {
-        switch type {
-        case .generic:
-            ContentUnavailableView(label: {
-                label
-            }, description: {
-                description
-            }) { actions }
-        
-        case .search(let text):
-            if let text {
-                ContentUnavailableView.search(text: text)
-            } else {
-                ContentUnavailableView.search
-            }
-        }
-    }
     
     func body(content: Content) -> some View {
         switch condition {
@@ -41,7 +23,21 @@ struct EmptyViewModifier<Label, Description, Actions>: ViewModifier where Label 
         case true:
             content
                 .overlay(alignment: .center) {
-                    unavailableView()
+                    switch type {
+                    case .generic:
+                        ContentUnavailableView(label: {
+                            label
+                        }, description: {
+                            description
+                        }) { actions }
+                        
+                    case .search(let text):
+                        if let text {
+                            ContentUnavailableView.search(text: text)
+                        } else {
+                            ContentUnavailableView.search
+                        }
+                    }
                 }
         }
     }

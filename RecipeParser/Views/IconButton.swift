@@ -7,6 +7,25 @@
 
 import SwiftUI
 
+private struct ButtonView<V>: View where V : View {
+    var display: IconButton.Display
+    var bg: V
+    var tint: Color?
+    var action: @MainActor () -> Void
+    
+    var body: some View {
+        Button(action: action) {
+            display.image
+                .fontWeight(.medium)
+                .scale(.heightWidth(), 45)
+                .background { bg }
+                .foregroundStyle(tint ?? Color.appForeground)
+                .clipTo(.circle)
+        }
+        .buttonStyle(AppButtonStyle())
+    }
+}
+
 struct IconButton: AppButton {
     typealias Display = Symbol
     typealias ButtonKind = Kind
@@ -16,35 +35,24 @@ struct IconButton: AppButton {
     var tint: Color? = .primary
     var action: @MainActor () -> Void
     
-    private var isMuted: Bool {
-        return kind == .muted
-    }
-    private var bg: some View {
-        let bgColor = isMuted ? Color.clear : .appBackground
-        
-        return bgColor.brightness(isMuted ? 0 : 0.1)
-    }
-    
-    @ViewBuilder private func buttonView() -> some View {
-        Button(action: action) {
-            display.image
-                .fontWeight(.medium)
-                .scale(.heightWidth(), 45)
-                .background(bg)
-                .foregroundStyle(tint ?? Color.appForeground)
-                .clipTo(.circle)
-        }
-        .buttonStyle(AppButtonStyle())
-    }
-    
     var body: some View {
         switch kind {
         case .regular:
-            buttonView()
+            ButtonView(
+                display: display,
+                bg: Color.appBackground.brightness(0.1),
+                tint: tint,
+                action: action
+            )
                 .shadow()
         
         case .muted:
-            buttonView()
+            ButtonView(
+                display: display,
+                bg: Color.clear,
+                tint: tint,
+                action: action
+            )
         }
     }
 }
@@ -70,5 +78,6 @@ extension IconButton {
 
 #Preview {
     IconButton(.plus) {}
+    IconButton(.bookmark, tint: .orange) {}
     IconButton(.x, tint: .red, kind: .muted) {}
 }

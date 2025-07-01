@@ -7,6 +7,32 @@
 
 import SwiftUI
 
+private struct ImageAndLabelView: View {
+    var display: WideButton.Display
+    var kind: WideButton.Kind
+    
+    @ScaledMetric private var spacing: CGFloat = 10
+    
+    var body: some View {
+        switch kind {
+        case .regular(let style), .wrapped(let style):
+            if let sfSymbol = display.icon, let style {
+                Label(display.title, sfSymbol: sfSymbol)
+                    .labelStyle(CustomLabelStyle(style))
+            } else {
+                Text(display.title)
+            }
+            
+        case .loading(let title):
+            HStack(alignment: .center, spacing: spacing) {
+                ProgressView()
+                
+                Text(title)
+            }
+        }
+    }
+}
+
 struct WideButton: AppButton {
     typealias Display = (title: String, icon: Symbol?)
     typealias ButtonKind = Kind
@@ -30,7 +56,7 @@ struct WideButton: AppButton {
     }
     private var color: (bg: Color, tint: Color) {
         if case .loading(_:) = kind {
-            return (Color(uiColor: .lightGray), .secondary)
+            return (.appBackground, .secondary)
         }
         
         guard let role else {
@@ -49,28 +75,9 @@ struct WideButton: AppButton {
         }
     }
     
-    @ViewBuilder private func imageAndLabelView() -> some View {
-        switch kind {
-        case .regular(let style), .wrapped(let style):
-            if let sfSymbol = display.icon, let style {
-                Label(display.title, sfSymbol: sfSymbol)
-                    .labelStyle(CustomLabelStyle(style))
-            } else {
-                Text(display.title)
-            }
-        
-        case .loading(let title):
-            HStack(alignment: .center, spacing: spacing) {
-                ProgressView()
-                    
-                Text(title)
-            }
-        }
-    }
-    
     var body: some View {
         Button(role: role, action: action) {
-            imageAndLabelView()
+            ImageAndLabelView(display: display, kind: kind)
                 .frame(maxWidth: .infinity)
                 .bold()
                 .scale(.height(isMinimum: true), 40)

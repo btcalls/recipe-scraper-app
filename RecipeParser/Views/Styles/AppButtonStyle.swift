@@ -10,6 +10,9 @@ import SwiftUI
 struct AppButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled: Bool
     
+    /// Controls the brightness of the button style based on whether the button is currently being pressed.
+    /// - Parameter isPressed: Flag whether the button is pressed or not.
+    /// - Returns: Brightness value.
     private func brightness(_ isPressed: Bool) -> Double {
         if !isEnabled {
             return -0.25
