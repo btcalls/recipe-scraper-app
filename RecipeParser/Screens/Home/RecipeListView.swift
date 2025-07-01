@@ -86,7 +86,7 @@ struct RecipeListView: View {
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
                     if: isEmpty,
-                    for: .generic
+                    type: .generic
                 )
         
         case .full:
@@ -97,7 +97,7 @@ struct RecipeListView: View {
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
                     if: items.isEmpty || updatedResults.isEmpty,
-                    for: items.isEmpty ? .generic : .search(searchContext.query)
+                    type: items.isEmpty ? .generic : .search(searchContext.query)
                 )
                 .searchable(
                     text: $searchContext.query,

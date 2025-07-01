@@ -21,7 +21,7 @@ extension View {
     func emptyView<Label, Actions>(
         _ label: Label,
         if condition: Bool,
-        for type: EmptyViewType = .generic,
+        type: EmptyViewType = .generic,
         description: String? = nil,
         @ViewBuilder actions: () -> Actions = EmptyView.init
     ) -> some View where Label : View, Actions : View  {
@@ -41,7 +41,7 @@ extension View {
     ///   - actions: Optional. Actions to display along the view.
     /// - Returns: Modified view with unavailable view option.
     func emptyView<Label, Description, Actions>(
-        for type: EmptyViewType = .generic,
+        type: EmptyViewType = .generic,
         if condition: Bool,
         label: Label,
         @ViewBuilder description: () -> Description = EmptyView.init,
