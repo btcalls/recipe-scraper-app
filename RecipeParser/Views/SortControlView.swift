@@ -7,6 +7,19 @@
 
 import SwiftUI
 
+private struct SelectedLabel: View {
+    var text: String
+    var isSelected: Bool
+    
+    var body: some View {
+        if isSelected {
+            Label(text, sfSymbol: .checkmark)
+        } else {
+            Text(text)
+        }
+    }
+}
+
 struct SortControlView<Model: SortableModel>: View {
     var sortItems: [SortItem<Model>]
     
@@ -30,11 +43,10 @@ struct SortControlView<Model: SortableModel>: View {
                         Button {
                             sortItem = item
                         } label: {
-                            if (item == sortItem) {
-                                Label(item.title, sfSymbol: .checkmark)
-                            } else {
-                                Text(item.title)
-                            }
+                            SelectedLabel(
+                                text: item.title,
+                                isSelected: item == sortItem
+                            )
                         }
                     }
                 }
@@ -44,11 +56,10 @@ struct SortControlView<Model: SortableModel>: View {
                         Button {
                             sortOrderItem = item
                         } label: {
-                            if (item == sortOrderItem) {
-                                Label(item.title, sfSymbol: .checkmark)
-                            } else {
-                                Text(item.title)
-                            }
+                            SelectedLabel(
+                                text: item.title,
+                                isSelected: item == sortOrderItem
+                            )
                         }
                     }
                 }

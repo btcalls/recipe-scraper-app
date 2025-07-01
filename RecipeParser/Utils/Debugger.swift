@@ -11,6 +11,24 @@ import os
 struct Debugger {
     /// Log messages to Xcode's debug console.
     /// - Parameters:
+    ///   - items: The items to display.
+    ///   - type: The type of log to use.
+    ///   - file: The file in which the logger was called.
+    ///   - function: The function in which the logger was called.
+    ///   - line: The line number in which the logger was called.
+    ///   - separator: The separator between items.
+    static func log(_ items: Any...,
+                    type: Debugger.`Type` = .notice,
+                    file: String = #file,
+                    function: String = #function,
+                    line: Int = #line,
+                    separator: String = " ") {
+        let output = items.map { "\n\t-> \($0)" }.joined(separator: separator)
+        
+        Self.log(output, type: type, file: file, function: function, line: line)
+    }
+    /// Log messages to Xcode's debug console.
+    /// - Parameters:
     ///   - message: The message to display.
     ///   - type: The type of log to use.
     ///   - file: The file in which the logger was called.

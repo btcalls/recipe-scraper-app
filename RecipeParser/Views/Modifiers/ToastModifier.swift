@@ -8,7 +8,7 @@
 import SwiftUI
 
 private struct BackgroundView: View {
-    @Binding var state: ToastView.State?
+    var state: ToastView.State?
     
     var body: some View {
         switch state {
@@ -25,8 +25,7 @@ private struct BackgroundView: View {
 }
 
 private struct MainView: View {
-    @Binding var state: ToastView.State?
-    
+    var state: ToastView.State?
     var onDismiss: @MainActor () -> Void
     
     var body: some View {
@@ -56,10 +55,10 @@ struct ToastModifier: ViewModifier {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay {
                 ZStack {
-                    MainView(state: $state, onDismiss: onDismiss)
+                    MainView(state: state, onDismiss: onDismiss)
                         .scale(.padding(.bottom), 20)
                 }
-                .background(BackgroundView(state: $state))
+                .background(BackgroundView(state: state))
                 .animation(.snappy, value: state)
             }
             .transition(.opacity)

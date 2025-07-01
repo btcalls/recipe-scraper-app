@@ -28,8 +28,6 @@ private struct BaseView: View {
     var mode: RecipeListView.Mode = .full
     var items: [Recipe]
     
-    @Binding var isEmpty: Bool
-    
     var body: some View {
         ScrollView {
             switch mode {
@@ -47,12 +45,6 @@ private struct BaseView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
-        .onAppear {
-            isEmpty = items.isEmpty
-        }
-        .onChange(of: items) {
-            isEmpty = items.isEmpty
-        }
     }
 }
 
@@ -87,19 +79,25 @@ struct RecipeListView: View {
     var body: some View {
         switch mode {
         case .first(_:):
-            BaseView(mode: mode, items: updatedResults, isEmpty: $isEmpty)
+            BaseView(mode: mode, items: updatedResults)
+                .onAppear {
+                    isEmpty = items.isEmpty
+                }
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
                     if: isEmpty,
-                    for: .generic
+                    type: .generic
                 )
         
         case .full:
-            BaseView(mode: mode, items: updatedResults, isEmpty: $isEmpty)
+            BaseView(mode: mode, items: updatedResults)
+                .onChange(of: items) {
+                    isEmpty = items.isEmpty
+                }
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
-                    if: updatedResults.isEmpty,
-                    for: .search(searchContext.query)
+                    if: items.isEmpty || updatedResults.isEmpty,
+                    type: items.isEmpty ? .generic : .search(searchContext.query)
                 )
                 .searchable(
                     text: $searchContext.query,

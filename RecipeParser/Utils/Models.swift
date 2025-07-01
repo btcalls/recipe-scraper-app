@@ -8,6 +8,14 @@
 import Foundation
 import UIKit
 
+struct RecipeMetadata {
+    var title: String
+    var description: String
+    var hostName: String
+    var image: UIImage? = nil
+    var icon: UIImage? = nil
+}
+
 struct SortItem<Model>: Equatable, Hashable {
     let title: String
     let keyPath: PartialKeyPath<Model>
@@ -41,12 +49,4 @@ extension SortOrderItem {
     static let za: Self = .init(title: "Z-A", value: .reverse)
     static let latest: Self = .init(title: "Latest", value: .reverse)
     static let oldest: Self = .init(title: "Oldest", value: .forward)
-}
-
-struct RecipeMetadata {
-    var title: String
-    var description: String
-    var hostName: String
-    var image: UIImage? = nil
-    var icon: UIImage? = nil
 }
