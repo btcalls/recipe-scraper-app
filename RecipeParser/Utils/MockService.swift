@@ -62,6 +62,9 @@ final class MockService {
         return decoded.data
     }
     
+    /// Configures a `ModelContainer` which can be used globally to mock storage with sample data in memory.
+    /// - Parameter withSample: Flag whether to populate data or not.
+    /// - Returns: Configured `ModelContainer` similar to the one used in app.
     @MainActor
     func modelContainer(withSample: Bool = true) -> ModelContainer {
         let modelConfiguration = ModelConfiguration(schema: ModelContainer.schema,

@@ -9,12 +9,9 @@ import SwiftUI
 import SwiftData
 
 private struct SeeAllButton: View {
-    @Binding var isEmpty: Bool
-    
     var body: some View {
         Label(.seeAll, sfSymbol: .chevronRightCircle)
             .labelStyle(CustomLabelStyle(.titleIcon()))
-            .navigate(to: RecipeListView(.full, isEmpty: $isEmpty))
             .buttonStyle(AppButtonStyle())
             .foregroundStyle(Color.accentColor)
     }
@@ -29,7 +26,8 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    SeeAllButton(isEmpty: $isEmpty)
+                    SeeAllButton()
+                        .navigate(to: RecipeListView(isEmpty: $isEmpty))
                         .remove(if: isEmpty)
                     
                     RecipeListView(.first(3), isEmpty: $isEmpty)
@@ -42,12 +40,14 @@ struct HomeView: View {
             .scrollBounceBehavior(.basedOnSize)
             .navigationTitle("")
             .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        isBrowserPresented = true
-                    } label: {
-                        Symbol.plus.image
-                            .bold()
+                if !isEmpty {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            isBrowserPresented = true
+                        } label: {
+                            Symbol.plus.image
+                                .bold()
+                        }
                     }
                 }
                 
