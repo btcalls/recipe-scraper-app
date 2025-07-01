@@ -10,12 +10,11 @@ import SwiftUI
 struct OnboardingCard<Content>: View where Content : View {
     var title: String
     var image: Image
-    
-    @ScaledMetric private var spacing: CGFloat = 20
+    var action: (title: String, handler: (@MainActor () -> Void))?
     
     @ViewBuilder let caption: Content
     
-    var action: (title: String, handler: (() -> Void))?
+    @ScaledMetric private var spacing: CGFloat = 20
     
     var body: some View {
         VStack(spacing: spacing) {
@@ -74,8 +73,8 @@ struct OnboardingCard<Content>: View where Content : View {
     OnboardingCard(
         title: .onboardingItemOneTitle,
         image: Image("Placeholder"),
-        caption: {
-            Text(String.onboardingItemOneDesc)
-        },
-        action: (.getStarted, {}))
+        action: (.getStarted, {})
+    ) {
+        Text(String.onboardingItemOneDesc)
+    }  
 }

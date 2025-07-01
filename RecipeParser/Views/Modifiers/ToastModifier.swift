@@ -7,28 +7,29 @@
 
 import SwiftUI
 
-struct ToastModifier: ViewModifier {
+private struct BackgroundView: View {
     @Binding var state: ToastView.State?
     
-    @State private var workItem: DispatchWorkItem?
-    
-    var duration: ToastView.Duration
-    var onDismiss: @MainActor () -> Void
-    
-    @ViewBuilder private func backgroundView() -> some View {
+    var body: some View {
         switch state {
         case .loading(_:):
             Color.secondary
                 .opacity(0.5)
                 .ignoresSafeArea(.all)
                 .transition(.opacity)
-        
+            
         default:
             EmptyView()
         }
     }
+}
+
+private struct MainView: View {
+    @Binding var state: ToastView.State?
     
-    @ViewBuilder private func mainToastView() -> some View {
+    var onDismiss: @MainActor () -> Void
+    
+    var body: some View {
         if let state {
             VStack {
                 Spacer()
@@ -40,16 +41,25 @@ struct ToastModifier: ViewModifier {
                                     removal: .opacity))
         }
     }
+}
+
+struct ToastModifier: ViewModifier {
+    @Binding var state: ToastView.State?
+    
+    var duration: ToastView.Duration
+    var onDismiss: @MainActor () -> Void
+    
+    @State private var workItem: DispatchWorkItem?
     
     func body(content: Content) -> some View {
         content
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay {
                 ZStack {
-                    mainToastView()
+                    MainView(state: $state, onDismiss: onDismiss)
                         .scale(.padding(.bottom), 20)
                 }
-                .background(backgroundView())
+                .background(BackgroundView(state: $state))
                 .animation(.snappy, value: state)
             }
             .transition(.opacity)
@@ -58,6 +68,7 @@ struct ToastModifier: ViewModifier {
             }
     }
     
+    /// Present toast view and start task for auto-dismissal, if specified.
     private func showToast() {
         guard let _ = state else {
             return
@@ -93,6 +104,7 @@ struct ToastModifier: ViewModifier {
         }
     }
     
+    /// Dismiss toast view and reset tasks and state.
     private func dismissToast() {
         workItem?.cancel()
         
@@ -106,9 +118,9 @@ struct TMPreviewView: View {
     
     var body: some View {
         Button("Show Toast") {
-            state = .loading(.processing)
+            state = .success("Yey!")
         }
-        .presentToast(as: $state) {
+        .presentToast(as: $state, duration: .timed(3)) {
             state = nil
         }
     }

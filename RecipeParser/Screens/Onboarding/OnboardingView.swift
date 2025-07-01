@@ -15,23 +15,21 @@ struct OnboardingView: View {
         TabView {
             OnboardingCard(
                 title: .onboardingItemOneTitle,
-                image: Image("Placeholder"),
-                caption: {
-                    Text(String.onboardingItemOneDesc)
-                }
-            )
+                image: Image("Placeholder")
+            ) {
+                Text(String.onboardingItemOneDesc)
+            }
             .tag(0)
             
             OnboardingCard(
                 title: .onboardingItemTwoTitle,
                 image: Image("Placeholder"),
-                caption: {
-                    Text(String.onboardingItemTwoDesc)
-                },
                 action: (.getStarted, {
                     isBrowserPresented = true
                 })
-            )
+            ) {
+                Text(String.onboardingItemTwoDesc)
+            }
             .tag(1)
         }
         .tabViewStyle(PageTabViewStyle())

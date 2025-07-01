@@ -32,4 +32,11 @@ extension Optional where Wrapped : Equatable {
     mutating func toggle(between value: Wrapped) {
         self = self == value ? nil : value
     }
+    
+    /// Check whether an optional value is `nil` or another value.
+    /// - Parameter value: The value to compare to.
+    /// - Returns: Flag whether condition is satisfied.
+    func isNil(or value: Self) -> Bool {
+        return self == nil || self == value
+    }
 }

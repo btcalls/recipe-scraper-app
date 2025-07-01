@@ -9,15 +9,14 @@ import SwiftUI
 import SwiftData
 
 struct ParseRecipeView: View {
-    @Environment(\.modelContext) private var context
-    @State private var recipeMetadata: RecipeMetadata?
-    @State private var viewState = ViewState()
-    
-    @ScaledMetric private var spacing: CGFloat = 20
-    
     var sharedURL: URL
     
     private var client = APIClient<RecipeEndpoints>()
+    
+    @Environment(\.modelContext) private var context
+    @ScaledMetric private var spacing: CGFloat = 20
+    @State private var recipeMetadata: RecipeMetadata?
+    @State private var viewState = ViewState()
     
     init(url: URL) {
         sharedURL = url
@@ -53,11 +52,13 @@ struct ParseRecipeView: View {
         }
     }
     
+    /// Parse and extracts metadata for the current recipe URL.
     private func parseSharedURL() async {
         recipeMetadata = try? await ExtractRecipeMetadata(url: sharedURL)
             .parse()
     }
     
+    /// Starts parsing recipe and saving to persistent storage.
     private func processRecipe() async {
         defer {
             viewState.isProcessing = false
@@ -89,6 +90,8 @@ struct ParseRecipeView: View {
         }
     }
     
+    /// Starts closing of this view and the Share view.
+    /// - Parameter hasCompleted: Flag whether a successful parsing was completed.
     private func close(hasCompleted: Bool = false) {
         AppValues.shared.isOnboardingComplete = hasCompleted
         

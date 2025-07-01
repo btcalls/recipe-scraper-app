@@ -39,7 +39,9 @@ extension RecipeEndpoints {
             return try? value.encoded()
             
         case .parseRecipe(let url):
-            return try? JSONSerialization.data(withJSONObject: ["url": url.absoluteString],
+            let dict = ["url": url.absoluteString]
+            
+            return try? JSONSerialization.data(withJSONObject: dict,
                                                options: [])
         }
     }

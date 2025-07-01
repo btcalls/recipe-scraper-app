@@ -7,6 +7,48 @@
 
 import SwiftUI
 
+private struct IconView: View {
+    var state: ToastView.State
+    var themeColor: Color
+    
+    var body: some View {
+        switch state {
+        case .info(_:):
+            Symbol.info.image
+            
+        case .error(_:):
+            Symbol.xmarkCircle.image
+            
+        case .success(_:):
+            Symbol.success.image
+            
+        case .loading(_:):
+            ProgressView()
+                .tint(themeColor)
+        }
+    }
+}
+
+private struct CloseButton: View {
+    var state: ToastView.State
+    var onDismiss: @MainActor () -> Void
+    
+    var body: some View {
+        switch state {
+        case .info(_:), .error(_:), .success(_:):
+            Button(action: onDismiss) {
+                Symbol.x.image
+                    .frame(width: 40, height: 40)
+                    .foregroundStyle(Color.appForeground.opacity(0.75))
+                    .imageScale(.medium)
+            }
+            
+        default:
+            EmptyView()
+        }
+    }
+}
+
 struct ToastView: View {
     var state: State
     var onDismiss: @MainActor () -> Void
@@ -38,41 +80,9 @@ struct ToastView: View {
         }
     }
     
-    @ViewBuilder private func iconView() -> some View {
-        switch state {
-        case .info(_:):
-            Symbol.info.image
-            
-        case .error(_:):
-            Symbol.xmarkCircle.image
-            
-        case .success(_:):
-            Symbol.success.image
-            
-        case .loading(_:):
-            ProgressView()
-                .tint(themeColor)
-        }
-    }
-    
-    @ViewBuilder private func closeButton() -> some View {
-        switch state {
-        case .info(_:), .error(_:), .success(_:):
-            Button(action: onDismiss) {
-                Symbol.x.image
-                    .frame(width: 40, height: 40)
-                    .foregroundStyle(Color.appForeground.opacity(0.75))
-                    .imageScale(.medium)
-            }
-            
-        default:
-            EmptyView()
-        }
-    }
-    
     var body: some View {
         HStack(alignment: .center, spacing: spacing) {
-            iconView()
+            IconView(state: state, themeColor: themeColor)
                 .imageScale(.medium)
                 .foregroundStyle(themeColor)
             
@@ -80,7 +90,7 @@ struct ToastView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .lineLimit(5)
                 
-            closeButton()
+            CloseButton(state: state, onDismiss: onDismiss)
         }
         .frame(minHeight: 45)
         .font(.caption)

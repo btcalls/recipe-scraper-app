@@ -8,13 +8,6 @@
 import SwiftUI
 
 struct CustomLabelStyle: LabelStyle {
-    enum Kind {
-        case verticalIconTitle(Font = .body, Image.Scale = .medium)
-        case verticalTitleIcon(Font = .body, Image.Scale = .medium)
-        case titleIcon(Font = .body, Image.Scale = .medium)
-        case iconTitle(Font = .body, Image.Scale = .medium)
-    }
-    
     var kind: Kind = .iconTitle()
     
     @ScaledMetric private var spacing: CGFloat = 8
@@ -53,6 +46,15 @@ struct CustomLabelStyle: LabelStyle {
             }
             .font(font)
         }
+    }
+}
+
+extension CustomLabelStyle {
+    enum Kind {
+        case verticalIconTitle(Font = .body, Image.Scale = .medium)
+        case verticalTitleIcon(Font = .body, Image.Scale = .medium)
+        case titleIcon(Font = .body, Image.Scale = .medium)
+        case iconTitle(Font = .body, Image.Scale = .medium)
     }
 }
 
