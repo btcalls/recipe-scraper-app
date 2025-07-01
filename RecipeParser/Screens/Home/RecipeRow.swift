@@ -25,6 +25,12 @@ struct RecipeRow: View {
                     .font(.headline)
                     .lineLimit(2)
             }
+            
+            Symbol.bookmarkFill.image
+                .font(.largeTitle)
+                .imageScale(.small)
+                .foregroundStyle(Color.yellow)
+                .remove(if: !recipe.isFavorite)
         }
         .scale(.padding(.vertical), 10)
         .scale(.padding(.horizontal), 15)
