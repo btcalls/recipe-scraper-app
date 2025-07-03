@@ -57,21 +57,29 @@ struct RecipeListView: View {
     private var updatedResults: [Recipe] {
         let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
                                                   order: sortOrder.value)
-        let sorted = items.sorted(using: descriptor)
+        var updated = items
+        
+        // Toggle between Favorites and all recipes
+        if isFavorites {
+            updated = updated.filter(\.isFavorite)
+        }
+        
+        updated.sort(using: descriptor)
         
         // Sort results
         if searchContext.debouncedQuery.isEmpty {
-            return sorted
+            return updated
         }
         
         // Search results
-        return sorted.filter {
+        return updated.filter {
             $0.name.contains(searchContext.debouncedQuery)
         }
     }
     
     @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
+    @State private var isFavorites: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
@@ -106,6 +114,13 @@ struct RecipeListView: View {
                 )
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     BottomControlView {
+                        Toggle($isFavorites.animation(.snappy))
+                            .toggleStyle(
+                                CustomToggleStyle(
+                                    icons: (on: .bookmarkFill, off: .bookmark)
+                                )
+                            )
+
                         SortControlView<Recipe>(
                             sortItem: $sortItem.animation(.snappy),
                             sortOrder: $sortOrder.animation(.snappy)
@@ -151,6 +166,8 @@ extension RecipeListView {
 #Preview {
     @Previewable @State var isEmpty: Bool = false
     
-    RecipeListView(isEmpty: $isEmpty)
-        .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
+    NavigationStack {
+        RecipeListView(isEmpty: $isEmpty)
+            .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
+    }
 }

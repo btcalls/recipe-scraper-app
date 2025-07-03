@@ -77,6 +77,9 @@ final class MockService {
             
             if withSample {
                 for recipe in MockService.shared.getRecipes() {
+                    // Randomise isFavorite
+                    recipe.isFavorite = .random()
+                    
                     container.mainContext.insert(recipe)
                 }
             }

@@ -106,8 +106,8 @@ extension View {
     
     /// Modifier to implement default `shadow()` across views.
     /// - Returns: Modified view with shadow.
-    func shadow() -> some View {
-        return shadow(color: .black.opacity(0.3), radius: 5, x: 2, y: 5)
+    func shadow(_ color: Color = .black) -> some View {
+        return shadow(color: color.opacity(0.3), radius: 5, x: 2, y: 5)
     }
 }
 
@@ -222,5 +222,13 @@ extension RoundedRectangle {
         style: RoundedCornerStyle = .continuous
     ) {
         self.init(cornerRadius: value.rawValue, style: style)
+    }
+}
+
+extension Toggle where Label == EmptyView {
+    init(_ isOn: Binding<Bool>) {
+        self.init(isOn: isOn) {
+            EmptyView()
+        }
     }
 }
