@@ -30,6 +30,12 @@ struct AppButtonStyle: ButtonStyle {
 }
 
 #Preview {
+    @Previewable @State var isFavorite: Bool = false
+    
+    Toggle($isFavorite)
+        .toggleStyle(CustomToggleStyle(icons: (on: .bookmarkFill,
+                                               off: .bookmark)))
+    
     WideButton("Test") {}
     WideButton("Test") {}
         .disabled(true)

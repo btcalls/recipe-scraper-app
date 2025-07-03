@@ -224,3 +224,11 @@ extension RoundedRectangle {
         self.init(cornerRadius: value.rawValue, style: style)
     }
 }
+
+extension Toggle where Label == EmptyView {
+    init(_ isOn: Binding<Bool>) {
+        self.init(isOn: isOn) {
+            EmptyView()
+        }
+    }
+}

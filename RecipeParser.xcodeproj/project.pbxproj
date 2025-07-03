@@ -119,6 +119,7 @@
 				Views/Styles/AppButtonStyle.swift,
 				Views/Styles/AppMenuStyle.swift,
 				Views/Styles/CustomLabelStyle.swift,
+				Views/Styles/CustomToggleStyle.swift,
 				Views/ToastView.swift,
 				Views/WideButton.swift,
 			);
