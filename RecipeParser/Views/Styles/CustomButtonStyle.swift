@@ -1,5 +1,5 @@
 //
-//  AppButtonStyle.swift
+//  CustomButtonStyle.swift
 //  RecipeParser
 //
 //  Created by Jason Jon Carreos on 3/6/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AppButtonStyle: ButtonStyle {
+struct CustomButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled: Bool
     
     /// Controls the brightness of the button style based on whether the button is currently being pressed.

@@ -126,7 +126,7 @@ struct RecipeListView: View {
                             sortOrder: $sortOrder.animation(.snappy)
                         )
                     }
-                    .buttonStyle(AppButtonStyle())
+                    .buttonStyle(CustomButtonStyle())
                     .scale(.padding(.trailing), 10)
                 }
         }

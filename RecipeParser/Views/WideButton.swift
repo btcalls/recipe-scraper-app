@@ -89,7 +89,7 @@ struct WideButton: AppButton {
                 .clipTo(RoundedRectangle(cornerRadius: CornerRadius.sm.rawValue))
         }
         .disabled(isDisabled)
-        .buttonStyle(AppButtonStyle())
+        .buttonStyle(CustomButtonStyle())
         .compositingGroup()
         .shadow()
     }

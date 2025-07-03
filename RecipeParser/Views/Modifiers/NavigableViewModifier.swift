@@ -16,7 +16,7 @@ struct NavigableViewModifier<Destination>: ViewModifier where Destination : View
         } label: {
             content
         }
-        .buttonStyle(AppButtonStyle())
+        .buttonStyle(CustomButtonStyle())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
     }

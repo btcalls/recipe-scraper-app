@@ -1,5 +1,5 @@
 //
-//  AppMenuStyle.swift
+//  CustomMenuStyle.swift
 //  RecipeParser
 //
 //  Created by Jason Jon Carreos on 22/6/2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AppMenuStyle: MenuStyle {
+struct CustomMenuStyle: MenuStyle {
     func makeBody(configuration: Configuration) -> some View {
         Menu(configuration)
             .scale(.padding(.vertical), 10)
@@ -16,5 +16,13 @@ struct AppMenuStyle: MenuStyle {
             .foregroundStyle(Color.accentColor)
             .clipTo(.capsule)
             .shadow()
+            .buttonStyle(CustomButtonStyle())
     }
+}
+
+#Preview {
+    Menu("Test") {
+        Button(action: { }) { Text("Test") }
+    }
+    .menuStyle(CustomMenuStyle())
 }
