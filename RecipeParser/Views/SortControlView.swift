@@ -66,7 +66,7 @@ struct SortControlView<Model: SortableModel>: View {
                 .remove(if: activeSortOrders.isEmpty)
             }
             .disableAnimation()
-            .menuStyle(AppMenuStyle())
+            .menuStyle(CustomMenuStyle())
             .menuOrder(.fixed)
         }
     }

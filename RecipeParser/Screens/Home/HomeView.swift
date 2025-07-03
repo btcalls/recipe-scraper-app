@@ -12,7 +12,7 @@ private struct SeeAllButton: View {
     var body: some View {
         Label(.seeAll, sfSymbol: .chevronRightCircle)
             .labelStyle(CustomLabelStyle(.titleIcon()))
-            .buttonStyle(AppButtonStyle())
+            .buttonStyle(CustomButtonStyle())
             .foregroundStyle(Color.accentColor)
     }
 }

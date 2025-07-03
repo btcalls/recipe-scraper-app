@@ -119,7 +119,7 @@ private struct ScrollControlView: View {
             IconButton(.arrowDown, action: down.action)
                 .disabled(down.disabled)
         }
-        .buttonStyle(AppButtonStyle())
+        .buttonStyle(CustomButtonStyle())
     }
 }
 
@@ -218,7 +218,7 @@ struct RecipeView: View {
                         proxy.scrollTo(currentID, anchor: .top)
                     }
                 }))
-                .buttonStyle(AppButtonStyle())
+                .buttonStyle(CustomButtonStyle())
                 .scale(.padding(.trailing), 10)
             }
         }

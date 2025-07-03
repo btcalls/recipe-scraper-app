@@ -22,7 +22,7 @@ private struct ButtonView<V>: View where V : View {
                 .foregroundStyle(tint ?? Color.appForeground)
                 .clipTo(.circle)
         }
-        .buttonStyle(AppButtonStyle())
+        .buttonStyle(CustomButtonStyle())
     }
 }
 
