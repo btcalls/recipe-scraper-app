@@ -117,20 +117,20 @@ struct RecipeListView: View {
                 )
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     BottomControlView {
+                        SortControlView<Recipe>(
+                            sortItem: $sortItem.animation(.snappy),
+                            sortOrder: $sortOrder.animation(.snappy)
+                        )
+                        
                         Toggle($isFavourites.animation(.snappy))
                             .toggleStyle(
                                 CustomToggleStyle(
                                     icons: (on: .bookmarkFill, off: .bookmark)
                                 )
                             )
-
-                        SortControlView<Recipe>(
-                            sortItem: $sortItem.animation(.snappy),
-                            sortOrder: $sortOrder.animation(.snappy)
-                        )
                     }
                     .buttonStyle(CustomButtonStyle())
-                    .scale(.padding(.trailing), 10)
+                    .scale(.padding(.horizontal), 10)
                 }
         }
     }
