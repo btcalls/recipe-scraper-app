@@ -53,14 +53,13 @@ struct RecipeListView: View {
     
     @Binding var isEmpty: Bool
     
-    /// Updated list of recipes based on search query and sorting selections.
     private var updatedResults: [Recipe] {
         let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
                                                   order: sortOrder.value)
         var updated = items
         
         // Toggle between Favorites and all recipes
-        if isFavorites {
+        if isFavourites {
             updated = updated.filter(\.isFavorite)
         }
         
@@ -79,7 +78,7 @@ struct RecipeListView: View {
     
     @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
-    @State private var isFavorites: Bool = false
+    @State private var isFavourites: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
@@ -103,9 +102,13 @@ struct RecipeListView: View {
                     isEmpty = items.isEmpty
                 }
                 .emptyView(
-                    Label(.noRecipes, sfSymbol: .forkKnife),
+                    Label(
+                        isFavourites ? .noFavourites : .noRecipes,
+                        sfSymbol: .forkKnife
+                    ),
                     if: items.isEmpty || updatedResults.isEmpty,
-                    type: items.isEmpty ? .generic : .search(searchContext.query)
+                    type: searchContext.query.isEmpty ? .generic :
+                            .search(searchContext.query)
                 )
                 .searchable(
                     text: $searchContext.query,
@@ -114,20 +117,20 @@ struct RecipeListView: View {
                 )
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     BottomControlView {
-                        Toggle($isFavorites.animation(.snappy))
+                        SortControlView<Recipe>(
+                            sortItem: $sortItem.animation(.snappy),
+                            sortOrder: $sortOrder.animation(.snappy)
+                        )
+                        
+                        Toggle($isFavourites.animation(.snappy))
                             .toggleStyle(
                                 CustomToggleStyle(
                                     icons: (on: .bookmarkFill, off: .bookmark)
                                 )
                             )
-
-                        SortControlView<Recipe>(
-                            sortItem: $sortItem.animation(.snappy),
-                            sortOrder: $sortOrder.animation(.snappy)
-                        )
                     }
                     .buttonStyle(CustomButtonStyle())
-                    .scale(.padding(.trailing), 10)
+                    .scale(.padding(.horizontal), 10)
                 }
         }
     }

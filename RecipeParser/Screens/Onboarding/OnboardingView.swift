@@ -52,4 +52,5 @@ struct OnboardingView: View {
 #Preview {
     OnboardingView()
         .environment(AppSettings())
+        .modelContainer(.shared())
 }

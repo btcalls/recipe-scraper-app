@@ -13,7 +13,6 @@ struct ParseRecipeView: View {
     
     private var client = APIClient<RecipeEndpoints>()
     
-    @Environment(\.modelContext) private var context
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var recipeMetadata: RecipeMetadata?
     @State private var viewState = ViewState()
@@ -70,14 +69,17 @@ struct ParseRecipeView: View {
 
         do {
             // Process request and save resulting model
+            let container = ModelContainer.shared()
             let model: ModelDTO<Recipe> = try await client.request(
                 .parseRecipe(sharedURL),
-                storeTo: .shared()
+                storeTo: container
             )
             
             viewState.toast = nil
             
             // Check if model was successfully saved in storage
+            let context = ModelContext(container)
+            
             if context.hasModel(model) {
                 close(hasCompleted: true)
             } else {

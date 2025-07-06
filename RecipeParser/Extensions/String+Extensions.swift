@@ -63,6 +63,7 @@ extension String {
     static let prepTime = "Prep. Time:"
     static let cookTime = "Cook Time:"
     static let noRecipes = "No Recipes"
+    static let noFavourites = "No Favourites"
     static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
     static let sortBy = "Sort By:"
 }

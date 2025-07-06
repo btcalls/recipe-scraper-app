@@ -77,16 +77,15 @@ struct SortControlView<Model: SortableModel>: View {
                 contentView()
             }
             
-            IconButton(isEnabled ? .chevronLeft : .sort) {
-                withAnimation {
-                    isEnabled.toggle()
-                }
-            }
+            Toggle($isEnabled.animation(.snappy))
+                .toggleStyle(
+                    CustomToggleStyle(icons: (on: .chevronLeft, off: .sort))
+                )
         }
         .font(.subheadline)
         .transition(.opacity)
         .onChange(of: sortItem) {
-            activeSortOrders = Model.sortItems[sortItem] ?? []
+            activeSortOrders = Model.sortItems[sortItem] ?? [.latest]
             sortOrderItem = activeSortOrders.first ?? .latest
         }
     }
@@ -99,11 +98,10 @@ extension SortControlView {
     ) {
         self._sortItem = item
         self._sortOrderItem = order
+        self._activeSortOrders = State(
+            initialValue: Model.sortItems[item.wrappedValue] ?? [.latest]
+        )
         
         self.sortItems = [SortItem<Model>](Model.sortItems.keys)
-        
-        self._activeSortOrders = State(
-            initialValue: Model.sortItems[item.wrappedValue] ?? []
-        )
     }
 }
