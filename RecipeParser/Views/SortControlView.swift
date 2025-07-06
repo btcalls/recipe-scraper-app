@@ -77,11 +77,10 @@ struct SortControlView<Model: SortableModel>: View {
                 contentView()
             }
             
-            IconButton(isEnabled ? .chevronLeft : .sort) {
-                withAnimation {
-                    isEnabled.toggle()
-                }
-            }
+            Toggle($isEnabled.animation(.snappy))
+                .toggleStyle(
+                    CustomToggleStyle(icons: (on: .chevronLeft, off: .sort))
+                )
         }
         .font(.subheadline)
         .transition(.opacity)
