@@ -78,9 +78,10 @@ enum Symbol: String {
     case plus
     case bullet = "circle.fill"
     case link
-    case arrowUp = "arrow.up"
-    case arrowDown = "arrow.down"
-    case chevronLeft = "chevron.left"
+    case arrowUp = "arrowtriangle.up"
+    case arrowDown = "arrowtriangle.down"
+    case arrowLeft = "arrowtriangle.left"
+    case arrowRight = "arrowtriangle.right"
     case chevronRightCircle = "chevron.right.circle.fill"
     case search = "magnifyingglass"
     case sort = "arrow.up.arrow.down"
