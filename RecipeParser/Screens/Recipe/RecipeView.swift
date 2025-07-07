@@ -57,6 +57,7 @@ private struct NameFavoriteView: View {
         let actor = DatabaseActor(modelContainer: .shared())
         
         recipe.isFavorite.toggle()
+        
         recipe.modifiedOn = Date()
         
         try await actor.save(model: recipe)
@@ -159,7 +160,6 @@ struct RecipeView: View {
                     
                     Text(recipe.detail)
                         .fontWeight(.light)
-
                     
                     Divider()
                         .asStandard()
