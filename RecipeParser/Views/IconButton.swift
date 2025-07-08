@@ -21,6 +21,7 @@ private struct ButtonView<V>: View where V : View {
                 .background { bg }
                 .foregroundStyle(tint ?? Color.appForeground)
                 .clipTo(.circle)
+                .contentTransition(.symbolEffect)
         }
         .buttonStyle(CustomButtonStyle())
     }
@@ -77,7 +78,11 @@ extension IconButton {
 }
 
 #Preview {
+    @Previewable @State var isEnabled = false
+    
     IconButton(.plus) {}
-    IconButton(.bookmark, tint: .orange) {}
+    IconButton(isEnabled ? .bookmarkFill : .bookmark, tint: .orange) {
+        isEnabled.toggle()
+    }
     IconButton(.x, tint: .red, kind: .muted) {}
 }
