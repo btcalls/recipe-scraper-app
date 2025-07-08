@@ -25,7 +25,7 @@ struct BottomControlView<Content>: View where Content : View {
             content
         }
         .scale(.padding(.all), 10)
-        .background(Color.appBackground)
+        .background(.thinMaterial)
         .clipShape(.capsule)
         .shadow()
     }

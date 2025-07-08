@@ -25,31 +25,40 @@ private struct TimeView: View {
     }
 }
 
-private struct NameFavoriteView: View {
+private struct DetailsView: View {
     let recipe: Recipe
     
     @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var xOffset: CGFloat = -10
+    @ScaledMetric private var yOffset: CGFloat = -55
     
     var body: some View {
-        HStack(alignment: .center, spacing: spacing) {
-            Text(recipe.name)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-            
-            Spacer()
-            
-            IconButton(
-                recipe.isFavorite ? .bookmarkFill : .bookmark,
-                tint: .yellow
-            ) {
-                Task {
-                    try? await onToggleFavorite(recipe)
+        VStack(spacing: spacing) {
+            HStack(alignment: .top, spacing: spacing) {
+                Text(recipe.name)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                
+                Spacer()
+                
+                IconButton(
+                    recipe.isFavorite ? .bookmarkFill : .bookmark,
+                    tint: .yellow,
+                    size: .lg
+                ) {
+                    Task {
+                        try? await onToggleFavorite(recipe)
+                    }
                 }
+                .offset(x: xOffset, y: yOffset)
             }
+            .imageScale(.large)
+            
+            Text(recipe.detail)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .fontWeight(.light)
         }
-        .imageScale(.large)
-        .scale(.padding(.bottom), 10)
     }
     
     @MainActor
@@ -109,8 +118,8 @@ private struct InstructionView: View {
 }
 
 private struct ScrollControlView: View {
-    var up: (disabled: Bool, action: @MainActor () -> Void)
-    var down: (disabled: Bool, action: @MainActor () -> Void)
+    let up: (disabled: Bool, action: @MainActor () -> Void)
+    let down: (disabled: Bool, action: @MainActor () -> Void)
     
     var body: some View {
         BottomControlView {
@@ -155,11 +164,8 @@ struct RecipeView: View {
                         .shadow()
                         .id(headerID)
                     
-                    NameFavoriteView(recipe: recipe)
+                    DetailsView(recipe: recipe)
                         .id(titleID)
-                    
-                    Text(recipe.detail)
-                        .fontWeight(.light)
                     
                     Divider()
                         .asStandard()
@@ -198,8 +204,8 @@ struct RecipeView: View {
                             .id(instructionsID)
                     }
                 }
-                .padding()
                 .scrollTargetLayout()
+                .scale(.padding(.horizontal), 20)
             }
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 ScrollControlView(up: (currentID.isNil(or: headerID), {
@@ -219,7 +225,7 @@ struct RecipeView: View {
                     }
                 }))
                 .buttonStyle(CustomButtonStyle())
-                .scale(.padding(.trailing), 10)
+                .scale(.padding(.trailing), 20)
             }
         }
         .background(Color.appBackground)
