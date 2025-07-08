@@ -10,14 +10,26 @@ import SwiftUI
 private struct ButtonView<V>: View where V : View {
     var display: IconButton.Display
     var bg: V
+    var size: IconButton.Size
     var tint: Color?
     var action: @MainActor () -> Void
+    
+    private var imageScale: Image.Scale {
+        switch size {
+        case .regular:
+            return .medium
+        
+        case .lg:
+            return .large
+        }
+    }
     
     var body: some View {
         Button(action: action) {
             display.image
                 .fontWeight(.medium)
-                .scale(.heightWidth(), 45)
+                .imageScale(imageScale)
+                .scale(.heightWidth(), size.rawValue)
                 .background { bg }
                 .foregroundStyle(tint ?? Color.appForeground)
                 .clipTo(.circle)
@@ -33,6 +45,7 @@ struct IconButton: AppButton {
     
     var display: Symbol
     var kind: Kind = .regular
+    var size: Size = .regular
     var tint: Color? = .primary
     var action: @MainActor () -> Void
     
@@ -42,6 +55,7 @@ struct IconButton: AppButton {
             ButtonView(
                 display: display,
                 bg: Color.appBackground.brightness(0.1),
+                size: size,
                 tint: tint,
                 action: action
             )
@@ -51,6 +65,7 @@ struct IconButton: AppButton {
             ButtonView(
                 display: display,
                 bg: Color.clear,
+                size: size,
                 tint: tint,
                 action: action
             )
@@ -64,15 +79,22 @@ extension IconButton {
         case muted
     }
     
+    enum Size: CGFloat {
+        case regular = 45
+        case lg = 60
+    }
+    
     init(
         _ display: Symbol,
         tint: Color = .primary,
         kind: Kind = .regular,
+        size: Size = .regular,
         action: @escaping @MainActor () -> Void
     ) {
         self.display = display
         self.tint = tint
         self.kind = kind
+        self.size = size
         self.action = action
     }
 }
@@ -80,7 +102,7 @@ extension IconButton {
 #Preview {
     @Previewable @State var isEnabled = false
     
-    IconButton(.plus) {}
+    IconButton(.bookmark, size: .lg) {}
     IconButton(isEnabled ? .bookmarkFill : .bookmark, tint: .orange) {
         isEnabled.toggle()
     }
