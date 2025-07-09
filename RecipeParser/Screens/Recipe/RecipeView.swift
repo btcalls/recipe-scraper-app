@@ -196,10 +196,7 @@ struct RecipeView: View {
                     Toggle($isStarted)
                         .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                 }
-                .animation(
-                    .interactiveSpring(duration: 0.25),
-                    value: title
-                )
+                .animation(.customInteractiveSpring, value: title)
                 .scale(.padding(.trailing), 20)
             }
             .fullScreenCover(isPresented: $isStarted) {

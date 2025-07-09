@@ -77,11 +77,12 @@ struct InstructionsView: View {
                     }
                     .disabled(index == items.count - 1)
                 }
+                .animation(
+                    .customInteractiveSpring,
+                    value: instruction
+                )
             }
-            .animation(
-                .interactiveSpring(duration: 0.25),
-                value: instruction
-            )
+            .animation(.customEaseInOut, value: instruction)
             .presentationBackgroundInteraction(.disabled)
             .presentationBackground(.ultraThinMaterial)
         }
@@ -90,6 +91,7 @@ struct InstructionsView: View {
                 dismiss()
                 onComplete()
             }
+            
             Button(String.cancel, role: .cancel) {}
         } message: {
             Text(String.cookCompleteConfirmation)

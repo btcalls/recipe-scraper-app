@@ -126,12 +126,13 @@ struct RecipeListView: View {
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     BottomControlView {
                         SortControlView<Recipe>(
-                            sortItem: $sortItem.animation(.interactiveSpring(duration: 0.25)),
-                            sortOrder: $sortOrder.animation(.interactiveSpring(duration: 0.25)),
-                            isEnabled: $isSort.animation(.interactiveSpring(duration: 0.25)),
+                            sortItem: $sortItem
+                                .animation(.customInteractiveSpring),
+                            sortOrder: $sortOrder.animation(.customInteractiveSpring),
+                            isEnabled: $isSort.animation(.customInteractiveSpring),
                         )
                         
-                        Toggle($isFavourites.animation(.interactiveSpring(duration: 0.25)))
+                        Toggle($isFavourites.animation(.customInteractiveSpring))
                             .toggleStyle(
                                 CustomToggleStyle(
                                     icons: (on: .bookmarkFill, off: .bookmark)

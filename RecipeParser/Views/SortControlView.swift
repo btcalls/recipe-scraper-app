@@ -78,7 +78,7 @@ struct SortControlView<Model: SortableModel>: View {
                 contentView()
             }
             
-            Toggle($isEnabled.animation(.snappy))
+            Toggle($isEnabled.animation(.customInteractiveSpring))
                 .toggleStyle(
                     CustomToggleStyle(icons: (on: .x, off: .sort))
                 )

@@ -59,7 +59,7 @@ struct ToastModifier: ViewModifier {
                         .scale(.padding(.bottom), 20)
                 }
                 .background(BackgroundView(state: state))
-                .animation(.snappy, value: state)
+                .animation(.customInteractiveSpring, value: state)
             }
             .transition(.opacity)
             .onChange(of: state) {

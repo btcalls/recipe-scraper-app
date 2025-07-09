@@ -26,7 +26,9 @@ struct RecipeParserApp: App {
                 case .home:
                     HomeView()
                         .tint(.accentColor)
-                        .transition(.opacity.animation(.bouncy(duration: 0.5)))
+                        .transition(
+                            .opacity.animation(.customInteractiveSpring)
+                        )
                 }
             }
         }
