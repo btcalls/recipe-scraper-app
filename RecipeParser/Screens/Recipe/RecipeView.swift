@@ -28,6 +28,8 @@ private struct TimeView: View {
 private struct DetailsView: View {
     let recipe: Recipe
     
+    var onAction: @MainActor () -> Void
+    
     @ScaledMetric private var spacing: CGFloat = 10
     @ScaledMetric private var xOffset: CGFloat = -10
     @ScaledMetric private var yOffset: CGFloat = -55
@@ -47,9 +49,7 @@ private struct DetailsView: View {
                     tint: .yellow,
                     size: .lg
                 ) {
-                    Task {
-                        try? await onToggleFavorite(recipe)
-                    }
+                    onAction()
                 }
                 .offset(x: xOffset, y: yOffset)
             }
@@ -59,17 +59,6 @@ private struct DetailsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
         }
-    }
-    
-    @MainActor
-    private func onToggleFavorite(_ recipe: Recipe) async throws {
-        let actor = DatabaseActor(modelContainer: .shared())
-        
-        recipe.isFavorite.toggle()
-        
-        recipe.modifiedOn = Date()
-        
-        try await actor.save(model: recipe)
     }
 }
 
@@ -140,8 +129,12 @@ struct RecipeView: View {
                         .scale(.padding(.bottom), 15)
                         .shadow()
                     
-                    DetailsView(recipe: recipe)
-                        .id(titleID)
+                    DetailsView(recipe: recipe) {
+                        Task {
+                            try? await onToggleFavorite()
+                        }
+                    }
+                    .id(titleID)
                     
                     Divider()
                         .asStandard()
@@ -183,6 +176,21 @@ struct RecipeView: View {
             }
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 BottomControlView {
+                    IconButton(.checkmark, size: .lg) {
+                        // TODO:
+                    }
+                    .remove(if: title.isEmpty)
+                                        
+                    IconButton(
+                        recipe.isFavorite ? .bookmarkFill : .bookmark,
+                        tint: .yellow
+                    ) {
+                        Task {
+                            try? await onToggleFavorite()
+                        }
+                    }
+                    .remove(if: title.isEmpty)
+                    
                     Toggle($isStarted)
                         .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                 }
@@ -200,6 +208,16 @@ struct RecipeView: View {
                 title = ids.contains { $0 == titleID } ? "" : recipe.name
             }
         }
+    }
+
+    private func onToggleFavorite() async throws {
+        let actor = DatabaseActor(modelContainer: .shared())
+        
+        recipe.isFavorite.toggle()
+        
+        recipe.modifiedOn = Date()
+        
+        try await actor.save(model: recipe)
     }
 }
 
