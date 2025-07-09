@@ -79,7 +79,7 @@ struct SortControlView<Model: SortableModel>: View {
             
             Toggle($isEnabled.animation(.snappy))
                 .toggleStyle(
-                    CustomToggleStyle(icons: (on: .chevronLeft, off: .sort))
+                    CustomToggleStyle(icons: (on: .x, off: .sort))
                 )
         }
         .font(.subheadline)

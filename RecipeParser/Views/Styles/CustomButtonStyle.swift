@@ -25,7 +25,10 @@ struct CustomButtonStyle: ButtonStyle {
         configuration.label
             .brightness(brightness(configuration.isPressed))
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
-            .animation(.easeOut(duration: 0.2), value: configuration.isPressed)
+            .animation(
+                .bouncy(duration: 0.25, extraBounce: 0.15),
+                value: configuration.isPressed
+            )
     }
 }
 

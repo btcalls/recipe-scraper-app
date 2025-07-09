@@ -89,6 +89,7 @@
 				Screens/Home/RecipeRow.swift,
 				Screens/Onboarding/OnboardingCard.swift,
 				Screens/Onboarding/OnboardingView.swift,
+				Screens/Recipe/InstructionsView.swift,
 				Screens/Recipe/RecipeView.swift,
 				Utils/Constants.swift,
 				Utils/Debugger.swift,
