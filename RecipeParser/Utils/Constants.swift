@@ -89,4 +89,5 @@ enum Symbol: String {
     case checkmarkCircle = "checkmark.circle"
     case bookmark
     case bookmarkFill = "bookmark.fill"
+    case list = "list.bullet.clipboard"
 }

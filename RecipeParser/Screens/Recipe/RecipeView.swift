@@ -33,7 +33,7 @@ private struct DetailsView: View {
     @ScaledMetric private var yOffset: CGFloat = -55
     
     var body: some View {
-        VStack(spacing: spacing) {
+        VStack(alignment: .leading, spacing: spacing) {
             HStack(alignment: .top, spacing: spacing) {
                 Text(recipe.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -117,37 +117,14 @@ private struct InstructionView: View {
     }
 }
 
-private struct ScrollControlView: View {
-    let up: (disabled: Bool, action: @MainActor () -> Void)
-    let down: (disabled: Bool, action: @MainActor () -> Void)
-    
-    var body: some View {
-        BottomControlView {
-            IconButton(.arrowUp, action: up.action)
-                .disabled(up.disabled)
-            
-            IconButton(.arrowDown, action: down.action)
-                .disabled(down.disabled)
-        }
-        .buttonStyle(CustomButtonStyle())
-    }
-}
-
 struct RecipeView: View {
     var recipe: Recipe
     
-    @Namespace private var headerID
     @Namespace private var titleID
-    @Namespace private var ingredientsID
-    @Namespace private var instructionsID
     @ScaledMetric private var height: CGFloat = 250
     @ScaledMetric private var spacing: CGFloat = 10
-    @State private var currentID: Namespace.ID? = nil
+    @State private var isStarted = false
     @State private var title: String = ""
-    
-    private var ids: [Namespace.ID] {
-        return [headerID, ingredientsID, instructionsID]
-    }
     
     var body: some View {
         ScrollViewReader { proxy in
@@ -162,7 +139,6 @@ struct RecipeView: View {
                         .clipShape(RoundedRectangle(cornerRadius: .lg))
                         .scale(.padding(.bottom), 15)
                         .shadow()
-                        .id(headerID)
                     
                     DetailsView(recipe: recipe)
                         .id(titleID)
@@ -188,7 +164,6 @@ struct RecipeView: View {
                         }
                     } header: {
                         HeaderView(value: .ingredients)
-                            .id(ingredientsID)
                     }
                     
                     Divider()
@@ -201,31 +176,20 @@ struct RecipeView: View {
                         }
                     } header: {
                         HeaderView(value: .instructions)
-                            .id(instructionsID)
                     }
                 }
                 .scrollTargetLayout()
                 .scale(.padding(.horizontal), 20)
             }
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                ScrollControlView(up: (currentID.isNil(or: headerID), {
-                    currentID = ids.cycle(currentID,
-                                          fallback: headerID,
-                                          reverse: true)
-                    
-                    withAnimation {
-                        proxy.scrollTo(currentID, anchor: .top)
-                    }
-                }), down: (currentID == instructionsID, {
-                    currentID = ids.cycle(currentID,
-                                          fallback: ingredientsID)
-                    
-                    withAnimation {
-                        proxy.scrollTo(currentID, anchor: .top)
-                    }
-                }))
-                .buttonStyle(CustomButtonStyle())
+                BottomControlView {
+                    Toggle($isStarted)
+                        .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                }
                 .scale(.padding(.trailing), 20)
+            }
+            .fullScreenCover(isPresented: $isStarted) {
+                InstructionsView(items: recipe.instructions)
             }
         }
         .background(Color.appBackground)
@@ -234,10 +198,6 @@ struct RecipeView: View {
         .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
             withAnimation {
                 title = ids.contains { $0 == titleID } ? "" : recipe.name
-                
-                if let first = ids.first {
-                    currentID = first
-                }
             }
         }
     }

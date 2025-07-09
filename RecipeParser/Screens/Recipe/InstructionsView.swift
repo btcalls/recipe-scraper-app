@@ -36,7 +36,7 @@ struct InstructionsView: View {
                 Spacer()
                 
                 Text(step)
-                    .font(.title)
+                    .font(.title2)
                     .fontWeight(.light)
                     .scale(.padding(.vertical), 10)
                     .scale(.padding(.horizontal), 15)
@@ -44,6 +44,7 @@ struct InstructionsView: View {
                     .clipShape(.capsule)
                 
                 Text(instruction)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .lineSpacing(7.5)
                     .font(.title3)
                     .fontWeight(.semibold)
