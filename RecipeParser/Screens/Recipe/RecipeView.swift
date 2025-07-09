@@ -196,6 +196,10 @@ struct RecipeView: View {
                     Toggle($isStarted)
                         .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                 }
+                .animation(
+                    .interactiveSpring(duration: 0.25),
+                    value: title
+                )
                 .scale(.padding(.trailing), 20)
             }
             .fullScreenCover(isPresented: $isStarted) {
@@ -220,9 +224,7 @@ struct RecipeView: View {
         .navigationTitle(title)
         .scrollBounceBehavior(.basedOnSize)
         .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
-            withAnimation {
-                title = ids.contains { $0 == titleID } ? "" : recipe.name
-            }
+            title = ids.contains { $0 == titleID } ? "" : recipe.name
         }
     }
     

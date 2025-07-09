@@ -37,7 +37,14 @@ private struct BaseView: View {
                 
             case .full:
                 BaseListView(items: items)
-                    .navigationTitle(String.allRecipes)
+                    .navigationTitle("")
+                    .toolbar {
+                        ToolbarItem(placement: .principal) {
+                            Text(String.allRecipes)
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                        }
+                    }
                     .padding()
             }
         }
