@@ -86,6 +86,7 @@ struct RecipeListView: View {
     @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var isFavourites: Bool = false
+    @State private var isSort: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
@@ -125,16 +126,18 @@ struct RecipeListView: View {
                 .safeAreaInset(edge: .bottom, alignment: .trailing) {
                     BottomControlView {
                         SortControlView<Recipe>(
-                            sortItem: $sortItem.animation(.snappy),
-                            sortOrder: $sortOrder.animation(.snappy)
+                            sortItem: $sortItem.animation(.interactiveSpring(duration: 0.25)),
+                            sortOrder: $sortOrder.animation(.interactiveSpring(duration: 0.25)),
+                            isEnabled: $isSort.animation(.interactiveSpring(duration: 0.25)),
                         )
                         
-                        Toggle($isFavourites.animation(.snappy))
+                        Toggle($isFavourites.animation(.interactiveSpring(duration: 0.25)))
                             .toggleStyle(
                                 CustomToggleStyle(
                                     icons: (on: .bookmarkFill, off: .bookmark)
                                 )
                             )
+                            .remove(if: isSort)
                     }
                     .buttonStyle(CustomButtonStyle())
                     .scale(.padding(.horizontal), 10)

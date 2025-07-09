@@ -69,7 +69,7 @@ extension String {
     static let noRecipes = "No Recipes"
     static let noFavourites = "No Favourites"
     static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
-    static let sortBy = "Sort By:"
+    static let sortBy = "Sort:"
 }
 
 // MARK: Functions

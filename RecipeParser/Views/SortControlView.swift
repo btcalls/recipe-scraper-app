@@ -25,15 +25,16 @@ struct SortControlView<Model: SortableModel>: View {
     
     @Binding var sortItem: SortItem<Model>
     @Binding var sortOrderItem: SortOrderItem
+    @Binding var isEnabled: Bool
     
     @State private var activeSortOrders: [SortOrderItem] = []
-    @State private var isEnabled = false
     
     @ViewBuilder private func contentView() -> some View {
         HStack(alignment: .center) {
             Text(String.sortBy)
                 .foregroundStyle(.secondary)
                 .fontWeight(.semibold)
+                .scale(.width(), 40)
             
             Spacer()
             
@@ -94,14 +95,25 @@ struct SortControlView<Model: SortableModel>: View {
 extension SortControlView {
     init(
         sortItem item: Binding<SortItem<Model>>,
-        sortOrder order: Binding<SortOrderItem>
+        sortOrder order: Binding<SortOrderItem>,
+        isEnabled: Binding<Bool>
     ) {
         self._sortItem = item
         self._sortOrderItem = order
+        self._isEnabled = isEnabled
         self._activeSortOrders = State(
             initialValue: Model.sortItems[item.wrappedValue] ?? [.latest]
         )
         
         self.sortItems = [SortItem<Model>](Model.sortItems.keys)
+    }
+}
+
+#Preview {
+    @Previewable @State var isEmpty: Bool = false
+    
+    NavigationStack {
+        RecipeListView(isEmpty: $isEmpty)
+            .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
     }
 }
