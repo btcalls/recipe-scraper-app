@@ -109,9 +109,11 @@ private struct InstructionView: View {
 struct RecipeView: View {
     var recipe: Recipe
     
+    @Environment(\.presentationMode) private var presentationMode
     @Namespace private var titleID
     @ScaledMetric private var height: CGFloat = 250
     @ScaledMetric private var spacing: CGFloat = 10
+    @State private var isCookCompleted = false
     @State private var isStarted = false
     @State private var title: String = ""
     
@@ -177,7 +179,7 @@ struct RecipeView: View {
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 BottomControlView {
                     IconButton(.checkmark, size: .lg) {
-                        // TODO:
+                        isCookCompleted.toggle()
                     }
                     .remove(if: title.isEmpty)
                                         
@@ -197,7 +199,21 @@ struct RecipeView: View {
                 .scale(.padding(.trailing), 20)
             }
             .fullScreenCover(isPresented: $isStarted) {
-                InstructionsView(items: recipe.instructions)
+                InstructionsView(items: recipe.instructions) {
+                    Task {
+                        try? await onCompleteRecipe()
+                    }
+                }
+            }
+            .alert(String.success, isPresented: $isCookCompleted) {
+                Button(String.markComplete) {
+                    Task {
+                        try? await onCompleteRecipe()
+                    }
+                }
+                Button(String.cancel, role: .cancel) {}
+            } message: {
+                Text(String.cookCompleteConfirmation)
             }
         }
         .background(Color.appBackground)
@@ -208,6 +224,11 @@ struct RecipeView: View {
                 title = ids.contains { $0 == titleID } ? "" : recipe.name
             }
         }
+    }
+    
+    private func onCompleteRecipe() async throws {
+        // TODO: Update recipe
+        presentationMode.wrappedValue.dismiss()
     }
 
     private func onToggleFavorite() async throws {
@@ -228,5 +249,8 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(MockService.shared.getRecipe())
+    NavigationStack {
+        RecipeRow(MockService.shared.getRecipe())
+            .navigate(to: RecipeView(MockService.shared.getRecipe()))
+    }
 }
