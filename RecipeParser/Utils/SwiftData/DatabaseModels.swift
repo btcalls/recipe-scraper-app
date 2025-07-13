@@ -22,6 +22,8 @@ extension ModelDTO {
 
 @Model
 final class Recipe: AppModel, SortableModel {
+    #Index<Recipe>([\.name, \.createdOn, \.isFavorite])
+    
     @Attribute(.unique)
     var id: String
     @Relationship(deleteRule: .cascade)
