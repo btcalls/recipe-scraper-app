@@ -45,15 +45,20 @@ struct InstructionsView: View {
                     .background(.ultraThinMaterial)
                     .clipShape(.capsule)
                 
-                Text(instruction)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .lineSpacing(7.5)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .scale(.padding(.all), 20)
-                    .background(Color.appBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: .regular))
-                    .shadow()
+                ScrollView {
+                    Text(instruction)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineSpacing(7.5)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .scale(.padding(.all), 20)
+                        .background(Color.appBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: .regular))
+                        .shadow()
+                }
+                .scrollIndicators(.automatic)
+                .scrollClipDisabled()
+                .scrollBounceBehavior(.basedOnSize)
                 
                 Spacer()
                 
