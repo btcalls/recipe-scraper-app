@@ -17,12 +17,14 @@ extension String {
     static let processing = "Processing..."
     static let parsingRecipe = "Parsing Recipe..."
     static let seeAll = "See All"
+    static let markComplete = "Mark as Complete"
     
     // MARK: Navigation/View Titles
     
     static let addRecipe = "Add Recipe"
     static let yourRecipes = "Your Recipes"
     static let allRecipes = "All Recipes"
+    static let success = "Hooray!"
     
     // MARK: Onboarding
     
@@ -41,6 +43,8 @@ extension String {
     }
     
     // MARK: Descriptions
+    
+    static let cookCompleteConfirmation = "Would you like to mark this recipe and your cooking session as completed?"
     
     static var noRecipesDescription: AttributedString {
         let actionString = "Add Recipe"
@@ -65,7 +69,7 @@ extension String {
     static let noRecipes = "No Recipes"
     static let noFavourites = "No Favourites"
     static let searchRecipe = "Search \"Hamburger\" or \"Mexican\""
-    static let sortBy = "Sort By:"
+    static let sortBy = "Sort:"
 }
 
 // MARK: Functions

@@ -26,7 +26,7 @@ struct CustomButtonStyle: ButtonStyle {
             .brightness(brightness(configuration.isPressed))
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
             .animation(
-                .bouncy(duration: 0.25, extraBounce: 0.15),
+                .customInteractiveSpring,
                 value: configuration.isPressed
             )
     }

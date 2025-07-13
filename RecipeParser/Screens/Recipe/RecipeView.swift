@@ -28,6 +28,8 @@ private struct TimeView: View {
 private struct DetailsView: View {
     let recipe: Recipe
     
+    var onAction: @MainActor () -> Void
+    
     @ScaledMetric private var spacing: CGFloat = 10
     @ScaledMetric private var xOffset: CGFloat = -10
     @ScaledMetric private var yOffset: CGFloat = -55
@@ -47,9 +49,7 @@ private struct DetailsView: View {
                     tint: .yellow,
                     size: .lg
                 ) {
-                    Task {
-                        try? await onToggleFavorite(recipe)
-                    }
+                    onAction()
                 }
                 .offset(x: xOffset, y: yOffset)
             }
@@ -59,17 +59,6 @@ private struct DetailsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
         }
-    }
-    
-    @MainActor
-    private func onToggleFavorite(_ recipe: Recipe) async throws {
-        let actor = DatabaseActor(modelContainer: .shared())
-        
-        recipe.isFavorite.toggle()
-        
-        recipe.modifiedOn = Date()
-        
-        try await actor.save(model: recipe)
     }
 }
 
@@ -120,9 +109,11 @@ private struct InstructionView: View {
 struct RecipeView: View {
     var recipe: Recipe
     
+    @Environment(\.presentationMode) private var presentationMode
     @Namespace private var titleID
     @ScaledMetric private var height: CGFloat = 250
     @ScaledMetric private var spacing: CGFloat = 10
+    @State private var isCookCompleted = false
     @State private var isStarted = false
     @State private var title: String = ""
     
@@ -140,8 +131,12 @@ struct RecipeView: View {
                         .scale(.padding(.bottom), 15)
                         .shadow()
                     
-                    DetailsView(recipe: recipe)
-                        .id(titleID)
+                    DetailsView(recipe: recipe) {
+                        Task {
+                            try? await onToggleFavorite()
+                        }
+                    }
+                    .id(titleID)
                     
                     Divider()
                         .asStandard()
@@ -183,23 +178,66 @@ struct RecipeView: View {
             }
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 BottomControlView {
+                    IconButton(.checkmark, size: .lg) {
+                        isCookCompleted.toggle()
+                    }
+                    .remove(if: title.isEmpty)
+                                        
+                    IconButton(
+                        recipe.isFavorite ? .bookmarkFill : .bookmark,
+                        tint: .yellow
+                    ) {
+                        Task {
+                            try? await onToggleFavorite()
+                        }
+                    }
+                    .remove(if: title.isEmpty)
+                    
                     Toggle($isStarted)
                         .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                 }
+                .animation(.customInteractiveSpring, value: title)
                 .scale(.padding(.trailing), 20)
             }
             .fullScreenCover(isPresented: $isStarted) {
-                InstructionsView(items: recipe.instructions)
+                InstructionsView(items: recipe.instructions) {
+                    Task {
+                        try? await onCompleteRecipe()
+                    }
+                }
+            }
+            .alert(String.success, isPresented: $isCookCompleted) {
+                Button(String.markComplete) {
+                    Task {
+                        try? await onCompleteRecipe()
+                    }
+                }
+                Button(String.cancel, role: .cancel) {}
+            } message: {
+                Text(String.cookCompleteConfirmation)
             }
         }
         .background(Color.appBackground)
         .navigationTitle(title)
         .scrollBounceBehavior(.basedOnSize)
         .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
-            withAnimation {
-                title = ids.contains { $0 == titleID } ? "" : recipe.name
-            }
+            title = ids.contains { $0 == titleID } ? "" : recipe.name
         }
+    }
+    
+    private func onCompleteRecipe() async throws {
+        // TODO: Update recipe
+        presentationMode.wrappedValue.dismiss()
+    }
+
+    private func onToggleFavorite() async throws {
+        let actor = DatabaseActor(modelContainer: .shared())
+        
+        recipe.isFavorite.toggle()
+        
+        recipe.modifiedOn = Date()
+        
+        try await actor.save(model: recipe)
     }
 }
 
@@ -210,5 +248,8 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(MockService.shared.getRecipe())
+    NavigationStack {
+        RecipeRow(MockService.shared.getRecipe())
+            .navigate(to: RecipeView(MockService.shared.getRecipe()))
+    }
 }

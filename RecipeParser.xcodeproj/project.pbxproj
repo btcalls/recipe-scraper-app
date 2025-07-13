@@ -71,6 +71,7 @@
 				API/APIClient.swift,
 				API/Endpoints/RecipeEndpoints.swift,
 				Assets.xcassets,
+				"Extensions/Animation+Extensions.swift",
 				"Extensions/Array+Extensions.swift",
 				"Extensions/Bundle+Extensions.swift",
 				"Extensions/Codable+Extensions.swift",

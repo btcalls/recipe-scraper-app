@@ -9,10 +9,12 @@ import SwiftUI
 
 struct InstructionsView: View {
     var items: [String]
+    var onComplete: @MainActor () -> Void
     
     @Environment(\.dismiss) private var dismiss
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var index = 0
+    @State private var isCookCompleted = false
     
     private var instruction: String {
         return items[index]
@@ -43,15 +45,20 @@ struct InstructionsView: View {
                     .background(.ultraThinMaterial)
                     .clipShape(.capsule)
                 
-                Text(instruction)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .lineSpacing(7.5)
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .scale(.padding(.all), 20)
-                    .background(Color.appBackground)
-                    .clipShape(RoundedRectangle(cornerRadius: .regular))
-                    .shadow()
+                ScrollView {
+                    Text(instruction)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .lineSpacing(7.5)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .scale(.padding(.all), 20)
+                        .background(Color.appBackground)
+                        .clipShape(RoundedRectangle(cornerRadius: .regular))
+                        .shadow()
+                }
+                .scrollIndicators(.automatic)
+                .scrollClipDisabled()
+                .scrollBounceBehavior(.basedOnSize)
                 
                 Spacer()
                 
@@ -63,6 +70,11 @@ struct InstructionsView: View {
                     }
                     .disabled(index == 0)
                     
+                    IconButton(.checkmark, size: .lg) {
+                        isCookCompleted.toggle()
+                    }
+                    .remove(if: index != items.count - 1)
+                    
                     IconButton(.arrowRight) {
                         if index < items.count - 1 {
                             index += 1
@@ -70,13 +82,24 @@ struct InstructionsView: View {
                     }
                     .disabled(index == items.count - 1)
                 }
+                .animation(
+                    .customInteractiveSpring,
+                    value: instruction
+                )
             }
-            .animation(
-                .interactiveSpring(duration: 0.25),
-                value: instruction
-            )
+            .animation(.customEaseInOut, value: instruction)
             .presentationBackgroundInteraction(.disabled)
             .presentationBackground(.ultraThinMaterial)
+        }
+        .alert(String.success, isPresented: $isCookCompleted) {
+            Button(String.markComplete) {
+                dismiss()
+                onComplete()
+            }
+            
+            Button(String.cancel, role: .cancel) {}
+        } message: {
+            Text(String.cookCompleteConfirmation)
         }
         .scale(.padding(.horizontal), 20)
     }
@@ -89,6 +112,8 @@ struct InstructionsView: View {
         .fullScreenCover(isPresented: $isPresented) {
             InstructionsView(
                 items: MockService.shared.getRecipe().instructions
-            )
+            ) {
+                // No-op
+            }
         }
 }
