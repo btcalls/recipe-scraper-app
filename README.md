@@ -2,7 +2,9 @@
 
 ## Overview
 
-Companion app for food-lovers and for those who enjoy cooking.
+The project was inspired by real-life frustrations of searching for recipes across the web, in which all recipe websites somehow have to bombard its viewers first with ads and lengthy overview and even the history of the dish, before presenting its actual recipe information.  
+
+This SwiftUI app aims to ease the experience of viewing recipes saved from various recipe websites by presenting it in a easy-to-use, intuitive mobile application.
 
 ### Features
 

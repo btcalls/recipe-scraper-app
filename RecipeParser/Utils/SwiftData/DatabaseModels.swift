@@ -22,12 +22,15 @@ extension ModelDTO {
 
 @Model
 final class Recipe: AppModel, SortableModel {
+    #Index<Recipe>([\.name, \.createdOn, \.isFavorite])
+    
     @Attribute(.unique)
     var id: String
     @Relationship(deleteRule: .cascade)
     var ingredients: [Ingredient]
     
     var name: String
+    var author: Author
     var categories: [Category]
     var cuisines: [Cuisine]
     var detail: String
@@ -38,6 +41,7 @@ final class Recipe: AppModel, SortableModel {
     var createdOn: Date
     var modifiedOn: Date
     var isFavorite: Bool
+    var timesCompleted: Int
     
     var prepTimeMeasurement: Measurement<UnitDuration> {
         return Measurement(value: prepTime, unit: .minutes)
@@ -45,15 +49,15 @@ final class Recipe: AppModel, SortableModel {
     var cookTimeMeasurement: Measurement<UnitDuration> {
         return Measurement(value: totalTime - prepTime, unit: .minutes)
     }
-    
-    private var image: String
-    
     var imageURL: URL? {
         return URL(string: image)
     }
     
+    private var image: String
+    
     private enum CodingKeys: String, CodingKey {
-        case id, name, categories, cuisines, prepTime, totalTime, instructions, ingredients
+        case id, name, author, categories, cuisines, prepTime, totalTime, instructions, ingredients
+        case createdOn, modifiedOn, isFavorite, timesCompleted
         case image = "imageUrl"
         case detail = "description"
         case label = "instanceDescription"
@@ -62,6 +66,7 @@ final class Recipe: AppModel, SortableModel {
     init(
         id: String,
         name: String,
+        author: Author,
         image: String,
         categories: [Category],
         cuisines: [Cuisine],
@@ -71,10 +76,14 @@ final class Recipe: AppModel, SortableModel {
         instructions: [String],
         ingredients: [Ingredient],
         label: String,
-        isFavorite: Bool
+        createdOn: Date = .init(),
+        modifiedOn: Date = .init(),
+        isFavorite: Bool,
+        timesCompleted: Int = 0
     ) {
         self.id = id
         self.name = name
+        self.author = author
         self.image = image
         self.categories = categories
         self.cuisines = cuisines
@@ -84,15 +93,17 @@ final class Recipe: AppModel, SortableModel {
         self.instructions = instructions
         self.ingredients = ingredients
         self.label = label
-        self.createdOn = .init()
-        self.modifiedOn = .init()
+        self.createdOn = createdOn
+        self.modifiedOn = modifiedOn
         self.isFavorite = isFavorite
+        self.timesCompleted = timesCompleted
     }
     
     required init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
+        author = try container.decode(Author.self, forKey: .author)
         image = try container.decode(String.self, forKey: .image)
         categories = try container.decode([Category].self, forKey: .categories)
         cuisines = try container.decode([Cuisine].self, forKey: .cuisines)
@@ -102,9 +113,14 @@ final class Recipe: AppModel, SortableModel {
         instructions = try container.decode([String].self, forKey: .instructions)
         ingredients = try container.decode([Ingredient].self, forKey: .ingredients)
         label = try container.decode(String.self, forKey: .label)
-        createdOn = .init()
-        modifiedOn = .init()
-        isFavorite = false
+        createdOn = try container
+            .decodeIfPresent(Date.self, forKey: .createdOn) ?? .init()
+        modifiedOn = try container
+            .decodeIfPresent(Date.self, forKey: .modifiedOn) ?? .init()
+        isFavorite = try container
+            .decodeIfPresent(Bool.self, forKey: .isFavorite) ?? false
+        timesCompleted = try container
+            .decodeIfPresent(Int.self, forKey: .timesCompleted) ?? 0
     }
     
     func encode(to encoder: any Encoder) throws {
@@ -112,6 +128,7 @@ final class Recipe: AppModel, SortableModel {
         
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
+        try container.encode(author, forKey: .author)
         try container.encode(image, forKey: .image)
         try container.encode(categories, forKey: .categories)
         try container.encode(cuisines, forKey: .cuisines)
@@ -121,6 +138,10 @@ final class Recipe: AppModel, SortableModel {
         try container.encode(instructions, forKey: .instructions)
         try container.encode(ingredients, forKey: .ingredients)
         try container.encode(label, forKey: .label)
+        try container.encode(createdOn, forKey: .createdOn)
+        try container.encode(modifiedOn, forKey: .modifiedOn)
+        try container.encode(isFavorite, forKey: .isFavorite)
+        try container.encode(timesCompleted, forKey: .timesCompleted)
     }
 }
 
@@ -141,6 +162,36 @@ extension Recipe {
         default:
             return .init(\.createdOn, order: order)
         }
+    }
+}
+
+@Model
+final class Author: AppModel {
+    #Unique<Author>([\.name, \.website])
+    
+    var name: String
+    var website: String
+    
+    init(name: String, website: String) {
+        self.name = name
+        self.website = website
+    }
+    
+    private enum CodingKeys: String, CodingKey {
+        case name, website
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        name = try container.decode(String.self, forKey: .name)
+        website = try container.decode(String.self, forKey: .website)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(name, forKey: .name)
+        try container.encode(website, forKey: .website)
     }
 }
 
