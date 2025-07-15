@@ -185,6 +185,9 @@ struct RecipeView: View {
                         }
                         .remove(if: title.isEmpty)
                         
+                        Toggle($isStarted)
+                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                        
                         IconButton(
                             recipe.isFavorite ? .bookmarkFill : .bookmark,
                             tint: .yellow
@@ -194,9 +197,6 @@ struct RecipeView: View {
                             }
                         }
                         .remove(if: title.isEmpty)
-                        
-                        Toggle($isStarted)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                     }
                     .animation(.customInteractiveSpring, value: title)
                     .scale(.padding(.trailing), 20)

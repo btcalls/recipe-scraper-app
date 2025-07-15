@@ -52,6 +52,15 @@ final class Recipe: AppModel, SortableModel {
     var imageURL: URL? {
         return URL(string: image)
     }
+    var categoriesLabel: String {
+        return categories.map(\.name).joined(separator: " | ")
+    }
+    var cuisinesLabel: String {
+        return cuisines.map(\.name).joined(separator: " | ")
+    }
+    var categoriesCuisinesLabel: String {
+        return [categoriesLabel, cuisinesLabel].joined(separator: " | ")
+    }
     
     private var image: String
     

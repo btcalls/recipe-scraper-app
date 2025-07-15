@@ -17,13 +17,18 @@ struct RecipeRow: View {
         HStack(alignment: .center, spacing: spacing) {
             CustomImage(kind: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
-                .clipTo(.circle)
+                .clipTo(RoundedRectangle(cornerRadius: .sm))
             
             VStack(alignment: .leading, spacing: bodySpacing) {
                 Text(recipe.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.headline)
                     .lineLimit(2)
+                
+                Text(recipe.categoriesCuisinesLabel)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.caption)
+                    .lineLimit(1)
             }
             
             Symbol.bookmarkFill.image
