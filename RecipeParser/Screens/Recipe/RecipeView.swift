@@ -233,9 +233,8 @@ struct RecipeView: View {
             let actor = DatabaseActor(modelContainer: .shared())
             
             recipe.timesCompleted += 1
-            recipe.modifiedOn = Date()
             
-            try await actor.save(model: recipe)
+            try await actor.save(recipe: recipe)
             
             presentationMode.wrappedValue.dismiss()
         } catch(let e) {
@@ -249,9 +248,7 @@ struct RecipeView: View {
             
             recipe.isFavorite.toggle()
             
-            recipe.modifiedOn = Date()
-            
-            try await actor.save(model: recipe)
+            try await actor.save(recipe: recipe)
         } catch(let e) {
             viewState.toast = .error(.error(e))
         }

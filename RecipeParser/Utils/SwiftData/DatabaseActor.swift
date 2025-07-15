@@ -31,3 +31,14 @@ actor DatabaseActor: Sendable {
         try context.save()
     }
 }
+
+extension DatabaseActor {
+    /// Saves the `Recipe` instance to the persistent storage.
+    /// - Parameter recipe: The persistent `Recipe` record to store.
+    func save<T: Recipe>(recipe: T) async throws {
+        recipe.modifiedOn = Date()
+        
+        context.insert(recipe)
+        try context.save()
+    }
+}
