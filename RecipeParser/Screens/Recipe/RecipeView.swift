@@ -131,7 +131,6 @@ struct RecipeView: View {
                             .frame(height: height)
                             .clipShape(RoundedRectangle(cornerRadius: .lg))
                             .scale(.padding(.bottom), 15)
-                            .shadow()
                         
                         DetailsView(recipe: recipe) {
                             Task {

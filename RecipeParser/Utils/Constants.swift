@@ -90,4 +90,5 @@ enum Symbol: String {
     case bookmark
     case bookmarkFill = "bookmark.fill"
     case list = "checklist"
+    case save = "square.and.arrow.down"
 }
