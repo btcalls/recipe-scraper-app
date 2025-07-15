@@ -116,128 +116,145 @@ struct RecipeView: View {
     @State private var isCookCompleted = false
     @State private var isStarted = false
     @State private var title: String = ""
+    @State private var viewState = ViewState()
     
     var body: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(
-                    alignment: .leading,
-                    spacing: spacing,
-                    pinnedViews: .sectionHeaders
-                ) {
-                    CustomImage(kind: .url(recipe.imageURL, toCache: true))
-                        .frame(height: height)
-                        .clipShape(RoundedRectangle(cornerRadius: .lg))
-                        .scale(.padding(.bottom), 15)
-                        .shadow()
-                    
-                    DetailsView(recipe: recipe) {
-                        Task {
-                            try? await onToggleFavorite()
-                        }
-                    }
-                    .id(titleID)
-                    
-                    Divider()
-                        .asStandard()
-                        .scale(.padding(.vertical), 5)
-                    
-                    VStack(alignment: .leading) {
-                        TimeView(measurement: recipe.prepTimeMeasurement,
-                                 label: .prepTime)
-                        TimeView(measurement: recipe.cookTimeMeasurement,
-                                 label: .cookTime)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .scale(.padding(.vertical), 5)
-                    
-                    Section {
-                        ForEach(recipe.ingredients) {
-                            IngredientView(value: $0.label)
-                        }
-                    } header: {
-                        HeaderView(value: .ingredients)
-                    }
-                    
-                    Divider()
-                        .asStandard()
-                        .scale(.padding(.vertical), 5)
-                    
-                    Section {
-                        ForEach(recipe.instructions, id: \.self) {
-                            InstructionView(value: $0)
-                        }
-                    } header: {
-                        HeaderView(value: .instructions)
-                    }
-                }
-                .scrollTargetLayout()
-                .scale(.padding(.horizontal), 20)
-            }
-            .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                BottomControlView {
-                    IconButton(.checkmark, size: .lg) {
-                        isCookCompleted.toggle()
-                    }
-                    .remove(if: title.isEmpty)
-                                        
-                    IconButton(
-                        recipe.isFavorite ? .bookmarkFill : .bookmark,
-                        tint: .yellow
+        LoadableView(viewState: viewState) {
+            ScrollViewReader { proxy in
+                ScrollView {
+                    LazyVStack(
+                        alignment: .leading,
+                        spacing: spacing,
+                        pinnedViews: .sectionHeaders
                     ) {
-                        Task {
-                            try? await onToggleFavorite()
+                        CustomImage(kind: .url(recipe.imageURL, toCache: true))
+                            .frame(height: height)
+                            .clipShape(RoundedRectangle(cornerRadius: .lg))
+                            .scale(.padding(.bottom), 15)
+                            .shadow()
+                        
+                        DetailsView(recipe: recipe) {
+                            Task {
+                                try? await onToggleFavorite()
+                            }
+                        }
+                        .id(titleID)
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                        
+                        VStack(alignment: .leading) {
+                            TimeView(measurement: recipe.prepTimeMeasurement,
+                                     label: .prepTime)
+                            TimeView(measurement: recipe.cookTimeMeasurement,
+                                     label: .cookTime)
+                        }
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                        
+                        Section {
+                            ForEach(recipe.ingredients) {
+                                IngredientView(value: $0.label)
+                            }
+                        } header: {
+                            HeaderView(value: .ingredients)
+                        }
+                        
+                        Divider()
+                            .asStandard()
+                            .scale(.padding(.vertical), 5)
+                        
+                        Section {
+                            ForEach(recipe.instructions, id: \.self) {
+                                InstructionView(value: $0)
+                            }
+                        } header: {
+                            HeaderView(value: .instructions)
                         }
                     }
-                    .remove(if: title.isEmpty)
-                    
-                    Toggle($isStarted)
-                        .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                    .scrollTargetLayout()
+                    .scale(.padding(.horizontal), 20)
                 }
-                .animation(.customInteractiveSpring, value: title)
-                .scale(.padding(.trailing), 20)
-            }
-            .fullScreenCover(isPresented: $isStarted) {
-                InstructionsView(items: recipe.instructions) {
-                    Task {
-                        try? await onCompleteRecipe()
+                .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                    BottomControlView {
+                        IconButton(.checkmark, size: .lg) {
+                            isCookCompleted.toggle()
+                        }
+                        .remove(if: title.isEmpty)
+                        
+                        IconButton(
+                            recipe.isFavorite ? .bookmarkFill : .bookmark,
+                            tint: .yellow
+                        ) {
+                            Task {
+                                try? await onToggleFavorite()
+                            }
+                        }
+                        .remove(if: title.isEmpty)
+                        
+                        Toggle($isStarted)
+                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                    }
+                    .animation(.customInteractiveSpring, value: title)
+                    .scale(.padding(.trailing), 20)
+                }
+                .fullScreenCover(isPresented: $isStarted) {
+                    InstructionsView(items: recipe.instructions) {
+                        Task {
+                            try? await onCompleteRecipe()
+                        }
                     }
                 }
-            }
-            .alert(String.success, isPresented: $isCookCompleted) {
-                Button(String.markComplete) {
-                    Task {
-                        try? await onCompleteRecipe()
+                .alert(String.success, isPresented: $isCookCompleted) {
+                    Button(String.markComplete) {
+                        Task {
+                            try? await onCompleteRecipe()
+                        }
                     }
+                    Button(String.cancel, role: .cancel) {}
+                } message: {
+                    Text(String.cookCompleteConfirmation)
                 }
-                Button(String.cancel, role: .cancel) {}
-            } message: {
-                Text(String.cookCompleteConfirmation)
             }
-        }
-        .background(Color.appBackground)
-        .navigationTitle(title)
-        .scrollBounceBehavior(.basedOnSize)
-        .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
-            title = ids.contains { $0 == titleID } ? "" : recipe.name
+            .background(Color.appBackground)
+            .navigationTitle(title)
+            .scrollBounceBehavior(.basedOnSize)
+            .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
+                title = ids.contains { $0 == titleID } ? "" : recipe.name
+            }
         }
     }
     
     private func onCompleteRecipe() async throws {
-        // TODO: Update recipe
-        presentationMode.wrappedValue.dismiss()
+        do {
+            let actor = DatabaseActor(modelContainer: .shared())
+            
+            recipe.timesCompleted += 1
+            recipe.modifiedOn = Date()
+            
+            try await actor.save(model: recipe)
+            
+            presentationMode.wrappedValue.dismiss()
+        } catch(let e) {
+            viewState.toast = .error(.error(e))
+        }
     }
 
     private func onToggleFavorite() async throws {
-        let actor = DatabaseActor(modelContainer: .shared())
-        
-        recipe.isFavorite.toggle()
-        
-        recipe.modifiedOn = Date()
-        
-        try await actor.save(model: recipe)
+        do {
+            let actor = DatabaseActor(modelContainer: .shared())
+            
+            recipe.isFavorite.toggle()
+            
+            recipe.modifiedOn = Date()
+            
+            try await actor.save(model: recipe)
+        } catch(let e) {
+            viewState.toast = .error(.error(e))
+        }
     }
 }
 
