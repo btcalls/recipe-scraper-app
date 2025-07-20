@@ -92,6 +92,7 @@
 				Screens/Onboarding/OnboardingView.swift,
 				Screens/Recipe/InstructionsView.swift,
 				Screens/Recipe/RecipeView.swift,
+				Utils/Builders/BoolBuilders.swift,
 				Utils/Constants.swift,
 				Utils/Debugger.swift,
 				Utils/ExtractRecipeMetadata.swift,

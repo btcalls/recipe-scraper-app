@@ -197,8 +197,11 @@ extension Recipe {
 
 private extension Recipe {
     func isSection(_ item: String) -> Bool {
-        return (item.hasSuffix("Instructions") ||
-                item.hasPrefix("For the"))
+        // NOTE: Add more keywords as necessary
+        return either {
+            item.hasSuffix("Instructions")
+            item.hasPrefix("For the")
+        }
     }
 }
 
