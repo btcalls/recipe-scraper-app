@@ -43,6 +43,12 @@ enum HTTPMethod: String {
 
 // MARK: UI
 
+enum AspectRatio: CGFloat {
+    case square = 1
+    case threeToFour = 0.75
+    case fourToThree = 1.75
+}
+
 enum CornerRadius: CGFloat {
     case sm = 8
     case regular = 16

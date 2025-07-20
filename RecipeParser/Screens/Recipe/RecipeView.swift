@@ -111,7 +111,6 @@ struct RecipeView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     @Namespace private var titleID
-    @ScaledMetric private var height: CGFloat = 250
     @ScaledMetric private var spacing: CGFloat = 10
     @State private var isCookCompleted = false
     @State private var isStarted = false
@@ -123,15 +122,16 @@ struct RecipeView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(
-                        alignment: .leading,
+                        alignment: .center,
                         spacing: spacing,
                         pinnedViews: .sectionHeaders
                     ) {
                         CustomImage(kind: .url(recipe.imageURL, toCache: true))
-                            .frame(height: height)
-                            .clipShape(RoundedRectangle(cornerRadius: .lg))
-                            .scale(.padding(.bottom), 15)
-                        
+                            .scale(.height(), 300)
+                            .fitToAspectRatio(.fourToThree)
+                            .clipTo(RoundedRectangle(cornerRadius: .lg))
+                            .scale(.padding(.vertical), 10)
+                            
                         DetailsView(recipe: recipe) {
                             Task {
                                 try? await onToggleFavorite()
@@ -261,8 +261,5 @@ extension RecipeView {
 }
 
 #Preview {
-    NavigationStack {
-        RecipeRow(MockService.shared.getRecipe())
-            .navigate(to: RecipeView(MockService.shared.getRecipe()))
-    }
+    RecipeView(MockService.shared.getRecipe())
 }

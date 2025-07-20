@@ -132,6 +132,20 @@ extension View {
         )
     }
     
+    /// Fits view to specified aspect ratio.
+    /// - Parameter aspectRatio: The aspect ratio to set to the view.
+    /// - Returns: Modified view fitted to desired aspect ratio.
+    func fitToAspectRatio(_ aspectRatio: CGFloat) -> some View {
+        return modifier(FitToAspectRatio(aspectRatio))
+    }
+    
+    /// Fits view to specified aspect ratio.
+    /// - Parameter aspectRatio: The aspect ratio to set to the view.
+    /// - Returns: Modified view fitted to desired aspect ratio.
+    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
+        return modifier(FitToAspectRatio(aspectRatio))
+    }
+    
     /// Modifier to clip View to a rounded rectangle.
     /// - Parameters:
     ///   - cornerRadius: Value corner radius to be applied.
@@ -188,7 +202,7 @@ extension View {
     /// - Parameter destination: The destination view.
     /// - Returns: Modifed view with navigation in place.
     func navigate<Destination>(to destination: Destination) -> some View where Destination : View {
-        modifier(NavigableViewModifier(destination: { destination }))
+        return modifier(NavigableViewModifier(destination: { destination }))
     }
 }
 
@@ -198,8 +212,7 @@ extension Divider {
     /// Apply app-standard modifiers to the `Divider`.
     /// - Returns: Modified divider.
     func asStandard() -> some View {
-        return self
-            .scale(.height(), 1)
+        return scale(.height(), 1)
             .background(.secondary.opacity(0.5))
     }
 }
@@ -213,6 +226,22 @@ extension Label where Title == Text, Icon == Image  {
         self.init(title: title) {
             Icon(systemName: sfSymbol.rawValue)
         }
+    }
+}
+
+extension Image {
+    /// Fits view to specified aspect ratio.
+    /// - Parameter aspectRatio: The aspect ratio to set to the view.
+    /// - Returns: Modified view fitted to desired aspect ratio.
+    func fitToAspectRatio(_ aspectRatio: CGFloat) -> some View {
+        return resizable().modifier(FitToAspectRatio(aspectRatio))
+    }
+    
+    /// Fits view to specified aspect ratio.
+    /// - Parameter aspectRatio: The aspect ratio to set to the view.
+    /// - Returns: Modified view fitted to desired aspect ratio.
+    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
+        return resizable().modifier(FitToAspectRatio(aspectRatio))
     }
 }
 
