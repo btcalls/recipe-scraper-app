@@ -72,6 +72,7 @@ private struct HeaderView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .scale(.padding(.vertical), 10)
             .background(Color.appBackground)
+            .lineLimit(2)
     }
 }
 
@@ -82,6 +83,21 @@ private struct IngredientView: View {
         Text(value)
             .frame(maxWidth: .infinity, alignment: .leading)
             .fontWeight(.light)
+    }
+}
+
+private struct InstructionSection: View {
+    let key: String
+    let items: [String]
+    
+    var body: some View {
+        Section {
+            ForEach(items, id: \.self) {
+                InstructionView(value: $0)
+            }
+        } header: {
+            HeaderView(value: key)
+        }
     }
 }
 
@@ -166,12 +182,8 @@ struct RecipeView: View {
                             .asStandard()
                             .scale(.padding(.vertical), 5)
                         
-                        Section {
-                            ForEach(recipe.instructions, id: \.self) {
-                                InstructionView(value: $0)
-                            }
-                        } header: {
-                            HeaderView(value: .instructions)
+                        ForEach(recipe.detailedInstructions, id: \.self.title) {
+                            InstructionSection(key: $0.title, items: $0.items)
                         }
                     }
                     .scrollTargetLayout()
