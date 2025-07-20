@@ -46,7 +46,7 @@ struct IconButton: AppButton {
     var display: Symbol
     var kind: Kind = .regular
     var size: Size = .regular
-    var tint: Color? = .primary
+    var tint: Color? = .accentColor
     var action: @MainActor () -> Void
     
     var body: some View {
@@ -86,7 +86,7 @@ extension IconButton {
     
     init(
         _ display: Symbol,
-        tint: Color = .primary,
+        tint: Color = .accentColor,
         kind: Kind = .regular,
         size: Size = .regular,
         action: @escaping @MainActor () -> Void

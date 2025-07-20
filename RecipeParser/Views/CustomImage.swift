@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct CustomImage: View {
-    var kind: Kind
+private struct ImageBody: View {
+    var kind: CustomImage.Kind
     
     var body: some View {
         switch kind {
@@ -18,15 +18,21 @@ struct CustomImage: View {
         case .resource(let resource):
             Image(resource)
                 .resizable()
-                .scaledToFill()
-                .clipped()
             
         case .uiImage(let uiImage):
             Image(uiImage: uiImage)
                 .resizable()
-                .scaledToFill()
-                .clipped()
         }
+    }
+}
+
+struct CustomImage: View {
+    var kind: Kind
+    
+    var body: some View {
+        ImageBody(kind: kind)
+            .scaledToFill()
+            .clipped()
     }
 }
 
@@ -51,8 +57,6 @@ private struct AsyncLoadImage: View {
             // Image successfully fetched
             urlImage
                 .resizable()
-                .scaledToFill()
-                .clipped()
         } else if let _ = error {
             // Failed image loading
             Symbol.xmarkCircle.image
@@ -137,7 +141,16 @@ private extension AsyncLoadImage {
 }
 
 #Preview {
-    CustomImage(kind: .url(MockService.shared.imageURL))
-        .scale(.heightWidth(), 100)
-        .clipTo(Circle(), lineWidth: 1, color: .primary)
+    VStack {
+        CustomImage(kind: .url(MockService.shared.imageURL))
+            .scale(.heightWidth(), 100)
+            .clipTo(Circle(), lineWidth: 1, color: .primary)
+        
+        CustomImage(kind: .url(MockService.shared.getRecipe().imageURL))
+            .scale(.height(), 250)
+            .fitToAspectRatio(.fourToThree)
+            .clipTo(RoundedRectangle(cornerRadius: .lg))
+    }
+    .frame(maxWidth: .infinity)
+    .padding(20)
 }

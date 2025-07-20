@@ -110,6 +110,7 @@
 				Views/IconButton.swift,
 				Views/LoadableView.swift,
 				Views/Modifiers/EmptyViewModifier.swift,
+				Views/Modifiers/FitToAspectRatioModifier.swift,
 				Views/Modifiers/HiddenViewModifier.swift,
 				Views/Modifiers/NavigableViewModifier.swift,
 				Views/Modifiers/ScaledModifier.swift,

@@ -14,6 +14,8 @@ private struct SelectedLabel: View {
     var body: some View {
         if isSelected {
             Label(text, sfSymbol: .checkmark)
+                .foregroundStyle(Color.appForeground)
+                .tint(.accent)
         } else {
             Text(text)
         }

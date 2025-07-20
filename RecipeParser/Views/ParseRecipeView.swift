@@ -31,15 +31,19 @@ struct ParseRecipeView: View {
                     
                     Divider().asStandard()
                     
-                    WideButton(.saveRecipe) {
+                    WideButton(.saveRecipe, icon: .save) {
                         Task {
                             await processRecipe()
                         }
                     }
                 }
                 .toolbar {
-                    Button(String.cancel) {
+                    Button {
                         close()
+                    } label: {
+                        Symbol.x.image
+                            .fontWeight(.medium)
+                            .imageScale(.medium)
                     }
                 }
                 .navigationTitle(String.addRecipe)

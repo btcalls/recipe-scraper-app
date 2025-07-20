@@ -15,7 +15,7 @@ final class MockService {
     
     static let shared = MockService()
     
-    let imageURL = URL(string: "https://www.recipetineats.com/tachyon/2024/07/Baked-Beef-Quasadillas-51259.jpg")!
+    let imageURL = URL(string: "https://preppykitchen.com/wp-content/uploads/2021/07/vanilla-cupcake-recipe-n.jpg")!
     let recipeURL = URL(string: "https://www.recipetineats.com/crispy-oven-baked-quesadillas/")!
     
     /// Get a single `Recipe` instance from sample data.
@@ -37,7 +37,7 @@ final class MockService {
             detail: "Tasty burger",
             prepTime: 20,
             totalTime: 40,
-            instructions: [""],
+            instructions: ["Make burger"],
             ingredients: [.init(base: "bun", amount: "2", label: "2 bun")],
             label: "",
             isFavorite: false
