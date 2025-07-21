@@ -18,6 +18,7 @@ private struct SeeAllButton: View {
 }
 
 struct HomeView: View {
+    @ScaledMetric private var height: CGFloat = 275
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var isBrowserPresented = false
     @State private var isEmpty: Bool = false
@@ -27,6 +28,7 @@ struct HomeView: View {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
                     WeeklyView()
+                        .frame(height: height)
                     
                     SeeAllButton()
                         .navigate(to: RecipeListView(isEmpty: $isEmpty))

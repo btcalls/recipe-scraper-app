@@ -25,7 +25,6 @@ extension String {
     static let yourRecipes = "Your Recipes"
     static let allRecipes = "All Recipes"
     static let success = "Hooray!"
-    static let weeklyRecipes = "For this Week..."
     
     // MARK: Onboarding
     
