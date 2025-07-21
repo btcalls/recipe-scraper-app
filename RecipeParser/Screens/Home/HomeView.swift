@@ -26,6 +26,8 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
+                    WeeklyView()
+                    
                     SeeAllButton()
                         .navigate(to: RecipeListView(isEmpty: $isEmpty))
                         .remove(if: isEmpty)
@@ -80,4 +82,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .modelContainer(MockService.shared.modelContainer(withSample: true))
 }
