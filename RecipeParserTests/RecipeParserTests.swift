@@ -14,4 +14,10 @@ struct RecipeParserTests {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
     }
 
+    @Test func parseRecipes() async throws {
+        let recipes = try MockService.shared.getRecipes()
+        
+        #expect(!recipes.isEmpty)
+    }
+    
 }

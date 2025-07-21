@@ -1,0 +1,34 @@
+{
+  "configurations" : [
+    {
+      "id" : "3B7BFA37-BAD1-47D8-BA98-542D3A106EE1",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "commandLineArgumentEntries" : [
+      {
+        "argument" : "-com.apple.CoreData.SQLDebug 1"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:RecipeParser.xcodeproj",
+      "identifier" : "49B19D2F2DB0F9EC008F9B9E",
+      "name" : "RecipeParser"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:RecipeParser.xcodeproj",
+        "identifier" : "49B19D402DB0F9EE008F9B9E",
+        "name" : "RecipeParserTests"
+      }
+    }
+  ],
+  "version" : 1
+}

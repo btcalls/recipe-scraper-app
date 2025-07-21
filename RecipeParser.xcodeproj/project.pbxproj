@@ -51,6 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		491881622E2E0C4E00F9292C /* RecipeParser.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = RecipeParser.xctestplan; sourceTree = "<group>"; };
 		492BD7D22DC9A07F0020485B /* RecipeParserShareExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RecipeParserShareExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B19D302DB0F9ED008F9B9E /* RecipeParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B19D412DB0F9EE008F9B9E /* RecipeParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -213,6 +214,7 @@
 		49B19D272DB0F9EC008F9B9E = {
 			isa = PBXGroup;
 			children = (
+				491881622E2E0C4E00F9292C /* RecipeParser.xctestplan */,
 				49B19D322DB0F9ED008F9B9E /* RecipeParser */,
 				49B19D442DB0F9EE008F9B9E /* RecipeParserTests */,
 				49B19D4E2DB0F9EE008F9B9E /* RecipeParserUITests */,
