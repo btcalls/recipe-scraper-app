@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 
 typealias AppModel = Codable & Identifiable
+typealias DetailedInstruction = (title: String, instructions: [String])
 
 struct ModelDTO<T: PersistentModel>: Sendable {
     let persistentId: PersistentIdentifier
@@ -60,6 +61,27 @@ final class Recipe: AppModel, SortableModel {
     }
     var categoriesCuisinesLabel: String {
         return [categoriesLabel, cuisinesLabel].joined(separator: " | ")
+    }
+    var detailedInstructions: [DetailedInstruction] {
+        let sectionIndices = instructions.enumerated().compactMap { (index, item) in
+            isSection(item) ? index : nil
+        }
+        
+        if sectionIndices.isEmpty {
+            return [(String.instructions, instructions)]
+        }
+        
+        let endIndices = sectionIndices.dropFirst() + [instructions.count]
+        
+        return zip(sectionIndices, endIndices).map { (start, end) in
+            let title = instructions[start]
+            let contentRange = (start + 1)..<end
+            let items = contentRange.isEmpty ? [] : Array(
+                instructions[contentRange]
+            )
+            
+            return (title, items)
+        }
     }
     
     private var image: String
@@ -170,6 +192,16 @@ extension Recipe {
             
         default:
             return .init(\.createdOn, order: order)
+        }
+    }
+}
+
+private extension Recipe {
+    func isSection(_ item: String) -> Bool {
+        // NOTE: Add more keywords as necessary
+        return either {
+            item.hasSuffix("Instructions")
+            item.hasPrefix("For the")
         }
     }
 }

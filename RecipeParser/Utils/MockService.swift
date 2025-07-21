@@ -21,9 +21,7 @@ final class MockService {
     /// Get a single `Recipe` instance from sample data.
     /// - Returns: `Recipe` sample instance.
     func getRecipe() -> Recipe {
-        let recipes = getRecipes()
-        
-        if !recipes.isEmpty {
+        if let recipes = try? getRecipes(), !recipes.isEmpty {
             return recipes[0]
         }
         
@@ -46,19 +44,15 @@ final class MockService {
     
     /// Decode list of `Recipe` instances from `sample_data.json` file.
     /// - Returns: `Recipe` list if a valid JSON file was parsed, else and empty array.
-    func getRecipes() -> [Recipe] {
-        let path = Bundle.main.path(forResource: "sample_data", ofType: "json")
-        
-        guard let path, let data = try? Data(
-            contentsOf: URL(filePath: path),
-            options: .mappedIfSafe
-        ) else {
+    func getRecipes() throws -> [Recipe] {
+        guard let path = Bundle.main.path(forResource: "sample_data",
+                                          ofType: "json") else {
             return []
         }
         
-        guard let decoded = try? JSONDecoder.standard.decode(Recipes.self, from: data) else {
-            return []
-        }
+        let data = try Data(contentsOf: URL(filePath: path),
+                            options: .mappedIfSafe)
+        let decoded = try JSONDecoder.standard.decode(Recipes.self, from: data)
         
         return decoded.data
     }
@@ -76,8 +70,9 @@ final class MockService {
             let container = try ModelContainer(for: ModelContainer.schema,
                                                configurations: [modelConfiguration])
             
-            if withSample {
-                for recipe in MockService.shared.getRecipes() {
+            // Populate with sample data
+            if withSample, let recipes = try? MockService.shared.getRecipes() {
+                for recipe in recipes {
                     // Randomise isFavorite
                     recipe.isFavorite = .random()
                     
