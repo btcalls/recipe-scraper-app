@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 
 typealias AppModel = Codable & Identifiable
+typealias DetailedInstruction = (title: String, instructions: [String])
 
 struct ModelDTO<T: PersistentModel>: Sendable {
     let persistentId: PersistentIdentifier
@@ -61,7 +62,7 @@ final class Recipe: AppModel, SortableModel {
     var categoriesCuisinesLabel: String {
         return [categoriesLabel, cuisinesLabel].joined(separator: " | ")
     }
-    var detailedInstructions: [(title: String, items: [String])] {
+    var detailedInstructions: [DetailedInstruction] {
         let sectionIndices = instructions.enumerated().compactMap { (index, item) in
             isSection(item) ? index : nil
         }

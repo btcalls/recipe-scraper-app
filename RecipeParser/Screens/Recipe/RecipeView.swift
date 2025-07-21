@@ -25,6 +25,29 @@ private struct TimeView: View {
     }
 }
 
+private struct TimeDetailsView: View {
+    let recipe: Recipe
+    
+    var body: some View {
+        VStack {
+            Divider()
+                .asStandard()
+                .scale(.padding(.vertical), 5)
+            
+            VStack(alignment: .leading) {
+                TimeView(measurement: recipe.prepTimeMeasurement,
+                         label: .prepTime)
+                TimeView(measurement: recipe.cookTimeMeasurement,
+                         label: .cookTime)
+            }
+            
+            Divider()
+                .asStandard()
+                .scale(.padding(.vertical), 5)
+        }
+    }
+}
+
 private struct DetailsView: View {
     let recipe: Recipe
     
@@ -58,6 +81,7 @@ private struct DetailsView: View {
             Text(recipe.detail)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
+                .scale(.padding(.vertical), 10)
         }
     }
 }
@@ -87,7 +111,7 @@ private struct IngredientView: View {
 }
 
 private struct InstructionSection: View {
-    let key: String
+    let title: String
     let items: [String]
     
     var body: some View {
@@ -96,7 +120,7 @@ private struct InstructionSection: View {
                 InstructionView(value: $0)
             }
         } header: {
-            HeaderView(value: key)
+            HeaderView(value: title)
         }
     }
 }
@@ -155,20 +179,7 @@ struct RecipeView: View {
                         }
                         .id(titleID)
                         
-                        Divider()
-                            .asStandard()
-                            .scale(.padding(.vertical), 5)
-                        
-                        VStack(alignment: .leading) {
-                            TimeView(measurement: recipe.prepTimeMeasurement,
-                                     label: .prepTime)
-                            TimeView(measurement: recipe.cookTimeMeasurement,
-                                     label: .cookTime)
-                        }
-                        
-                        Divider()
-                            .asStandard()
-                            .scale(.padding(.vertical), 5)
+                        TimeDetailsView(recipe: recipe)
                         
                         Section {
                             ForEach(recipe.ingredients) {
@@ -182,8 +193,8 @@ struct RecipeView: View {
                             .asStandard()
                             .scale(.padding(.vertical), 5)
                         
-                        ForEach(recipe.detailedInstructions, id: \.self.title) {
-                            InstructionSection(key: $0.title, items: $0.items)
+                        ForEach(recipe.detailedInstructions, id: \.self.title) { (title, items) in
+                            InstructionSection(title: title, items: items)
                         }
                     }
                     .scrollTargetLayout()
@@ -213,7 +224,7 @@ struct RecipeView: View {
                     .scale(.padding(.trailing), 20)
                 }
                 .fullScreenCover(isPresented: $isStarted) {
-                    InstructionsView(items: recipe.instructions) {
+                    InstructionsView(items: recipe.detailedInstructions) {
                         Task {
                             try? await onCompleteRecipe()
                         }
