@@ -89,6 +89,7 @@
 				Screens/Home/HomeView.swift,
 				Screens/Home/RecipeListView.swift,
 				Screens/Home/RecipeRow.swift,
+				Screens/Home/WeeklyView.swift,
 				Screens/Onboarding/OnboardingCard.swift,
 				Screens/Onboarding/OnboardingView.swift,
 				Screens/Recipe/InstructionsView.swift,

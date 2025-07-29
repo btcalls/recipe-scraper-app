@@ -28,7 +28,7 @@ struct RecipeRow: View {
                 Text(recipe.categoriesCuisinesLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.caption)
-                    .lineLimit(1)
+                    .lineLimit(2)
             }
             
             Symbol.bookmarkFill.image
