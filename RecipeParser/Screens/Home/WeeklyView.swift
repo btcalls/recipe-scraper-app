@@ -38,7 +38,9 @@ struct WeeklyView: View {
                                 VStack(alignment: .center, spacing: spacing) {
                                     CustomImage(kind: .url(recipe.imageURL, toCache: true))
                                         .frame(width: width, height: width)
-                                        .clipTo(.circle)
+                                        .clipTo(
+                                            RoundedRectangle(cornerRadius: .sm)
+                                        )
                                         .scrollTransition { view, transition in
                                             view
                                                 .opacity(transition.isIdentity ? 1 : 0.3)
