@@ -69,7 +69,6 @@ private struct DetailsView: View {
                 
                 IconButton(
                     recipe.isFavorite ? .bookmarkFill : .bookmark,
-                    tint: .yellow,
                     size: .lg
                 ) {
                     onAction()
@@ -154,6 +153,7 @@ struct RecipeView: View {
     @ScaledMetric private var spacing: CGFloat = 10
     @State private var isCookCompleted = false
     @State private var isStarted = false
+    @State private var isCalendarDisplayed = false
     @State private var title: String = ""
     @State private var viewState = ViewState()
     
@@ -210,10 +210,10 @@ struct RecipeView: View {
                         Toggle($isStarted)
                             .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                         
-                        IconButton(
-                            recipe.isFavorite ? .bookmarkFill : .bookmark,
-                            tint: .yellow
-                        ) {
+                        Toggle($isCalendarDisplayed)
+                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
+                        
+                        IconButton(recipe.isFavorite ? .bookmarkFill : .bookmark) {
                             Task {
                                 try? await onToggleFavorite()
                             }
@@ -239,6 +239,11 @@ struct RecipeView: View {
                     Button(String.cancel, role: .cancel) {}
                 } message: {
                     Text(String.cookCompleteConfirmation)
+                }
+                .sheet(isPresented: $isCalendarDisplayed) {
+                    // TODO:
+                } content: {
+                    // TODO:
                 }
             }
             .background(Color.appBackground)
