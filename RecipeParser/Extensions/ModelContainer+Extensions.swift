@@ -16,6 +16,7 @@ extension ModelContainer {
         Cuisine.self,
         Ingredient.self,
         BaseIngredient.self,
+        RecipeWeekMenu.self,
     ])
     
     /// The `ModelContainer` instance configured and used across the application.

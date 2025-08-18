@@ -347,3 +347,46 @@ final class Ingredient: AppModel {
         try container.encode(label, forKey: .label)
     }
 }
+
+@Model
+final class RecipeWeekMenu: AppModel {
+    @Relationship(deleteRule: .nullify, inverse: \Recipe.id)
+    var recipeID: String
+    var name: String
+    var imageURL: URL?
+    var date: Date
+    
+    private enum CodingKeys: String, CodingKey {
+        case recipeID = "id"
+        case name, imageURL, date
+    }
+    
+    init(
+        recipeID: String,
+        name: String,
+        imageURL: URL? = nil,
+        date: Date
+    ) {
+        self.recipeID = recipeID
+        self.name = name
+        self.imageURL = imageURL
+        self.date = date
+    }
+    
+    required init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        recipeID = try container.decode(String.self, forKey: .recipeID)
+        name = try container.decode(String.self, forKey: .name)
+        imageURL = try container.decodeIfPresent(URL.self, forKey: .imageURL)
+        date = try container.decode(Date.self, forKey: .date)
+    }
+    
+    func encode(to encoder: any Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(recipeID, forKey: .recipeID)
+        try container.encode(name, forKey: .name)
+        try container.encode(imageURL, forKey: .imageURL)
+        try container.encode(date, forKey: .date)
+    }
+}
