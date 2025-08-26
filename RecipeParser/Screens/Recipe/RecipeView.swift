@@ -243,7 +243,11 @@ struct RecipeView: View {
                 .sheet(isPresented: $isCalendarDisplayed) {
                     // TODO:
                 } content: {
-                    // TODO:
+                    Button("Add") {
+                        Task {
+                            try? await onScheduleRecipe()
+                        }
+                    }
                 }
             }
             .background(Color.appBackground)
@@ -276,6 +280,25 @@ struct RecipeView: View {
             recipe.isFavorite.toggle()
             
             try await actor.save(recipe: recipe)
+        } catch(let e) {
+            viewState.toast = .error(.error(e))
+        }
+    }
+    
+    private func onScheduleRecipe() async throws {
+        do {
+            let actor = DatabaseActor(modelContainer: .shared())
+            let model = RecipeWeekMenu(
+                recipeID: recipe.id,
+                name: recipe.name,
+                imageURL: recipe.imageURL,
+                date: Date()
+            )
+            
+            try await actor.save(model: model)
+            
+            // TEMP
+            viewState.toast = .success("Successfully set.")
         } catch(let e) {
             viewState.toast = .error(.error(e))
         }

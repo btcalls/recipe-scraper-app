@@ -389,4 +389,19 @@ final class RecipeWeekMenu: AppModel {
         try container.encode(imageURL, forKey: .imageURL)
         try container.encode(date, forKey: .date)
     }
+    
+    static var withinThisWeek: FetchDescriptor<RecipeWeekMenu> {
+        let now = Date.now
+        let calendar = Calendar.current
+        let startDate = calendar.dateComponents(
+            [.calendar, .yearForWeekOfYear, .weekOfYear],
+            from: now
+        ).date!
+        let endDate = calendar.date(byAdding: .day, value: 7, to: startDate)!
+        let descriptor = FetchDescriptor<RecipeWeekMenu>(predicate: #Predicate {
+            (startDate...endDate).contains($0.date)
+        }, sortBy: [SortDescriptor(\.date)])
+        
+        return descriptor
+    }
 }
