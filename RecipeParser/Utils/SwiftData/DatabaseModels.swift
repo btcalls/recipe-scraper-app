@@ -350,6 +350,8 @@ final class Ingredient: AppModel {
 
 @Model
 final class RecipeWeekMenu: AppModel {
+    #Unique<RecipeWeekMenu>([\.recipeID, \.date])
+    
     @Relationship(deleteRule: .nullify, inverse: \Recipe.id)
     var recipeID: String
     var name: String
