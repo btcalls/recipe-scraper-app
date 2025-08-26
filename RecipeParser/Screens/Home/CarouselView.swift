@@ -1,5 +1,5 @@
 //
-//  WeeklyView.swift
+//  CarouselView.swift
 //  RecipeParser
 //
 //  Created by Jason Jon Carreos on 21/7/2025.
@@ -8,12 +8,17 @@
 import SwiftUI
 import SwiftData
 
-struct WeeklyView: View {
+struct CarouselView: View {
     @ScaledMetric private var width: CGFloat = 150
     @ScaledMetric private var labelHeight: CGFloat = 75
     @ScaledMetric private var spacing: CGFloat = 10
     @State private var currentRecipe: Recipe?
-    @Query(RecipeWeekMenu.withinThisWeek) private var recipes: [RecipeWeekMenu] = []
+    
+    private var recipes: [Recipe] {
+        let items = try? MockService.shared.getRecipes()
+        
+        return items ?? []
+    }
     
     private var weekday: Text {
         return Text(Date.now.formatted(.dateTime.weekday(.wide)))
@@ -78,5 +83,5 @@ struct WeeklyView: View {
 }
 
 #Preview {
-    WeeklyView()
+    CarouselView()
 }
