@@ -27,9 +27,6 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    WeeklyView()
-                        .frame(height: height)
-                    
                     SeeAllButton()
                         .navigate(to: RecipeListView(isEmpty: $isEmpty))
                         .remove(if: isEmpty)
