@@ -37,14 +37,7 @@ private struct BaseView: View {
                 
             case .full:
                 BaseListView(items: items)
-                    .navigationTitle("")
-                    .toolbar {
-                        ToolbarItem(placement: .principal) {
-                            Text(String.allRecipes)
-                                .font(.title3)
-                                .fontWeight(.semibold)
-                        }
-                    }
+                    .navigationTitle(String.allRecipes)
                     .padding()
             }
         }
@@ -86,7 +79,6 @@ struct RecipeListView: View {
     @Query private var items: [Recipe]
     @ScaledMetric private var spacing: CGFloat = 20
     @State private var isFavourites: Bool = false
-    @State private var isSort: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
@@ -118,31 +110,31 @@ struct RecipeListView: View {
                     type: searchContext.query.isEmpty ? .generic :
                             .search(searchContext.query)
                 )
-                .searchable(
-                    text: $searchContext.query,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: Text(String.searchRecipe)
-                )
-                .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    BottomControlView {
+                .toolbar {
+                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
+                    ToolbarSpacer(.flexible, placement: .bottomBar)
+                    
+                    ToolbarItem(placement: .bottomBar) {
                         SortControlView<Recipe>(
                             sortItem: $sortItem
                                 .animation(.customInteractiveSpring),
-                            sortOrder: $sortOrder.animation(.customInteractiveSpring),
-                            isEnabled: $isSort.animation(.customInteractiveSpring),
+                            sortOrder: $sortOrder.animation(.customInteractiveSpring)
                         )
-                        
-                        Toggle($isFavourites.animation(.customInteractiveSpring))
+                    }
+                    
+                    ToolbarItem(placement: .bottomBar) {
+                        Toggle($isFavourites)
                             .toggleStyle(
                                 CustomToggleStyle(
                                     icons: (on: .bookmarkFill, off: .bookmark)
                                 )
                             )
-                            .remove(if: isSort)
                     }
-                    .buttonStyle(CustomButtonStyle())
-                    .scale(.padding(.horizontal), 10)
                 }
+                .searchable(
+                    text: $searchContext.query,
+                    prompt: Text(String.searchRecipe),
+                )
         }
     }
 }
