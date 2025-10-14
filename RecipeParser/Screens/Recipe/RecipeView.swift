@@ -50,32 +50,15 @@ private struct TimeDetailsView: View {
 
 private struct DetailsView: View {
     let recipe: Recipe
-    
-    var onAction: @MainActor () -> Void
-    
+        
     @ScaledMetric private var spacing: CGFloat = 10
-    @ScaledMetric private var xOffset: CGFloat = -10
-    @ScaledMetric private var yOffset: CGFloat = -55
     
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
-            HStack(alignment: .top, spacing: spacing) {
-                Text(recipe.name)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Spacer()
-                
-                IconButton(
-                    recipe.isFavorite ? .bookmarkFill : .bookmark,
-                    size: .lg
-                ) {
-                    onAction()
-                }
-                .offset(x: xOffset, y: yOffset)
-            }
-            .imageScale(.large)
+            Text(recipe.name)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .font(.largeTitle)
+                .fontWeight(.bold)
             
             Text(recipe.detail)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -170,14 +153,10 @@ struct RecipeView: View {
                             .scale(.height(), 300)
                             .fitToAspectRatio(.fourToThree)
                             .clipTo(RoundedRectangle(cornerRadius: .lg))
-                            .scale(.padding(.vertical), 10)
+                            .padding(.vertical, 10)
                             
-                        DetailsView(recipe: recipe) {
-                            Task {
-                                try? await onToggleFavorite()
-                            }
-                        }
-                        .id(titleID)
+                        DetailsView(recipe: recipe)
+                            .id(titleID)
                         
                         TimeDetailsView(recipe: recipe)
                         
@@ -199,29 +178,38 @@ struct RecipeView: View {
                     }
                     .scrollTargetLayout()
                     .scale(.padding(.horizontal), 20)
+                    .scrollEdgeEffectStyle(.hard, for: .all)
                 }
-                .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    BottomControlView {
-                        IconButton(.checkmark, size: .lg) {
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button {
                             isCookCompleted.toggle()
+                        } label: {
+                            Symbol.checkmark.image
                         }
-                        .remove(if: title.isEmpty)
-                        
-                        Toggle($isStarted)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
                         
                         Toggle($isCalendarDisplayed)
                             .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
-                        
-                        IconButton(recipe.isFavorite ? .bookmarkFill : .bookmark) {
+                    }
+                    
+                    ToolbarSpacer(.fixed, placement: .bottomBar)
+                    
+                    ToolbarItem(placement: .bottomBar) {
+                        Button {
                             Task {
                                 try? await onToggleFavorite()
                             }
+                        } label: {
+                            recipe.isFavorite ? Symbol.bookmarkFill.image : Symbol.bookmark.image
                         }
-                        .remove(if: title.isEmpty)
                     }
-                    .animation(.customInteractiveSpring, value: title)
-                    .scale(.padding(.trailing), 20)
+                    
+                    ToolbarSpacer(.flexible, placement: .bottomBar)
+                    
+                    ToolbarItem(placement: .bottomBar) {
+                        Toggle($isStarted)
+                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                    }
                 }
                 .fullScreenCover(isPresented: $isStarted) {
                     InstructionsView(items: recipe.detailedInstructions) {
@@ -312,5 +300,7 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(MockService.shared.getRecipe())
+    NavigationStack {
+        RecipeView(MockService.shared.getRecipe())
+    }
 }

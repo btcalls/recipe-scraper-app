@@ -34,22 +34,13 @@ struct InstructionsView: View {
     }
     
     var body: some View {
-        VStack(alignment: .center, spacing: spacing) {
-            HStack {
-                Spacer()
-                
-                IconButton(.x, kind: .muted) {
-                    dismiss()
-                }
-                .imageScale(.large)
-            }
-            
+        NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: spacing) {
                     if let title {
                         Text(title)
-                            .font(.headline)
-                            .fontWeight(.light)
+                            .font(.title3)
+                            .fontWeight(.semibold)
                             .lineLimit(2)
                         
                         Divider()
@@ -61,45 +52,46 @@ struct InstructionsView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .lineSpacing(7.5)
                         .font(.title3)
-                        .fontWeight(.semibold)
+                        .fontWeight(.regular)
                         
                 }
-                .scale(.padding(.all), 20)
-                .background(Color.appBackground)
-                .clipShape(RoundedRectangle(cornerRadius: .regular))
-                .shadow()
             }
-            .scrollIndicators(.automatic)
-            .scrollClipDisabled()
-            .scrollBounceBehavior(.basedOnSize)
-            .scale(.padding(.top), 20)
-            
-            Spacer()
-            
-            BottomControlView {
-                IconButton(.arrowLeft) {
-                    prev()
+            .toolbar {
+                Button(.x, role: .close) {
+                    dismiss()
                 }
-                .disabled(isPrevDisabled)
                 
-                IconButton(.checkmark, size: .lg) {
+                Button(.checkmark, role: .confirm) {
                     isCookCompleted.toggle()
                 }
                 .remove(if: !isNextDisabled)
-                
-                IconButton(.arrowRight) {
-                    next()
-                }
-                .disabled(isNextDisabled)
             }
-            .animation(
-                .customInteractiveSpring,
-                value: instruction
-            )
+            .safeAreaBar(edge: .bottom, content: {
+                GlassEffectContainer {
+                    HStack {
+                        Button(.arrowLeft) {
+                            prev()
+                        }
+                        .padding()
+                        .glassEffect(.regular.interactive())
+                        .disabled(isPrevDisabled)
+                        
+                        Button(.arrowRight) {
+                            next()
+                        }
+                        .padding()
+                        .glassEffect(.regular.interactive())
+                        .disabled(isNextDisabled)
+                    }
+                }
+            })
+            .scrollIndicators(.automatic)
+            .scrollClipDisabled()
+            .scrollBounceBehavior(.basedOnSize)
+            .scale(.padding(.horizontal), 20)
         }
-        .animation(.customEaseInOut, value: instruction)
         .presentationBackgroundInteraction(.disabled)
-        .presentationBackground(.ultraThinMaterial)
+        .presentationDetents([.fraction(0.5), .fraction(0.75), .large])
         .alert(String.success, isPresented: $isCookCompleted) {
             Button(String.markComplete) {
                 dismiss()
@@ -110,7 +102,6 @@ struct InstructionsView: View {
         } message: {
             Text(String.cookCompleteConfirmation)
         }
-        .scale(.padding(.horizontal), 20)
     }
     
     private func prev() {
@@ -157,9 +148,18 @@ struct InstructionsView: View {
 }
 
 #Preview {
-    InstructionsView(
-        items: MockService.shared.getRecipe().detailedInstructions
-    ) {
-        // No-op
+    @Previewable @State var isPresenting = true
+    
+    VStack {
+        Toggle(isOn: $isPresenting) {
+            Text("Present")
+        }
+    }
+    .sheet(isPresented: $isPresenting) {
+        InstructionsView(
+            items: MockService.shared.getRecipe().detailedInstructions
+        ) {
+            // No-op
+        }
     }
 }

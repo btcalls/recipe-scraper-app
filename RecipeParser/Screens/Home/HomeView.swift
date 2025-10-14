@@ -8,15 +8,6 @@
 import SwiftUI
 import SwiftData
 
-private struct SeeAllButton: View {
-    var body: some View {
-        Label(.seeAll, sfSymbol: .chevronRightCircle)
-            .labelStyle(CustomLabelStyle(.titleIcon()))
-            .buttonStyle(CustomButtonStyle())
-            .foregroundStyle(Color.accentColor)
-    }
-}
-
 struct HomeView: View {
     @ScaledMetric private var height: CGFloat = 275
     @ScaledMetric private var spacing: CGFloat = 20
@@ -27,9 +18,14 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    SeeAllButton()
-                        .navigate(to: RecipeListView(isEmpty: $isEmpty))
-                        .remove(if: isEmpty)
+                    NavigationLink(destination: RecipeListView(isEmpty: $isEmpty)) {
+                        Label(
+                            String.seeAll,
+                            systemImage: Symbol.chevronRightCircle.rawValue
+                        )
+                        .padding(.vertical, 5)
+                    }
+                    .buttonStyle(.glass)
                     
                     RecipeListView(.first(3), isEmpty: $isEmpty)
                     
@@ -39,23 +35,15 @@ struct HomeView: View {
             }
             .background(Color.appBackground)
             .scrollBounceBehavior(.basedOnSize)
-            .navigationTitle("")
             .toolbar {
                 if !isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
+                    ToolbarItem(placement: .primaryAction) {
                         Button {
                             isBrowserPresented = true
                         } label: {
                             Symbol.plus.image
-                                .bold()
                         }
                     }
-                }
-                
-                ToolbarItem(placement: .topBarLeading) {
-                    Text(String.yourRecipes)
-                        .font(.title3)
-                        .fontWeight(.semibold)
                 }
             }
             .emptyView(
@@ -80,6 +68,8 @@ struct HomeView: View {
 }
 
 #Preview {
-    HomeView()
-        .modelContainer(MockService.shared.modelContainer(withSample: true))
+    NavigationStack {
+        HomeView()
+            .modelContainer(MockService.shared.modelContainer(withSample: true))
+    }
 }

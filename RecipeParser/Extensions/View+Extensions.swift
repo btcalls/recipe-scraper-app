@@ -208,6 +208,14 @@ extension View {
 
 // MARK: Views
 
+extension Button where Label == Image {
+    init(_ symbol: Symbol, role: ButtonRole? = .none, action: @escaping @MainActor () -> Void) {
+        self.init(role: role, action: action) {
+            symbol.image
+        }
+    }
+}
+
 extension Divider {
     /// Apply app-standard modifiers to the `Divider`.
     /// - Returns: Modified divider.
