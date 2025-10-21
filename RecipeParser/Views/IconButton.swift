@@ -7,18 +7,31 @@
 
 import SwiftUI
 
-private struct ButtonView<V>: View where V : View {
-    var display: IconButton.Display
-    var bg: V
-    var size: IconButton.Size
-    var tint: Color?
+struct IconButton: AppButton {
+    typealias Display = Symbol
+    typealias ButtonKind = Kind
+    
+    var display: Symbol
+    var kind: Kind = .regular
+    var size: Size = .regular
     var action: @MainActor () -> Void
     
+    @Environment(\.isEnabled) private var isEnabled
+    
+    private var glass: Glass {
+        switch kind {
+        case .regular:
+            return .regular
+        
+        case .muted:
+            return .clear
+        }
+    }
     private var imageScale: Image.Scale {
         switch size {
         case .regular:
             return .medium
-        
+            
         case .lg:
             return .large
         }
@@ -29,47 +42,10 @@ private struct ButtonView<V>: View where V : View {
             display.image
                 .fontWeight(.medium)
                 .imageScale(imageScale)
-                .scale(.heightWidth(), size.rawValue)
-                .background { bg }
-                .foregroundStyle(tint ?? Color.appForeground)
-                .clipTo(.circle)
                 .contentTransition(.symbolEffect)
         }
-        .buttonStyle(CustomButtonStyle())
-    }
-}
-
-struct IconButton: AppButton {
-    typealias Display = Symbol
-    typealias ButtonKind = Kind
-    
-    var display: Symbol
-    var kind: Kind = .regular
-    var size: Size = .regular
-    var tint: Color? = .accentColor
-    var action: @MainActor () -> Void
-    
-    var body: some View {
-        switch kind {
-        case .regular:
-            ButtonView(
-                display: display,
-                bg: Color.appBackground.brightness(0.1),
-                size: size,
-                tint: tint,
-                action: action
-            )
-                .shadow()
-        
-        case .muted:
-            ButtonView(
-                display: display,
-                bg: Color.clear,
-                size: size,
-                tint: tint,
-                action: action
-            )
-        }
+        .padding()
+        .glassEffect(glass.interactive(isEnabled), in: .circle)
     }
 }
 
@@ -86,13 +62,11 @@ extension IconButton {
     
     init(
         _ display: Symbol,
-        tint: Color = .accentColor,
         kind: Kind = .regular,
         size: Size = .regular,
         action: @escaping @MainActor () -> Void
     ) {
         self.display = display
-        self.tint = tint
         self.kind = kind
         self.size = size
         self.action = action
@@ -102,9 +76,11 @@ extension IconButton {
 #Preview {
     @Previewable @State var isEnabled = false
     
-    IconButton(.bookmark, size: .lg) {}
-    IconButton(isEnabled ? .bookmarkFill : .bookmark, tint: .orange) {
+    IconButton(.checkmark, size: .lg) {}
+    IconButton(isEnabled ? .bookmarkFill : .bookmark) {
         isEnabled.toggle()
     }
-    IconButton(.x, tint: .red, kind: .muted) {}
+    .tint(.yellow)
+    IconButton(.x, kind: .muted) {}
+        .disabled(true)
 }

@@ -69,18 +69,14 @@ struct InstructionsView: View {
             .safeAreaBar(edge: .bottom, content: {
                 GlassEffectContainer {
                     HStack {
-                        Button(.arrowLeft) {
+                        IconButton(.arrowLeft) {
                             prev()
                         }
-                        .padding()
-                        .glassEffect(.regular.interactive())
                         .disabled(isPrevDisabled)
                         
-                        Button(.arrowRight) {
+                        IconButton(.arrowRight) {
                             next()
                         }
-                        .padding()
-                        .glassEffect(.regular.interactive())
                         .disabled(isNextDisabled)
                     }
                 }

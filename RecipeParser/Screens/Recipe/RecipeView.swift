@@ -182,33 +182,25 @@ struct RecipeView: View {
                 }
                 .toolbar {
                     ToolbarItemGroup(placement: .bottomBar) {
-                        Button {
-                            isCookCompleted.toggle()
-                        } label: {
-                            Symbol.checkmark.image
-                        }
-                        
                         Toggle($isCalendarDisplayed)
                             .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
-                    }
                     
-                    ToolbarSpacer(.fixed, placement: .bottomBar)
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Button {
+                        Button(recipe.isFavorite ? .bookmarkFill : .bookmark) {
                             Task {
                                 try? await onToggleFavorite()
                             }
-                        } label: {
-                            recipe.isFavorite ? Symbol.bookmarkFill.image : Symbol.bookmark.image
                         }
                     }
                     
                     ToolbarSpacer(.flexible, placement: .bottomBar)
                     
-                    ToolbarItem(placement: .bottomBar) {
+                    ToolbarItemGroup(placement: .bottomBar) {
                         Toggle($isStarted)
                             .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+                        
+                        Button(.checkmark, role: .confirm) {
+                            isCookCompleted.toggle()
+                        }
                     }
                 }
                 .fullScreenCover(isPresented: $isStarted) {
