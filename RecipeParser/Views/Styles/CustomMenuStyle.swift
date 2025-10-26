@@ -10,19 +10,15 @@ import SwiftUI
 struct CustomMenuStyle: MenuStyle {
     func makeBody(configuration: Configuration) -> some View {
         Menu(configuration)
-            .scale(.padding(.vertical), 10)
-            .scale(.padding(.horizontal), 15)
-            .background(Color.appBackground.brightness(0.1))
-            .foregroundStyle(Color.accentColor)
-            .clipTo(.capsule)
-            .shadow()
-            .buttonStyle(CustomButtonStyle())
+            .buttonStyle(.glass)
+            .padding()
     }
 }
 
 #Preview {
     Menu("Test") {
-        Button(action: { }) { Text("Test") }
+        Button(action: { }) { Text("Menu 1") }
+        Button(action: { }) { Text("Menu 2") }
     }
     .menuStyle(CustomMenuStyle())
 }

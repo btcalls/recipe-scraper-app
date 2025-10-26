@@ -18,31 +18,26 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    NavigationLink(destination: RecipeListView(isEmpty: $isEmpty)) {
-                        Label(
-                            String.seeAll,
-                            systemImage: Symbol.chevronRightCircle.rawValue
-                        )
-                        .padding(.vertical, 5)
-                    }
-                    .buttonStyle(.glass)
+                    Label(.seeAll, sfSymbol: .chevronRightCircle)
+                        .padding()
+                        .asLink(value: String.seeAll)
+                        .remove(if: isEmpty)
                     
-                    RecipeListView(.first(3), isEmpty: $isEmpty)
+                    RecipeListView(view: .first(3), isEmpty: $isEmpty)
                     
                     Spacer()
                 }
                 .padding()
+                .navigationDestination(for: String.self) { value in
+                    RecipeListView(isEmpty: $isEmpty)
+                }
             }
             .background(Color.appBackground)
             .scrollBounceBehavior(.basedOnSize)
             .toolbar {
                 if !isEmpty {
-                    ToolbarItem(placement: .primaryAction) {
-                        Button {
-                            isBrowserPresented = true
-                        } label: {
-                            Symbol.plus.image
-                        }
+                    Button(.plus, role: .confirm) {
+                        isBrowserPresented = true
                     }
                 }
             }
@@ -64,6 +59,7 @@ struct HomeView: View {
                     .ignoresSafeArea()
             }
         }
+        .navigationBarTitleDisplayMode(.inline) // or .inline, .large
     }
 }
 

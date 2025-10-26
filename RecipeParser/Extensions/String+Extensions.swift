@@ -49,11 +49,12 @@ extension String {
     static var noRecipesDescription: AttributedString {
         let actionString = "Add Recipe"
         var attrString = AttributedString(
-            "You haven't saved any recipes yet. Start by pressing the \(actionString) button."
+            "Save your first recipe by pressing the \(actionString) button."
         )
         
         if let range = attrString.range(of: actionString) {
             attrString[range].foregroundColor = Color.accentColor
+            attrString[range].font = .default.bold()
         }
         
         return attrString

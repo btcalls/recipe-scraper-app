@@ -15,12 +15,18 @@ private struct BaseListView: View {
     
     var body: some View {
         VStack(spacing: spacing) {
-            ForEach(items, id: \.id) {
-                RecipeRow($0)
-                    .navigate(to: RecipeView($0))
+            ForEach(items, id: \.id) { item in
+                RecipeRow(item)
+                    .asLink(
+                        value: item,
+                        shape: RoundedRectangle(cornerRadius: .regular)
+                    )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationDestination(for: Recipe.self) { recipe in
+            RecipeView(recipe: recipe)
+        }
     }
 }
 
@@ -140,7 +146,7 @@ struct RecipeListView: View {
 }
 
 extension RecipeListView {
-    init(_ mode: Mode = .full, isEmpty: Binding<Bool>) {
+    init(view mode: Mode = .full, isEmpty: Binding<Bool>) {
         self.mode = mode
         self._isEmpty = isEmpty
         
@@ -177,3 +183,4 @@ extension RecipeListView {
             .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
     }
 }
+

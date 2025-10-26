@@ -78,7 +78,6 @@ struct WideButton: AppButton {
     var body: some View {
         Button(role: role, action: action) {
             ImageAndLabelView(display: display, kind: kind)
-                .bold()
                 .padding()
         }
         .disabled(isDisabled)

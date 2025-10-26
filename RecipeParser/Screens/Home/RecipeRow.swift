@@ -17,13 +17,14 @@ struct RecipeRow: View {
         HStack(alignment: .center, spacing: spacing) {
             CustomImage(kind: .url(recipe.imageURL))
                 .frame(width: 80, height: 80)
-                .clipTo(RoundedRectangle(cornerRadius: .sm))
+                .clipTo(.rect(corners: .concentric(minimum: .sm), isUniform: true))
             
             VStack(alignment: .leading, spacing: bodySpacing) {
                 Text(recipe.name)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.headline)
                     .lineLimit(2)
+                    .multilineTextAlignment(.leading)
                 
                 Text(recipe.categoriesCuisinesLabel)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -37,11 +38,7 @@ struct RecipeRow: View {
                 .foregroundStyle(Color.yellow)
                 .remove(if: !recipe.isFavorite)
         }
-        .scale(.padding(.vertical), 10)
-        .scale(.padding(.horizontal), 15)
-        .background(Color.appBackground.brightness(0.1))
-        .rounded(cornerRadius: .regular)
-        .shadow()
+        .scale(.padding(.all), 15)
     }
 }
 
@@ -53,4 +50,5 @@ extension RecipeRow {
 
 #Preview {
     RecipeRow(recipe: MockService.shared.getRecipe())
+        .asLink(value: MockService.shared.getRecipe())
 }

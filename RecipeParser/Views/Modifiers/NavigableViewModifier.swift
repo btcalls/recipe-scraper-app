@@ -7,17 +7,27 @@
 
 import SwiftUI
 
-struct NavigableViewModifier<Destination>: ViewModifier where Destination : View {
-    @ViewBuilder var destination: Destination
+struct NavigableViewModifier<Value, S: RoundedRectangularShape>: ViewModifier where Value : Hashable {
+    var value: Value
+    var shape: S
+    
+    @Environment(\.isEnabled) private var isEnabled
     
     func body(content: Content) -> some View {
-        NavigationLink {
-            destination
-        } label: {
+        NavigationLink(value: value) {
             content
         }
-        .buttonStyle(CustomButtonStyle())
         .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
+        .buttonStyle(.plain)
+        .containerShape(shape)
+        .glassEffect(.regular.interactive(isEnabled), in: shape)
+    }
+}
+
+#Preview {
+    NavigationStack {
+        RecipeRow(MockService().getRecipe())
+            .asLink(value: String.seeAll)
     }
 }
