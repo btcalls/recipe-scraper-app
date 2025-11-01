@@ -18,9 +18,9 @@ private struct TimeView: View {
                 .frame(alignment: .leading)
             
             Text(measurement, format: .measurement(width: .abbreviated))
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
                 .italic()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
@@ -56,13 +56,13 @@ private struct DetailsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             Text(recipe.name)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .font(.largeTitle)
                 .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             Text(recipe.detail)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .scale(.padding(.vertical), 10)
         }
     }
@@ -75,10 +75,9 @@ private struct HeaderView: View {
         Text(value)
             .font(.title2)
             .fontWeight(.semibold)
+            .lineLimit(2)
             .frame(maxWidth: .infinity, alignment: .leading)
             .scale(.padding(.vertical), 10)
-            .background(Color.appBackground)
-            .lineLimit(2)
     }
 }
 
@@ -99,31 +98,13 @@ private struct InstructionSection: View {
     var body: some View {
         Section {
             ForEach(items, id: \.self) {
-                InstructionView(value: $0)
+                Text($0)
+                    .bulleted()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fontWeight(.light)
             }
         } header: {
             HeaderView(value: title)
-        }
-    }
-}
-
-private struct InstructionView: View {
-    let value: String
-    
-    @ScaledMetric private var bulletFont: CGFloat = 7.5
-    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
-    @ScaledMetric private var spacing: CGFloat = 10
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: spacing) {
-            Symbol.bullet.image
-                .font(.system(size: bulletFont))
-                .imageScale(.small)
-                .offset(y: bulletYOffset)
-            
-            Text(value)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fontWeight(.light)
         }
     }
 }
@@ -140,15 +121,36 @@ struct RecipeView: View {
     @State private var title: String = ""
     @State private var viewState = ViewState()
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .bottomBar) {
+//            Toggle($isCalendarDisplayed)
+//                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
+            
+            Button(recipe.isFavorite ? .bookmarkFill : .bookmark) {
+                Task {
+                    try? await onToggleFavorite()
+                }
+            }
+        }
+        
+        ToolbarSpacer(.flexible, placement: .bottomBar)
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            Toggle($isStarted)
+                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+            
+            Button(.checkmark, role: .confirm) {
+                isCookCompleted.toggle()
+            }
+        }
+    }
+    
     var body: some View {
         LoadableView(viewState: viewState) {
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(
-                        alignment: .center,
-                        spacing: spacing,
-                        pinnedViews: .sectionHeaders
-                    ) {
+                    LazyVStack(alignment: .center, spacing: spacing) {
                         CustomImage(kind: .url(recipe.imageURL, toCache: true))
                             .scale(.height(), 300)
                             .fitToAspectRatio(.fourToThree)
@@ -156,7 +158,7 @@ struct RecipeView: View {
                             .padding(.vertical, 10)
                             
                         DetailsView(recipe: recipe)
-                            .id(titleID)
+                            .id(recipe.name)
                         
                         TimeDetailsView(recipe: recipe)
                         
@@ -178,30 +180,10 @@ struct RecipeView: View {
                     }
                     .scrollTargetLayout()
                     .scale(.padding(.horizontal), 20)
-                    .scrollEdgeEffectStyle(.hard, for: .all)
+                    .scale(.padding(.bottom), 40)
                 }
                 .toolbar {
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Toggle($isCalendarDisplayed)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
-                    
-                        Button(recipe.isFavorite ? .bookmarkFill : .bookmark) {
-                            Task {
-                                try? await onToggleFavorite()
-                            }
-                        }
-                    }
-                    
-                    ToolbarSpacer(.flexible, placement: .bottomBar)
-                    
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Toggle($isStarted)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
-                        
-                        Button(.checkmark, role: .confirm) {
-                            isCookCompleted.toggle()
-                        }
-                    }
+                    toolbarContent
                 }
                 .fullScreenCover(isPresented: $isStarted) {
                     InstructionsView(items: recipe.detailedInstructions) {
@@ -232,9 +214,10 @@ struct RecipeView: View {
             }
             .background(Color.appBackground)
             .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
-            .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
-                title = ids.contains { $0 == titleID } ? "" : recipe.name
+            .onScrollTargetVisibilityChange(idType: String.self) { ids in
+                title = ids.contains { $0 == recipe.name } ? "" : recipe.name
             }
         }
     }
