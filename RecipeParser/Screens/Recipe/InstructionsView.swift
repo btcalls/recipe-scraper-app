@@ -87,7 +87,7 @@ struct InstructionsView: View {
             .scale(.padding(.horizontal), 20)
         }
         .presentationBackgroundInteraction(.disabled)
-        .presentationDetents([.fraction(0.5), .fraction(0.75), .large])
+        .presentationDetents([.fraction(0.65), .large])
         .alert(String.success, isPresented: $isCookCompleted) {
             Button(String.markComplete) {
                 dismiss()

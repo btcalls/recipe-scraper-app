@@ -185,13 +185,6 @@ struct RecipeView: View {
                 .toolbar {
                     toolbarContent
                 }
-                .fullScreenCover(isPresented: $isStarted) {
-                    InstructionsView(items: recipe.detailedInstructions) {
-                        Task {
-                            try? await onCompleteRecipe()
-                        }
-                    }
-                }
                 .alert(String.success, isPresented: $isCookCompleted) {
                     Button(String.markComplete) {
                         Task {
@@ -202,12 +195,21 @@ struct RecipeView: View {
                 } message: {
                     Text(String.cookCompleteConfirmation)
                 }
+                .sheet(isPresented: $isStarted) {
+                    InstructionsView(items: recipe.detailedInstructions) {
+                        Task {
+                            try? await onCompleteRecipe()
+                        }
+                    }
+                }
                 .sheet(isPresented: $isCalendarDisplayed) {
                     // TODO:
                 } content: {
                     Button("Add") {
                         Task {
                             try? await onScheduleRecipe()
+                            
+                            isCalendarDisplayed = false
                         }
                     }
                 }
@@ -232,7 +234,7 @@ struct RecipeView: View {
             
             presentationMode.wrappedValue.dismiss()
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
 
@@ -244,7 +246,7 @@ struct RecipeView: View {
             
             try await actor.save(recipe: recipe)
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
     
@@ -263,7 +265,7 @@ struct RecipeView: View {
             // TEMP
             viewState.toast = .success("Successfully set.")
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
 }

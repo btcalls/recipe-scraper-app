@@ -21,6 +21,7 @@ struct OnboardingCard<Content>: View where Content : View {
             image
                 .resizable()
                 .scaledToFit()
+                .clipShape(.rect(corners: .concentric(minimum: .sm)))
                 .shadow()
                 .containerRelativeFrame(.vertical,
                                         count: 100,
@@ -33,7 +34,6 @@ struct OnboardingCard<Content>: View where Content : View {
                 .fontWeight(.semibold)
                 .lineLimit(2)
                 .scale(.padding(.horizontal), 20)
-                .shadow()
             
             caption
                 .foregroundStyle(.white)
@@ -43,15 +43,7 @@ struct OnboardingCard<Content>: View where Content : View {
             Spacer()
             
             if let (title, handler) = action {
-                Button(action: handler) {
-                    Text(title)
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .scale(.padding(.horizontal), 20)
-                        .scale(.padding(.vertical), 10)
-                }
-                .rounded(cornerRadius: .regular, lineWidth: 1, color: .white)
-                .tint(.white)
+                WideButton(title, action: handler)
             }
             
             Spacer()

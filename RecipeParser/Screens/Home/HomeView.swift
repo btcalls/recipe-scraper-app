@@ -59,7 +59,7 @@ struct HomeView: View {
                     .ignoresSafeArea()
             }
         }
-        .navigationBarTitleDisplayMode(.inline) // or .inline, .large
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -118,6 +118,7 @@ struct RecipeListView: View {
                 )
                 .toolbar {
                     DefaultToolbarItem(kind: .search, placement: .bottomBar)
+                    
                     ToolbarSpacer(.flexible, placement: .bottomBar)
                     
                     ToolbarItem(placement: .bottomBar) {

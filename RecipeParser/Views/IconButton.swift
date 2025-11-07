@@ -31,7 +31,7 @@ struct IconButton: AppButton {
         switch size {
         case .regular:
             return .medium
-            
+        
         case .lg:
             return .large
         }
