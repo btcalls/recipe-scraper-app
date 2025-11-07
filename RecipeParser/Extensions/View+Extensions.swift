@@ -199,14 +199,26 @@ extension View {
 
 extension View {
     /// Modifier to apply navigation capabilities to this view.
-    /// - Parameter destination: The destination view.
+    /// - Parameter value: The value in which navigation will be based of.
+    /// - Parameter shape: The shape to apply to both glass and view containers.
     /// - Returns: Modifed view with navigation in place.
-    func navigate<Destination>(to destination: Destination) -> some View where Destination : View {
-        return modifier(NavigableViewModifier(destination: { destination }))
+    func asLink<Value, S: RoundedRectangularShape>(
+        value: Value,
+        shape: S = Capsule()
+    ) -> some View where Value : Hashable {
+        return modifier(NavigableViewModifier(value: value, shape: shape))
     }
 }
 
 // MARK: Views
+
+extension Button where Label == Image {
+    init(_ symbol: Symbol, role: ButtonRole? = .none, action: @escaping @MainActor () -> Void) {
+        self.init(role: role, action: action) {
+            symbol.image
+        }
+    }
+}
 
 extension Divider {
     /// Apply app-standard modifiers to the `Divider`.
@@ -214,6 +226,12 @@ extension Divider {
     func asStandard() -> some View {
         return scale(.height(), 1)
             .background(.secondary.opacity(0.5))
+    }
+}
+
+extension Edge.Corner.Style {
+    static func concentric(minimum radius: CornerRadius) -> Edge.Corner.Style {
+        return .concentric(minimum: .fixed(radius.rawValue))
     }
 }
 
@@ -251,6 +269,12 @@ extension RoundedRectangle {
         style: RoundedCornerStyle = .continuous
     ) {
         self.init(cornerRadius: value.rawValue, style: style)
+    }
+}
+
+extension Text {
+    func bulleted() -> Text {
+        return Text("• \(self)")
     }
 }
 

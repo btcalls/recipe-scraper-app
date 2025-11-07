@@ -16,7 +16,7 @@ private struct IconView: View {
         case .info(_:):
             Symbol.info.image
             
-        case .error(_:):
+        case .failure(_:):
             Symbol.xmarkCircle.image
             
         case .success(_:):
@@ -35,13 +35,9 @@ private struct CloseButton: View {
     
     var body: some View {
         switch state {
-        case .info(_:), .error(_:), .success(_:):
-            Button(action: onDismiss) {
-                Symbol.x.image
-                    .frame(width: 40, height: 40)
-                    .foregroundStyle(Color.appForeground.opacity(0.75))
-                    .imageScale(.medium)
-            }
+        case .info(_:), .failure(_:), .success(_:):
+            Button(.x, role: .close, action: onDismiss)
+                .buttonStyle(.glass)
             
         default:
             EmptyView()
@@ -57,7 +53,7 @@ struct ToastView: View {
     
     private var caption: String {
         switch state {
-        case .error(let error):
+        case .failure(let error):
             return error.description
         
         case .info(let text), .success(let text), .loading(let text):
@@ -69,7 +65,7 @@ struct ToastView: View {
         case .info(_:):
             return .blue
             
-        case .error(_:):
+        case .failure(_:):
             return .red
             
         case .success(_:):
@@ -93,21 +89,22 @@ struct ToastView: View {
             CloseButton(state: state, onDismiss: onDismiss)
         }
         .frame(minHeight: 45)
-        .font(.caption)
+        .font(.callout)
         .fontWeight(.medium)
         .scale(.padding(.vertical), 10)
         .scale(.padding(.horizontal), 15)
         .foregroundStyle(Color.appForeground)
-        .background(Color.appBackground)
-        .rounded(cornerRadius: .regular, lineWidth: 1, color: themeColor)
-        .shadow()
+        .glassEffect(
+            .regular.tint(themeColor.opacity(0.15)),
+            in: RoundedRectangle(cornerRadius: .regular)
+        )
     }
 }
 
 extension ToastView {
     enum State: Equatable {
         case info(String)
-        case error(CustomError)
+        case failure(CustomError)
         case success(String)
         case loading(String = .processing)
     }
@@ -127,7 +124,7 @@ extension ToastView.State {
             (.loading(let val1), .loading(let val2)):
             return val1 == val2
             
-        case (.error(let val1), .error(let val2)):
+        case (.failure(let val1), .failure(let val2)):
             return val1 == val2
         
         default:
@@ -139,7 +136,7 @@ extension ToastView.State {
 #Preview {
     VStack {
         ToastView(state: .info("This is a sample toast")) {}
-        ToastView(state: .error(CustomError.network(.authError))) {}
+        ToastView(state: .failure(CustomError.network(.authError))) {}
         ToastView(state: .success("Successful request.")) {}
         ToastView(state: .loading("Parsing recipe...")) {}
     }

@@ -15,10 +15,10 @@ private struct ImageAndLabelView: View {
     
     var body: some View {
         switch kind {
-        case .regular(let style), .wrapped(let style):
-            if let sfSymbol = display.icon, let style {
+        case .regular:
+            if let sfSymbol = display.icon {
                 Label(display.title, sfSymbol: sfSymbol)
-                    .labelStyle(CustomLabelStyle(style))
+                    .labelIconToTitleSpacing(spacing)
             } else {
                 Text(display.title)
             }
@@ -39,10 +39,10 @@ struct WideButton: AppButton {
     
     var display: (title: String, icon: Symbol?)
     var kind: Kind
-    var tint: Color?
     var role: ButtonRole? = .none
     var action: @MainActor () -> Void
     
+    @Environment(\.isEnabled) private var isEnabled
     @ScaledMetric private var spacing: CGFloat = 8
     
     private var isDisabled: Bool {
@@ -51,12 +51,12 @@ struct WideButton: AppButton {
             return true
             
         default:
-            return false
+            return !isEnabled
         }
     }
-    private var color: (bg: Color, tint: Color) {
+    private var color: (bg: Color?, tint: Color?) {
         if case .loading(_:) = kind {
-            return (.appBackground, .secondary)
+            return (nil, nil)
         }
         
         guard let role else {
@@ -65,10 +65,10 @@ struct WideButton: AppButton {
         
         switch role {
         case .destructive:
-            return (.red, .white)
+            return (nil, nil)
             
         case .cancel:
-            return (.appBackground, .appForeground)
+            return (nil, .appForeground)
         
         default:
             return (.accentColor, .white)
@@ -78,34 +78,24 @@ struct WideButton: AppButton {
     var body: some View {
         Button(role: role, action: action) {
             ImageAndLabelView(display: display, kind: kind)
-                .frame(maxWidth: .infinity)
-                .bold()
-                .scale(.height(isMinimum: true), 40)
-                .scale(.padding(.vertical), 10)
-                .scale(.padding(.horizontal), 15)
-                .background(color.bg)
-                .foregroundStyle(color.tint)
-                .tint(color.tint)
-                .clipTo(RoundedRectangle(cornerRadius: CornerRadius.sm.rawValue))
+                .padding()
         }
         .disabled(isDisabled)
-        .buttonStyle(CustomButtonStyle())
-        .compositingGroup()
-        .shadow()
+        .glassEffect(.regular.interactive(!isDisabled).tint(color.bg))
+        .tint(color.tint)
     }
 }
 
 extension WideButton {
     enum Kind {
-        case regular(CustomLabelStyle.Kind? = .iconTitle())
-        case wrapped(CustomLabelStyle.Kind? = .iconTitle())
+        case regular
         case loading(String = .processing)
     }
     
     internal init(
         _ title: String,
         icon: Symbol? = nil,
-        kind: Kind = .regular(),
+        kind: Kind = .regular,
         role: ButtonRole? = .none,
         action: @escaping @MainActor () -> Void
     ) {
@@ -121,7 +111,7 @@ extension WideButton {
         action: @escaping @MainActor () -> Void
     ) {
         self.display = (title, .none)
-        self.kind = .regular()
+        self.kind = .regular
         self.role = role
         self.action = action
     }
@@ -140,7 +130,7 @@ extension WideButton {
 
 #Preview {
     WideButton("Sample") {}
-    WideButton("Delete", icon: .x, role: .destructive) {}
+    WideButton("Delete", icon: .x, kind: .regular, role: .destructive) {}
     WideButton("Cancel", role: .cancel) {}
     WideButton.loading("Testing Button") {}
 }

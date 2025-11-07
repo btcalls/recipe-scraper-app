@@ -18,9 +18,9 @@ private struct TimeView: View {
                 .frame(alignment: .leading)
             
             Text(measurement, format: .measurement(width: .abbreviated))
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
                 .italic()
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
 }
@@ -50,36 +50,19 @@ private struct TimeDetailsView: View {
 
 private struct DetailsView: View {
     let recipe: Recipe
-    
-    var onAction: @MainActor () -> Void
-    
+        
     @ScaledMetric private var spacing: CGFloat = 10
-    @ScaledMetric private var xOffset: CGFloat = -10
-    @ScaledMetric private var yOffset: CGFloat = -55
     
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
-            HStack(alignment: .top, spacing: spacing) {
-                Text(recipe.name)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                
-                Spacer()
-                
-                IconButton(
-                    recipe.isFavorite ? .bookmarkFill : .bookmark,
-                    size: .lg
-                ) {
-                    onAction()
-                }
-                .offset(x: xOffset, y: yOffset)
-            }
-            .imageScale(.large)
+            Text(recipe.name)
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             Text(recipe.detail)
-                .frame(maxWidth: .infinity, alignment: .leading)
                 .fontWeight(.light)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .scale(.padding(.vertical), 10)
         }
     }
@@ -92,10 +75,9 @@ private struct HeaderView: View {
         Text(value)
             .font(.title2)
             .fontWeight(.semibold)
+            .lineLimit(2)
             .frame(maxWidth: .infinity, alignment: .leading)
             .scale(.padding(.vertical), 10)
-            .background(Color.appBackground)
-            .lineLimit(2)
     }
 }
 
@@ -116,31 +98,13 @@ private struct InstructionSection: View {
     var body: some View {
         Section {
             ForEach(items, id: \.self) {
-                InstructionView(value: $0)
+                Text($0)
+                    .bulleted()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fontWeight(.light)
             }
         } header: {
             HeaderView(value: title)
-        }
-    }
-}
-
-private struct InstructionView: View {
-    let value: String
-    
-    @ScaledMetric private var bulletFont: CGFloat = 7.5
-    @ScaledMetric private var bulletYOffset: CGFloat = 7.5
-    @ScaledMetric private var spacing: CGFloat = 10
-    
-    var body: some View {
-        HStack(alignment: .top, spacing: spacing) {
-            Symbol.bullet.image
-                .font(.system(size: bulletFont))
-                .imageScale(.small)
-                .offset(y: bulletYOffset)
-            
-            Text(value)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fontWeight(.light)
         }
     }
 }
@@ -157,27 +121,44 @@ struct RecipeView: View {
     @State private var title: String = ""
     @State private var viewState = ViewState()
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItemGroup(placement: .bottomBar) {
+//            Toggle($isCalendarDisplayed)
+//                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
+            
+            Button(recipe.isFavorite ? .bookmarkFill : .bookmark) {
+                Task {
+                    try? await onToggleFavorite()
+                }
+            }
+        }
+        
+        ToolbarSpacer(.flexible, placement: .bottomBar)
+        
+        ToolbarItemGroup(placement: .bottomBar) {
+            Toggle($isStarted)
+                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+            
+            Button(.checkmark, role: .confirm) {
+                isCookCompleted.toggle()
+            }
+        }
+    }
+    
     var body: some View {
         LoadableView(viewState: viewState) {
             ScrollViewReader { proxy in
                 ScrollView {
-                    LazyVStack(
-                        alignment: .center,
-                        spacing: spacing,
-                        pinnedViews: .sectionHeaders
-                    ) {
+                    LazyVStack(alignment: .center, spacing: spacing) {
                         CustomImage(kind: .url(recipe.imageURL, toCache: true))
                             .scale(.height(), 300)
                             .fitToAspectRatio(.fourToThree)
                             .clipTo(RoundedRectangle(cornerRadius: .lg))
-                            .scale(.padding(.vertical), 10)
+                            .padding(.vertical, 10)
                             
-                        DetailsView(recipe: recipe) {
-                            Task {
-                                try? await onToggleFavorite()
-                            }
-                        }
-                        .id(titleID)
+                        DetailsView(recipe: recipe)
+                            .id(recipe.name)
                         
                         TimeDetailsView(recipe: recipe)
                         
@@ -199,36 +180,10 @@ struct RecipeView: View {
                     }
                     .scrollTargetLayout()
                     .scale(.padding(.horizontal), 20)
+                    .scale(.padding(.bottom), 40)
                 }
-                .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    BottomControlView {
-                        IconButton(.checkmark, size: .lg) {
-                            isCookCompleted.toggle()
-                        }
-                        .remove(if: title.isEmpty)
-                        
-                        Toggle($isStarted)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
-                        
-                        Toggle($isCalendarDisplayed)
-                            .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
-                        
-                        IconButton(recipe.isFavorite ? .bookmarkFill : .bookmark) {
-                            Task {
-                                try? await onToggleFavorite()
-                            }
-                        }
-                        .remove(if: title.isEmpty)
-                    }
-                    .animation(.customInteractiveSpring, value: title)
-                    .scale(.padding(.trailing), 20)
-                }
-                .fullScreenCover(isPresented: $isStarted) {
-                    InstructionsView(items: recipe.detailedInstructions) {
-                        Task {
-                            try? await onCompleteRecipe()
-                        }
-                    }
+                .toolbar {
+                    toolbarContent
                 }
                 .alert(String.success, isPresented: $isCookCompleted) {
                     Button(String.markComplete) {
@@ -240,21 +195,31 @@ struct RecipeView: View {
                 } message: {
                     Text(String.cookCompleteConfirmation)
                 }
+                .sheet(isPresented: $isStarted) {
+                    InstructionsView(items: recipe.detailedInstructions) {
+                        Task {
+                            try? await onCompleteRecipe()
+                        }
+                    }
+                }
                 .sheet(isPresented: $isCalendarDisplayed) {
                     // TODO:
                 } content: {
                     Button("Add") {
                         Task {
                             try? await onScheduleRecipe()
+                            
+                            isCalendarDisplayed = false
                         }
                     }
                 }
             }
             .background(Color.appBackground)
             .navigationTitle(title)
+            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
-            .onScrollTargetVisibilityChange(idType: Namespace.ID.self) { ids in
-                title = ids.contains { $0 == titleID } ? "" : recipe.name
+            .onScrollTargetVisibilityChange(idType: String.self) { ids in
+                title = ids.contains { $0 == recipe.name } ? "" : recipe.name
             }
         }
     }
@@ -269,7 +234,7 @@ struct RecipeView: View {
             
             presentationMode.wrappedValue.dismiss()
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
 
@@ -281,7 +246,7 @@ struct RecipeView: View {
             
             try await actor.save(recipe: recipe)
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
     
@@ -300,7 +265,7 @@ struct RecipeView: View {
             // TEMP
             viewState.toast = .success("Successfully set.")
         } catch(let e) {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
 }
@@ -312,5 +277,7 @@ extension RecipeView {
 }
 
 #Preview {
-    RecipeView(MockService.shared.getRecipe())
+    NavigationStack {
+        RecipeView(MockService.shared.getRecipe())
+    }
 }

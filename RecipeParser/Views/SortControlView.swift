@@ -14,8 +14,6 @@ private struct SelectedLabel: View {
     var body: some View {
         if isSelected {
             Label(text, sfSymbol: .checkmark)
-                .foregroundStyle(Color.appForeground)
-                .tint(.accent)
         } else {
             Text(text)
         }
@@ -27,66 +25,38 @@ struct SortControlView<Model: SortableModel>: View {
     
     @Binding var sortItem: SortItem<Model>
     @Binding var sortOrderItem: SortOrderItem
-    @Binding var isEnabled: Bool
     
     @State private var activeSortOrders: [SortOrderItem] = []
     
-    @ViewBuilder private func contentView() -> some View {
-        HStack(alignment: .center) {
-            Text(String.sortBy)
-                .foregroundStyle(.secondary)
-                .fontWeight(.semibold)
-                .scale(.width(), 40)
-            
-            Spacer()
-            
-            Group {
-                Menu(sortItem.title) {
-                    ForEach(sortItems, id: \.title) { item in
-                        Button {
-                            sortItem = item
-                        } label: {
-                            SelectedLabel(
-                                text: item.title,
-                                isSelected: item == sortItem
-                            )
-                        }
-                    }
-                }
-                
-                Menu(sortOrderItem.title) {
-                    ForEach(activeSortOrders, id: \.title) { item in
-                        Button {
-                            sortOrderItem = item
-                        } label: {
-                            SelectedLabel(
-                                text: item.title,
-                                isSelected: item == sortOrderItem
-                            )
-                        }
-                    }
-                }
-                .remove(if: activeSortOrders.isEmpty)
-            }
-            .disableAnimation()
-            .menuStyle(CustomMenuStyle())
-            .menuOrder(.fixed)
-        }
-    }
-    
     var body: some View {
-        HStack(alignment: .center) {
-            if isEnabled {
-                contentView()
+        Menu {
+            ForEach(sortItems, id: \.title) { item in
+                Button {
+                    sortItem = item
+                } label: {
+                    SelectedLabel(
+                        text: item.title,
+                        isSelected: item == sortItem
+                    )
+                }
             }
             
-            Toggle($isEnabled.animation(.customInteractiveSpring))
-                .toggleStyle(
-                    CustomToggleStyle(icons: (on: .x, off: .sort))
-                )
+            Divider()
+            
+            ForEach(activeSortOrders, id: \.title) { item in
+                Button {
+                    sortOrderItem = item
+                } label: {
+                    SelectedLabel(
+                        text: item.title,
+                        isSelected: item == sortOrderItem
+                    )
+                }
+            }
+        } label: {
+            Symbol.sort.image
         }
-        .font(.subheadline)
-        .transition(.opacity)
+        .menuOrder(.fixed)
         .onChange(of: sortItem) {
             activeSortOrders = Model.sortItems[sortItem] ?? [.latest]
             sortOrderItem = activeSortOrders.first ?? .latest
@@ -97,12 +67,10 @@ struct SortControlView<Model: SortableModel>: View {
 extension SortControlView {
     init(
         sortItem item: Binding<SortItem<Model>>,
-        sortOrder order: Binding<SortOrderItem>,
-        isEnabled: Binding<Bool>
+        sortOrder order: Binding<SortOrderItem>
     ) {
         self._sortItem = item
         self._sortOrderItem = order
-        self._isEnabled = isEnabled
         self._activeSortOrders = State(
             initialValue: Model.sortItems[item.wrappedValue] ?? [.latest]
         )

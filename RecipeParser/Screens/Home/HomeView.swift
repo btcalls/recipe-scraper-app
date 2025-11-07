@@ -8,15 +8,6 @@
 import SwiftUI
 import SwiftData
 
-private struct SeeAllButton: View {
-    var body: some View {
-        Label(.seeAll, sfSymbol: .chevronRightCircle)
-            .labelStyle(CustomLabelStyle(.titleIcon()))
-            .buttonStyle(CustomButtonStyle())
-            .foregroundStyle(Color.accentColor)
-    }
-}
-
 struct HomeView: View {
     @ScaledMetric private var height: CGFloat = 275
     @ScaledMetric private var spacing: CGFloat = 20
@@ -27,35 +18,27 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .trailing, spacing: spacing) {
-                    SeeAllButton()
-                        .navigate(to: RecipeListView(isEmpty: $isEmpty))
+                    Label(.seeAll, sfSymbol: .chevronRightCircle)
+                        .padding()
+                        .asLink(value: String.seeAll)
                         .remove(if: isEmpty)
                     
-                    RecipeListView(.first(3), isEmpty: $isEmpty)
+                    RecipeListView(view: .first(3), isEmpty: $isEmpty)
                     
                     Spacer()
                 }
                 .padding()
+                .navigationDestination(for: String.self) { value in
+                    RecipeListView(isEmpty: $isEmpty)
+                }
             }
             .background(Color.appBackground)
             .scrollBounceBehavior(.basedOnSize)
-            .navigationTitle("")
             .toolbar {
                 if !isEmpty {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button {
-                            isBrowserPresented = true
-                        } label: {
-                            Symbol.plus.image
-                                .bold()
-                        }
+                    Button(.plus, role: .confirm) {
+                        isBrowserPresented = true
                     }
-                }
-                
-                ToolbarItem(placement: .topBarLeading) {
-                    Text(String.yourRecipes)
-                        .font(.title3)
-                        .fontWeight(.semibold)
                 }
             }
             .emptyView(
@@ -76,10 +59,13 @@ struct HomeView: View {
                     .ignoresSafeArea()
             }
         }
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
 #Preview {
-    HomeView()
-        .modelContainer(MockService.shared.modelContainer(withSample: true))
+    NavigationStack {
+        HomeView()
+            .modelContainer(MockService.shared.modelContainer(withSample: true))
+    }
 }

@@ -11,10 +11,10 @@ struct CustomToggleStyle: ToggleStyle {
     var icons: (on: Symbol, off: Symbol) = (.success, .checkmarkCircle)
     
     func makeBody(configuration: Configuration) -> some View {
-        IconButton(
-            configuration.isOn ? icons.on : icons.off
-        ) {
+        Button {
             configuration.isOn.toggle()
+        } label: {
+            configuration.isOn ? icons.on.image : icons.off.image
         }
     }
 }

@@ -29,36 +29,34 @@ struct ParseRecipeView: View {
                     
                     Spacer()
                     
-                    Divider().asStandard()
-                    
                     WideButton(.saveRecipe, icon: .save) {
                         Task {
                             await processRecipe()
                         }
                     }
                 }
+                .scale(.padding(.horizontal), 20)
+                .scale(.padding(.top), 20)
                 .toolbar {
-                    Button {
+                    Button(role: .close) {
                         close()
-                    } label: {
-                        Symbol.x.image
-                            .fontWeight(.medium)
-                            .imageScale(.medium)
                     }
                 }
-                .navigationTitle(String.addRecipe)
-                .padding()
-                .task {
-                    await parseSharedURL()
-                }
+            }
+            .task {
+                await parseSharedURL()
             }
         }
     }
     
     /// Parse and extracts metadata for the current recipe URL.
     private func parseSharedURL() async {
-        recipeMetadata = try? await ExtractRecipeMetadata(url: sharedURL)
-            .parse()
+        do {
+            recipeMetadata = try await ExtractRecipeMetadata(url: sharedURL)
+                .parse()
+        } catch {
+            viewState.toast = .failure(.error(error))
+        }
     }
     
     /// Starts parsing recipe and saving to persistent storage.
@@ -87,12 +85,12 @@ struct ParseRecipeView: View {
             if context.hasModel(model) {
                 close(hasCompleted: true)
             } else {
-                viewState.toast = .error(.app(.persistentDataLookupError))
+                viewState.toast = .failure(.app(.persistentDataLookupError))
             }
         } catch let e as CustomError {
-            viewState.toast = .error(e)
+            viewState.toast = .failure(e)
         } catch let e {
-            viewState.toast = .error(.error(e))
+            viewState.toast = .failure(.error(e))
         }
     }
     
