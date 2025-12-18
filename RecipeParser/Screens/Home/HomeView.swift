@@ -10,7 +10,7 @@ import SwiftData
 
 struct HomeView: View {
     @ScaledMetric private var height: CGFloat = 275
-    @ScaledMetric private var spacing: CGFloat = 20
+    @ScaledMetric private var spacing = Layout.Scaled.spacing
     @State private var isBrowserPresented = false
     @State private var isEmpty: Bool = false
     

@@ -142,8 +142,8 @@ extension View {
     /// Fits view to specified aspect ratio.
     /// - Parameter aspectRatio: The aspect ratio to set to the view.
     /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
-        return modifier(FitToAspectRatio(aspectRatio))
+    func fitToAspectRatio(_ aspectRatio: Layout.AspectRatio) -> some View {
+        return modifier(FitToAspectRatio(aspectRatio.rawValue))
     }
     
     /// Modifier to clip View to a rounded rectangle.
@@ -152,7 +152,7 @@ extension View {
     ///   - lineWidth: Thickness of the border width.
     ///   - color: Color of the border.
     /// - Returns: Modified view with rounded shape, and drawn border, if applicable.
-    func rounded(cornerRadius: CornerRadius = .sm,
+    func rounded(cornerRadius: Layout.CornerRadius = .small,
                  lineWidth: CGFloat = 0,
                  color: Color = .clear) -> some View {
         return clipTo(
@@ -230,7 +230,7 @@ extension Divider {
 }
 
 extension Edge.Corner.Style {
-    static func concentric(minimum radius: CornerRadius) -> Edge.Corner.Style {
+    static func concentric(minimum radius: Layout.CornerRadius) -> Edge.Corner.Style {
         return .concentric(minimum: .fixed(radius.rawValue))
     }
 }
@@ -258,14 +258,14 @@ extension Image {
     /// Fits view to specified aspect ratio.
     /// - Parameter aspectRatio: The aspect ratio to set to the view.
     /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
+    func fitToAspectRatio(_ aspectRatio: Layout.AspectRatio) -> some View {
         return resizable().modifier(FitToAspectRatio(aspectRatio))
     }
 }
 
 extension RoundedRectangle {
     init(
-        cornerRadius value: CornerRadius,
+        cornerRadius value: Layout.CornerRadius,
         style: RoundedCornerStyle = .continuous
     ) {
         self.init(cornerRadius: value.rawValue, style: style)

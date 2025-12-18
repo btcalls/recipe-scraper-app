@@ -11,7 +11,7 @@ private struct ImageAndLabelView: View {
     var display: WideButton.Display
     var kind: WideButton.Kind
     
-    @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Spacing.small
     
     var body: some View {
         switch kind {
@@ -43,7 +43,7 @@ struct WideButton: AppButton {
     var action: @MainActor () -> Void
     
     @Environment(\.isEnabled) private var isEnabled
-    @ScaledMetric private var spacing: CGFloat = 8
+    @ScaledMetric private var spacing = Layout.Spacing.small
     
     private var isDisabled: Bool {
         switch kind {

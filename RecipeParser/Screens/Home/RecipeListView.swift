@@ -11,7 +11,7 @@ import SwiftData
 private struct BaseListView: View {
     var items: [Recipe]
     
-    @ScaledMetric private var spacing: CGFloat = 15
+    @ScaledMetric private var spacing = Layout.Scaled.interItem
     
     var body: some View {
         LazyVStack(spacing: spacing) {
@@ -19,7 +19,7 @@ private struct BaseListView: View {
                 RecipeRow(item)
                     .asLink(
                         value: item,
-                        shape: RoundedRectangle(cornerRadius: .regular)
+                        shape: RoundedRectangle(cornerRadius: .medium)
                     )
             }
         }
@@ -83,7 +83,6 @@ struct RecipeListView: View {
     }
     
     @Query private var items: [Recipe]
-    @ScaledMetric private var spacing: CGFloat = 20
     @State private var isFavourites: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest

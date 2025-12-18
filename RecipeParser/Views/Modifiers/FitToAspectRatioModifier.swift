@@ -15,7 +15,7 @@ struct FitToAspectRatio: ViewModifier {
         self.aspectRatio = aspectRatio
     }
     
-    public init(_ aspectRatio: AspectRatio) {
+    public init(_ aspectRatio: Layout.AspectRatio) {
         self.aspectRatio = aspectRatio.rawValue
     }
     

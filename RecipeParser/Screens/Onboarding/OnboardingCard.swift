@@ -14,14 +14,14 @@ struct OnboardingCard<Content>: View where Content : View {
     
     @ViewBuilder let caption: Content
     
-    @ScaledMetric private var spacing: CGFloat = 20
+    @ScaledMetric private var spacing = Layout.Scaled.spacing
     
     var body: some View {
         VStack(spacing: spacing) {
             image
                 .resizable()
                 .scaledToFit()
-                .clipShape(.rect(corners: .concentric(minimum: .sm)))
+                .clipShape(.rect(corners: .concentric(minimum: .small)))
                 .shadow()
                 .containerRelativeFrame(.vertical,
                                         count: 100,
@@ -56,7 +56,7 @@ struct OnboardingCard<Content>: View where Content : View {
         .background(LinearGradient(gradient: Gradient(colors: [.red, .orange]),
                                    startPoint: .top,
                                    endPoint: .bottom))
-        .cornerRadius(CornerRadius.lg.rawValue)
+        .cornerRadius(Layout.CornerRadius.medium.rawValue)
         .padding(.horizontal, 20)
     }
 }

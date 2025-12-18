@@ -41,7 +41,9 @@ struct CarouselView: View {
                                     CustomImage(kind: .url(recipe.imageURL, toCache: true))
                                         .frame(width: width, height: width)
                                         .clipTo(
-                                            RoundedRectangle(cornerRadius: .sm)
+                                            RoundedRectangle(
+                                                cornerRadius: .small
+                                            )
                                         )
                                         .scrollTransition { view, transition in
                                             view

@@ -43,25 +43,6 @@ enum HTTPMethod: String {
 
 // MARK: UI
 
-enum AspectRatio: CGFloat {
-    case square = 1
-    case threeToFour = 0.75
-    case fourToThree = 1.75
-}
-
-enum CornerRadius: CGFloat {
-    case sm = 8
-    case regular = 16
-    case lg = 24
-}
-
-enum Spacing: CGFloat {
-    case xs = 5
-    case sm = 8
-    case regular = 10
-    case lg = 20
-}
-
 enum EmptyViewType {
     case generic
     case search(String?)

@@ -148,8 +148,8 @@ private extension AsyncLoadImage {
         
         CustomImage(kind: .url(MockService.shared.getRecipe().imageURL))
             .scale(.height(), 250)
-            .fitToAspectRatio(.fourToThree)
-            .clipTo(RoundedRectangle(cornerRadius: .lg))
+            .fitToAspectRatio(.photo4x3)
+            .clipTo(RoundedRectangle(cornerRadius: .large))
     }
     .frame(maxWidth: .infinity)
     .padding(20)

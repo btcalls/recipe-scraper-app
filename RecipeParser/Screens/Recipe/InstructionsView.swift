@@ -12,7 +12,7 @@ struct InstructionsView: View {
     var onComplete: @MainActor () -> Void
     
     @Environment(\.dismiss) private var dismiss
-    @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Spacing.medium
     @State private var isCookCompleted = false
     @State private var index = 0
     @State private var sectionIndex = 0

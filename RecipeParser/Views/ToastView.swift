@@ -49,7 +49,7 @@ struct ToastView: View {
     var state: State
     var onDismiss: @MainActor () -> Void
     
-    @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Spacing.small
     
     private var caption: String {
         switch state {
@@ -96,7 +96,7 @@ struct ToastView: View {
         .foregroundStyle(Color.appForeground)
         .glassEffect(
             .regular.tint(themeColor.opacity(0.15)),
-            in: RoundedRectangle(cornerRadius: .regular)
+            in: RoundedRectangle(cornerRadius: .medium)
         )
     }
 }

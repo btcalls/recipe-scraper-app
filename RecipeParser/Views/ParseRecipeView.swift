@@ -13,7 +13,7 @@ struct ParseRecipeView: View {
     
     private var client = APIClient<RecipeEndpoints>()
     
-    @ScaledMetric private var spacing: CGFloat = 20
+    @ScaledMetric private var spacing = Layout.Scaled.spacing
     @State private var recipeMetadata: RecipeMetadata?
     @State private var viewState = ViewState()
     
