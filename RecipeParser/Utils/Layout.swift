@@ -12,7 +12,7 @@ import SwiftUI
 ///
 /// Usage examples:
 /// - `.padding(.horizontal, Layout.Padding.horizontal)`
-/// - `.cornerRadius(Layout.CornerRadius.medium)` or `.rounded(cornerRadius: .medium)`
+/// - `.cornerRadius(Layout.CornerRadius.medium)`
 /// - `.frame(height: Layout.Size.rowHeight)`
 /// - `@ScaledMetric var spacing = Layout.Scaled.spacing`
 public enum Layout {

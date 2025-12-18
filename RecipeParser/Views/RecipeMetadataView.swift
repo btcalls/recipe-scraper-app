@@ -27,7 +27,7 @@ struct RecipeMetadataView: View {
             recipeImage
                 .frame(width: size, height: size)
                 .aspectRatio(contentMode: .fill)
-                .rounded(cornerRadius: .medium)
+                .clipTo(RoundedRectangle(cornerRadius: .medium))
             
             VStack(alignment: .center, spacing: bodySpacing) {
                 Text(metadata?.title ?? .placeholder(length: 30))

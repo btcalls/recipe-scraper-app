@@ -146,29 +146,20 @@ extension View {
         return modifier(FitToAspectRatio(aspectRatio.rawValue))
     }
     
-    /// Modifier to clip View to a rounded rectangle.
-    /// - Parameters:
-    ///   - cornerRadius: Value corner radius to be applied.
-    ///   - lineWidth: Thickness of the border width.
-    ///   - color: Color of the border.
-    /// - Returns: Modified view with rounded shape, and drawn border, if applicable.
-    func rounded(cornerRadius: Layout.CornerRadius = .small,
-                 lineWidth: CGFloat = 0,
-                 color: Color = .clear) -> some View {
-        return clipTo(
-            RoundedRectangle(cornerRadius: cornerRadius),
-            lineWidth: lineWidth,
-            color: color
-        )
-    }
-    
     /// Modifier to apply scaling to this view with given value.
     /// - Parameters:
     ///   - scaleType: The type in which the scaling is applied to.
     ///   - value: The value to be scaled.
+    ///   - relativeTo: Text style to match scaling.
     /// - Returns: Modified view with scaled value.
-    func scale(_ scaleType: ScaledModifier.Kind, _ value: CGFloat) -> some View {
-        return modifier(ScaledModifier(scaleType: scaleType, value: value))
+    func scale(_ scaleType: ScaledModifier.Kind,
+               _ value: CGFloat,
+               relativeTo: Font.TextStyle = .body) -> some View {
+        return modifier(
+            ScaledModifier(scaleType: scaleType,
+                           value: value,
+                           relativeTo: relativeTo)
+        )
     }
 }
 
