@@ -14,7 +14,7 @@ private struct BaseListView: View {
     @ScaledMetric private var spacing: CGFloat = 15
     
     var body: some View {
-        VStack(spacing: spacing) {
+        LazyVStack(spacing: spacing) {
             ForEach(items, id: \.id) { item in
                 RecipeRow(item)
                     .asLink(
@@ -24,9 +24,6 @@ private struct BaseListView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationDestination(for: Recipe.self) { recipe in
-            RecipeView(recipe: recipe)
-        }
     }
 }
 
@@ -51,6 +48,9 @@ private struct BaseView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
+        .navigationDestination(for: Recipe.self) { recipe in
+            RecipeView(recipe: recipe)
+        }
     }
 }
 
@@ -89,6 +89,30 @@ struct RecipeListView: View {
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        DefaultToolbarItem(kind: .search, placement: .bottomBar)
+        
+        ToolbarSpacer(.flexible, placement: .bottomBar)
+        
+        ToolbarItem(placement: .bottomBar) {
+            SortControlView<Recipe>(
+                sortItem: $sortItem
+                    .animation(.customInteractiveSpring),
+                sortOrder: $sortOrder.animation(.customInteractiveSpring)
+            )
+        }
+        
+        ToolbarItem(placement: .bottomBar) {
+            Toggle($isFavourites)
+                .toggleStyle(
+                    CustomToggleStyle(
+                        icons: (on: .bookmarkFill, off: .bookmark)
+                    )
+                )
+        }
+    }
+    
     var body: some View {
         switch mode {
         case .first(_:):
@@ -117,26 +141,7 @@ struct RecipeListView: View {
                             .search(searchContext.query)
                 )
                 .toolbar {
-                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                    
-                    ToolbarSpacer(.flexible, placement: .bottomBar)
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        SortControlView<Recipe>(
-                            sortItem: $sortItem
-                                .animation(.customInteractiveSpring),
-                            sortOrder: $sortOrder.animation(.customInteractiveSpring)
-                        )
-                    }
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle($isFavourites)
-                            .toggleStyle(
-                                CustomToggleStyle(
-                                    icons: (on: .bookmarkFill, off: .bookmark)
-                                )
-                            )
-                    }
+                    toolbarContent
                 }
                 .searchable(
                     text: $searchContext.query,
