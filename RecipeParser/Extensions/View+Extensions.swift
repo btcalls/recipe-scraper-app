@@ -111,58 +111,6 @@ extension View {
     }
 }
 
-// MARK: Shape-related
-
-extension View {
-    /// Modifier to clip View to specified shape, and add border if applicable.
-    /// - Parameters:
-    ///   - shape: The `Shape` to apply.
-    ///   - lineWidth: Thickness of the border width.
-    ///   - color: Color of the border.
-    /// - Returns: Modified view clipped to a circle shape, and drawn border, if applicable.
-    func clipTo<S: Shape>(_ shape: S,
-                          lineWidth: CGFloat = 0,
-                          color: Color = .clear) -> some View {
-        return modifier(
-            ShapeAndBorderModifier(
-                shape: shape,
-                color: color,
-                lineWidth: lineWidth
-            )
-        )
-    }
-    
-    /// Fits view to specified aspect ratio.
-    /// - Parameter aspectRatio: The aspect ratio to set to the view.
-    /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: CGFloat) -> some View {
-        return modifier(FitToAspectRatio(aspectRatio))
-    }
-    
-    /// Fits view to specified aspect ratio.
-    /// - Parameter aspectRatio: The aspect ratio to set to the view.
-    /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: Layout.AspectRatio) -> some View {
-        return modifier(FitToAspectRatio(aspectRatio.rawValue))
-    }
-    
-    /// Modifier to apply scaling to this view with given value.
-    /// - Parameters:
-    ///   - scaleType: The type in which the scaling is applied to.
-    ///   - value: The value to be scaled.
-    ///   - relativeTo: Text style to match scaling.
-    /// - Returns: Modified view with scaled value.
-    func scale(_ scaleType: ScaledModifier.Kind,
-               _ value: CGFloat,
-               relativeTo: Font.TextStyle = .body) -> some View {
-        return modifier(
-            ScaledModifier(scaleType: scaleType,
-                           value: value,
-                           relativeTo: relativeTo)
-        )
-    }
-}
-
 // MARK: Actions
 
 extension View {

@@ -17,10 +17,6 @@ private struct BaseListView: View {
         LazyVStack(spacing: spacing) {
             ForEach(items, id: \.id) { item in
                 RecipeRow(item)
-                    .asLink(
-                        value: item,
-                        shape: RoundedRectangle(cornerRadius: .medium)
-                    )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -36,11 +32,9 @@ private struct BaseView: View {
             switch mode {
             case .first(_:):
                 BaseListView(items: items)
-                    .navigationTitle("")
                 
             case .full:
                 BaseListView(items: items)
-                    .navigationTitle(String.allRecipes)
                     .padding()
             }
         }
@@ -48,16 +42,11 @@ private struct BaseView: View {
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
-        .navigationDestination(for: Recipe.self) { recipe in
-            RecipeView(recipe: recipe)
-        }
     }
 }
 
 struct RecipeListView: View {
     var mode: Mode = .full
-    
-    @Binding var isEmpty: Bool
     
     private var updatedResults: [Recipe] {
         let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
@@ -116,20 +105,14 @@ struct RecipeListView: View {
         switch mode {
         case .first(_:):
             BaseView(mode: mode, items: updatedResults)
-                .onAppear {
-                    isEmpty = items.isEmpty
-                }
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
-                    if: isEmpty,
+                    if: items.isEmpty,
                     type: .generic
                 )
         
         case .full:
             BaseView(mode: mode, items: updatedResults)
-                .onChange(of: items) {
-                    isEmpty = items.isEmpty
-                }
                 .emptyView(
                     Label(
                         isFavourites ? .noFavourites : .noRecipes,
@@ -151,9 +134,9 @@ struct RecipeListView: View {
 }
 
 extension RecipeListView {
-    init(view mode: Mode = .full, isEmpty: Binding<Bool>) {
+    init(view mode: Mode = .full) {
         self.mode = mode
-        self._isEmpty = isEmpty
+        
         
         // Setup initial query for items
         var descriptor = FetchDescriptor<Recipe>(
@@ -184,7 +167,7 @@ extension RecipeListView {
     @Previewable @State var isEmpty: Bool = false
     
     NavigationStack {
-        RecipeListView(isEmpty: $isEmpty)
+        RecipeListView()
             .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
     }
 }

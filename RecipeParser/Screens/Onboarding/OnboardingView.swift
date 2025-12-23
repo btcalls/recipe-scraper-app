@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @Environment(AppSettings.self) private var appSettings
-    @State private var isBrowserPresented = false
+    @EnvironmentObject private var coordinator: Coordinator
     
     var body: some View {
         TabView {
@@ -25,7 +24,7 @@ struct OnboardingView: View {
                 title: .onboardingItemTwoTitle,
                 image: Image("Placeholder"),
                 action: (.getStarted, {
-                    isBrowserPresented = true
+                    coordinator.presentSheet(.browser)
                 })
             ) {
                 Text(String.onboardingItemTwoDesc)
@@ -34,23 +33,10 @@ struct OnboardingView: View {
         }
         .tabViewStyle(PageTabViewStyle())
         .padding(.vertical, 20)
-        .sheet(isPresented: $isBrowserPresented) {
-            isBrowserPresented = false
-            
-            if AppValues.shared.isOnboardingComplete {
-                withAnimation {
-                    appSettings.rootView = .home
-                }
-            }
-        } content: {
-            BrowserView()
-                .ignoresSafeArea()
-        }
     }
 }
 
 #Preview {
     OnboardingView()
-        .environment(AppSettings())
         .modelContainer(.shared())
 }

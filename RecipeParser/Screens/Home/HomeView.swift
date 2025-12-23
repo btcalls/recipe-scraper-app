@@ -9,57 +9,55 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @EnvironmentObject private var coordinator: Coordinator
     @ScaledMetric private var height: CGFloat = 275
     @ScaledMetric private var spacing = Layout.Scaled.spacing
-    @State private var isBrowserPresented = false
-    @State private var isEmpty: Bool = false
     
-    var body: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .trailing, spacing: spacing) {
-                    Label(.seeAll, sfSymbol: .chevronRightCircle)
-                        .padding()
-                        .asLink(value: String.seeAll)
-                        .remove(if: isEmpty)
-                    
-                    RecipeListView(view: .first(3), isEmpty: $isEmpty)
-                    
-                    Spacer()
+    private var isEmpty = Recipe.count() == 0
+    
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        if !isEmpty {
+            ToolbarItem {
+                Button(.plus, role: .confirm) {
+                    coordinator.presentSheet(.browser)
                 }
-                .padding()
-                .navigationDestination(for: String.self) { value in
-                    RecipeListView(isEmpty: $isEmpty)
-                }
-            }
-            .background(Color.appBackground)
-            .scrollBounceBehavior(.basedOnSize)
-            .toolbar {
-                if !isEmpty {
-                    Button(.plus, role: .confirm) {
-                        isBrowserPresented = true
-                    }
-                }
-            }
-            .emptyView(
-                if: isEmpty,
-                label: Label(.noRecipes, sfSymbol: .forkKnife),
-                description: {
-                    Text(String.noRecipesDescription)
-                }
-            ) {
-                WideButton(.addRecipe, icon: .plus) {
-                    isBrowserPresented = true
-                }
-            }
-            .sheet(isPresented: $isBrowserPresented) {
-                isBrowserPresented = false
-            } content: {
-                BrowserView()
-                    .ignoresSafeArea()
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .trailing, spacing: spacing) {
+                WideButton(
+                    display: (.seeAll, .chevronRightCircle),
+                    kind: .regular) {
+                        coordinator.push(page: .recipes)
+                    }
+                    .remove(if: isEmpty)
+                
+                RecipeListView(view: .first(3))
+                
+                Spacer()
+            }
+            .padding()
+        }
+        .background(Color.appBackground)
+        .scrollBounceBehavior(.basedOnSize)
+        .toolbar {
+            toolbarContent
+        }
+        .emptyView(
+            if: isEmpty,
+            label: Label(.noRecipes, sfSymbol: .forkKnife),
+            description: {
+                Text(String.noRecipesDescription)
+            }
+        ) {
+            WideButton(.addRecipe, icon: .plus) {
+                coordinator.presentSheet(.browser)
+            }
+        }
     }
 }
 

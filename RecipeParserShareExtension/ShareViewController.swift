@@ -9,7 +9,9 @@ import UIKit
 import UniformTypeIdentifiers
 import SwiftUI
 
-// Based on https://agtlucas.com/blog/implementing-a-swift-ui-sharesheet-extension/
+/// View controller to present the hosted view, `ParseRecipeView`, invoked from a share sheet.
+///
+/// Based on this [share sheet](https://agtlucas.com/blog/implementing-a-swift-ui-sharesheet-extension/) tutorial.
 final class ShareViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +25,23 @@ final class ShareViewController: UIViewController {
             return
         }
         
+        // Observer for closing the share view
+        NotificationCenter.default.addObserver(forName: .closeShareView,
+                                               object: nil,
+                                               queue: nil) { [weak self] _ in
+            DispatchQueue.main.async {
+                if let self {
+                    self.close()
+                }
+            }
+        }
+        
+        // Setup share view
         let identifier = "public.url"
         
         if itemProvider.hasItemConformingToTypeIdentifier(identifier) {
-            itemProvider.loadItem(forTypeIdentifier: identifier, options: nil) { [weak self] (url, error) in
+            itemProvider.loadItem(forTypeIdentifier: identifier,
+                                  options: nil) { [weak self] (url, error) in
                 guard let self else {
                     return
                 }
@@ -57,16 +72,6 @@ final class ShareViewController: UIViewController {
             close()
             
             return
-        }
-        
-        NotificationCenter.default.addObserver(forName: .closeShareView,
-                                               object: nil,
-                                               queue: nil) { [weak self] _ in
-            DispatchQueue.main.async {
-                if let self {
-                    self.close()
-                }
-            }
         }
     }
     
