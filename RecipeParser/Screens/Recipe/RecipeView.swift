@@ -51,7 +51,7 @@ private struct TimeDetailsView: View {
 private struct DetailsView: View {
     let recipe: Recipe
         
-    @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Spacing.medium
     
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
@@ -114,7 +114,7 @@ struct RecipeView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     @Namespace private var titleID
-    @ScaledMetric private var spacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Spacing.medium
     @State private var isCookCompleted = false
     @State private var isStarted = false
     @State private var isCalendarDisplayed = false
@@ -153,8 +153,8 @@ struct RecipeView: View {
                     LazyVStack(alignment: .center, spacing: spacing) {
                         CustomImage(kind: .url(recipe.imageURL, toCache: true))
                             .scale(.height(), 300)
-                            .fitToAspectRatio(.fourToThree)
-                            .clipTo(RoundedRectangle(cornerRadius: .lg))
+                            .fitToAspectRatio(.photo16x9)
+                            .clipTo(RoundedRectangle(cornerRadius: .large))
                             .padding(.vertical, 10)
                             
                         DetailsView(recipe: recipe)

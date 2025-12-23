@@ -83,7 +83,7 @@ extension SortControlView {
     @Previewable @State var isEmpty: Bool = false
     
     NavigationStack {
-        RecipeListView(isEmpty: $isEmpty)
+        RecipeListView()
             .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
     }
 }

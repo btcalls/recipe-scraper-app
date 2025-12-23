@@ -111,67 +111,6 @@ extension View {
     }
 }
 
-// MARK: Shape-related
-
-extension View {
-    /// Modifier to clip View to specified shape, and add border if applicable.
-    /// - Parameters:
-    ///   - shape: The `Shape` to apply.
-    ///   - lineWidth: Thickness of the border width.
-    ///   - color: Color of the border.
-    /// - Returns: Modified view clipped to a circle shape, and drawn border, if applicable.
-    func clipTo<S: Shape>(_ shape: S,
-                          lineWidth: CGFloat = 0,
-                          color: Color = .clear) -> some View {
-        return modifier(
-            ShapeAndBorderModifier(
-                shape: shape,
-                color: color,
-                lineWidth: lineWidth
-            )
-        )
-    }
-    
-    /// Fits view to specified aspect ratio.
-    /// - Parameter aspectRatio: The aspect ratio to set to the view.
-    /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: CGFloat) -> some View {
-        return modifier(FitToAspectRatio(aspectRatio))
-    }
-    
-    /// Fits view to specified aspect ratio.
-    /// - Parameter aspectRatio: The aspect ratio to set to the view.
-    /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
-        return modifier(FitToAspectRatio(aspectRatio))
-    }
-    
-    /// Modifier to clip View to a rounded rectangle.
-    /// - Parameters:
-    ///   - cornerRadius: Value corner radius to be applied.
-    ///   - lineWidth: Thickness of the border width.
-    ///   - color: Color of the border.
-    /// - Returns: Modified view with rounded shape, and drawn border, if applicable.
-    func rounded(cornerRadius: CornerRadius = .sm,
-                 lineWidth: CGFloat = 0,
-                 color: Color = .clear) -> some View {
-        return clipTo(
-            RoundedRectangle(cornerRadius: cornerRadius),
-            lineWidth: lineWidth,
-            color: color
-        )
-    }
-    
-    /// Modifier to apply scaling to this view with given value.
-    /// - Parameters:
-    ///   - scaleType: The type in which the scaling is applied to.
-    ///   - value: The value to be scaled.
-    /// - Returns: Modified view with scaled value.
-    func scale(_ scaleType: ScaledModifier.Kind, _ value: CGFloat) -> some View {
-        return modifier(ScaledModifier(scaleType: scaleType, value: value))
-    }
-}
-
 // MARK: Actions
 
 extension View {
@@ -230,7 +169,7 @@ extension Divider {
 }
 
 extension Edge.Corner.Style {
-    static func concentric(minimum radius: CornerRadius) -> Edge.Corner.Style {
+    static func concentric(minimum radius: Layout.CornerRadius) -> Edge.Corner.Style {
         return .concentric(minimum: .fixed(radius.rawValue))
     }
 }
@@ -258,14 +197,14 @@ extension Image {
     /// Fits view to specified aspect ratio.
     /// - Parameter aspectRatio: The aspect ratio to set to the view.
     /// - Returns: Modified view fitted to desired aspect ratio.
-    func fitToAspectRatio(_ aspectRatio: AspectRatio) -> some View {
+    func fitToAspectRatio(_ aspectRatio: Layout.AspectRatio) -> some View {
         return resizable().modifier(FitToAspectRatio(aspectRatio))
     }
 }
 
 extension RoundedRectangle {
     init(
-        cornerRadius value: CornerRadius,
+        cornerRadius value: Layout.CornerRadius,
         style: RoundedCornerStyle = .continuous
     ) {
         self.init(cornerRadius: value.rawValue, style: style)

@@ -194,6 +194,14 @@ extension Recipe {
             return .init(\.createdOn, order: order)
         }
     }
+    
+    @MainActor
+    static func count(by predicate: Predicate<Recipe>? = nil) -> Int {
+        let descriptor = FetchDescriptor(predicate: predicate)
+        let context = ModelContext(ModelContainer.shared())
+        
+        return (try? context.fetchCount(descriptor)) ?? 0
+    }
 }
 
 private extension Recipe {

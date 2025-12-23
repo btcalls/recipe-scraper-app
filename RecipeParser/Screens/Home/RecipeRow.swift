@@ -10,14 +10,20 @@ import SwiftUI
 struct RecipeRow: View {
     var recipe: Recipe
     
-    @ScaledMetric private var spacing: CGFloat = 20
-    @ScaledMetric private var bodySpacing: CGFloat = 5
+    @EnvironmentObject private var coordinator: Coordinator
+    @ScaledMetric private var spacing = Layout.Scaled.spacing
+    @ScaledMetric private var bodySpacing = Layout.Spacing.xSmall
     
     var body: some View {
         HStack(alignment: .center, spacing: spacing) {
             CustomImage(kind: .url(recipe.imageURL))
-                .frame(width: 80, height: 80)
-                .clipTo(.rect(corners: .concentric(minimum: .sm), isUniform: true))
+                .scale(.square(), 80)
+                .clipTo(
+                    .rect(
+                        corners: .concentric(minimum: .small),
+                        isUniform: true
+                    )
+                )
             
             VStack(alignment: .leading, spacing: bodySpacing) {
                 Text(recipe.name)
@@ -39,6 +45,10 @@ struct RecipeRow: View {
                 .remove(if: !recipe.isFavorite)
         }
         .scale(.padding(.all), 15)
+        .card(interactive: true)
+        .onTapGesture {
+            coordinator.push(page: .recipe(recipe))
+        }
     }
 }
 
@@ -50,5 +60,4 @@ extension RecipeRow {
 
 #Preview {
     RecipeRow(recipe: MockService.shared.getRecipe())
-        .asLink(value: MockService.shared.getRecipe())
 }

@@ -11,22 +11,15 @@ import SwiftData
 private struct BaseListView: View {
     var items: [Recipe]
     
-    @ScaledMetric private var spacing: CGFloat = 15
+    @ScaledMetric private var spacing = Layout.Scaled.interItem
     
     var body: some View {
-        VStack(spacing: spacing) {
+        LazyVStack(spacing: spacing) {
             ForEach(items, id: \.id) { item in
                 RecipeRow(item)
-                    .asLink(
-                        value: item,
-                        shape: RoundedRectangle(cornerRadius: .regular)
-                    )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .navigationDestination(for: Recipe.self) { recipe in
-            RecipeView(recipe: recipe)
-        }
     }
 }
 
@@ -39,11 +32,9 @@ private struct BaseView: View {
             switch mode {
             case .first(_:):
                 BaseListView(items: items)
-                    .navigationTitle("")
                 
             case .full:
                 BaseListView(items: items)
-                    .navigationTitle(String.allRecipes)
                     .padding()
             }
         }
@@ -56,8 +47,6 @@ private struct BaseView: View {
 
 struct RecipeListView: View {
     var mode: Mode = .full
-    
-    @Binding var isEmpty: Bool
     
     private var updatedResults: [Recipe] {
         let descriptor = Recipe.getSortDescriptor(for: sortItem.keyPath,
@@ -83,30 +72,47 @@ struct RecipeListView: View {
     }
     
     @Query private var items: [Recipe]
-    @ScaledMetric private var spacing: CGFloat = 20
     @State private var isFavourites: Bool = false
     @State private var sortItem: SortItem<Recipe> = .createdOn
     @State private var sortOrder: SortOrderItem = .latest
     @StateObject private var searchContext = SearchContext()
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        DefaultToolbarItem(kind: .search, placement: .bottomBar)
+        
+        ToolbarSpacer(.flexible, placement: .bottomBar)
+        
+        ToolbarItem(placement: .bottomBar) {
+            SortControlView<Recipe>(
+                sortItem: $sortItem
+                    .animation(.customInteractiveSpring),
+                sortOrder: $sortOrder.animation(.customInteractiveSpring)
+            )
+        }
+        
+        ToolbarItem(placement: .bottomBar) {
+            Toggle($isFavourites)
+                .toggleStyle(
+                    CustomToggleStyle(
+                        icons: (on: .bookmarkFill, off: .bookmark)
+                    )
+                )
+        }
+    }
+    
     var body: some View {
         switch mode {
         case .first(_:):
             BaseView(mode: mode, items: updatedResults)
-                .onAppear {
-                    isEmpty = items.isEmpty
-                }
                 .emptyView(
                     Label(.noRecipes, sfSymbol: .forkKnife),
-                    if: isEmpty,
+                    if: items.isEmpty,
                     type: .generic
                 )
         
         case .full:
             BaseView(mode: mode, items: updatedResults)
-                .onChange(of: items) {
-                    isEmpty = items.isEmpty
-                }
                 .emptyView(
                     Label(
                         isFavourites ? .noFavourites : .noRecipes,
@@ -117,26 +123,7 @@ struct RecipeListView: View {
                             .search(searchContext.query)
                 )
                 .toolbar {
-                    DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                    
-                    ToolbarSpacer(.flexible, placement: .bottomBar)
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        SortControlView<Recipe>(
-                            sortItem: $sortItem
-                                .animation(.customInteractiveSpring),
-                            sortOrder: $sortOrder.animation(.customInteractiveSpring)
-                        )
-                    }
-                    
-                    ToolbarItem(placement: .bottomBar) {
-                        Toggle($isFavourites)
-                            .toggleStyle(
-                                CustomToggleStyle(
-                                    icons: (on: .bookmarkFill, off: .bookmark)
-                                )
-                            )
-                    }
+                    toolbarContent
                 }
                 .searchable(
                     text: $searchContext.query,
@@ -147,9 +134,9 @@ struct RecipeListView: View {
 }
 
 extension RecipeListView {
-    init(view mode: Mode = .full, isEmpty: Binding<Bool>) {
+    init(view mode: Mode = .full) {
         self.mode = mode
-        self._isEmpty = isEmpty
+        
         
         // Setup initial query for items
         var descriptor = FetchDescriptor<Recipe>(
@@ -180,7 +167,7 @@ extension RecipeListView {
     @Previewable @State var isEmpty: Bool = false
     
     NavigationStack {
-        RecipeListView(isEmpty: $isEmpty)
+        RecipeListView()
             .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
     }
 }

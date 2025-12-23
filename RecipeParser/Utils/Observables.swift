@@ -9,12 +9,8 @@ import SwiftUI
 
 @Observable
 final class AppSettings {
-    enum RootView {
-        case onboarding
-        case home
-    }
-    
-    var rootView: RootView = .onboarding
+    // TODO: Add global settings here (e.g. theme)
+    var rootPage: AppPages = .onboarding
 }
 
 @Observable

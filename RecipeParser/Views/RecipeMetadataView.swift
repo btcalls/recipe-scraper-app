@@ -11,8 +11,8 @@ struct RecipeMetadataView: View {
     var metadata: RecipeMetadata?
     
     @ScaledMetric private var size: CGFloat = 150
-    @ScaledMetric private var spacing: CGFloat = 30
-    @ScaledMetric private var bodySpacing: CGFloat = 10
+    @ScaledMetric private var spacing = Layout.Scaled.spacing
+    @ScaledMetric private var bodySpacing = Layout.Spacing.medium
     
     private var recipeImage: CustomImage {
         guard let metadata, let image = metadata.image else {
@@ -27,7 +27,7 @@ struct RecipeMetadataView: View {
             recipeImage
                 .frame(width: size, height: size)
                 .aspectRatio(contentMode: .fill)
-                .rounded(cornerRadius: .regular)
+                .clipTo(RoundedRectangle(cornerRadius: .medium))
             
             VStack(alignment: .center, spacing: bodySpacing) {
                 Text(metadata?.title ?? .placeholder(length: 30))

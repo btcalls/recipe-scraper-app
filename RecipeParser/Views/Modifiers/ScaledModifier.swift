@@ -12,6 +12,11 @@ struct ScaledModifier: ViewModifier {
     
     @ScaledMetric var value: CGFloat
     
+    init(scaleType: Kind, value: CGFloat, relativeTo: Font.TextStyle = .body) {
+        self.scaleType = scaleType
+        self._value = ScaledMetric(wrappedValue: value, relativeTo: relativeTo)
+    }
+    
     func body(content: Content) -> some View {
         switch scaleType {
         case .padding(let edge):
@@ -31,7 +36,7 @@ struct ScaledModifier: ViewModifier {
                 content.frame(width: value)
             }
             
-        case .heightWidth(let isMinimum):
+        case .square(let isMinimum):
             if isMinimum {
                 content.frame(minWidth: value, minHeight: value)
             } else {
@@ -46,6 +51,6 @@ extension ScaledModifier {
         case padding(Edge.Set)
         case height(isMinimum: Bool = false)
         case width(isMinimum: Bool = false)
-        case heightWidth(isMinimum: Bool = false)
+        case square(isMinimum: Bool = false)
     }
 }

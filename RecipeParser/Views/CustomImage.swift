@@ -143,13 +143,13 @@ private extension AsyncLoadImage {
 #Preview {
     VStack {
         CustomImage(kind: .url(MockService.shared.imageURL))
-            .scale(.heightWidth(), 100)
+            .scale(.square(), 100)
             .clipTo(Circle(), lineWidth: 1, color: .primary)
         
         CustomImage(kind: .url(MockService.shared.getRecipe().imageURL))
             .scale(.height(), 250)
-            .fitToAspectRatio(.fourToThree)
-            .clipTo(RoundedRectangle(cornerRadius: .lg))
+            .fitToAspectRatio(.photo4x3)
+            .clipTo(RoundedRectangle(cornerRadius: .large))
     }
     .frame(maxWidth: .infinity)
     .padding(20)

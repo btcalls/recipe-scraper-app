@@ -78,6 +78,17 @@ final class MockService {
                     
                     container.mainContext.insert(recipe)
                 }
+                
+                // Add sample weekly queued recipe
+                if recipes.count > 0 {
+                    let weeklyRecipe = RecipeWeekMenu(
+                        recipeID: recipes[0].id,
+                        name: recipes[0].name,
+                        date: .now
+                    )
+                    
+                    container.mainContext.insert(weeklyRecipe)
+                }
             }
             
             return container
