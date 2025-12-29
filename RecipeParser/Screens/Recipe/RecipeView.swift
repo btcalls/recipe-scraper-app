@@ -81,28 +81,13 @@ private struct HeaderView: View {
     }
 }
 
-private struct IngredientView: View {
-    let value: String
-    
-    var body: some View {
-        Text(value)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fontWeight(.light)
-    }
-}
-
 private struct InstructionSection: View {
     let title: String
     let items: [String]
     
     var body: some View {
         Section {
-            ForEach(items, id: \.self) {
-                Text($0)
-                    .bulleted()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fontWeight(.light)
-            }
+            BulletedList(items: items)
         } header: {
             HeaderView(value: title)
         }
@@ -166,9 +151,7 @@ struct RecipeView: View {
                         TimeDetailsView(recipe: recipe)
                         
                         Section {
-                            ForEach(recipe.ingredients) {
-                                IngredientView(value: $0.label)
-                            }
+                            BulletedList(items: recipe.ingredients.map { $0.label })
                         } header: {
                             HeaderView(value: .ingredients)
                         }

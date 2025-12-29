@@ -109,6 +109,7 @@
 				Utils/SwiftData/DatabaseActor.swift,
 				Utils/SwiftData/DatabaseModels.swift,
 				Views/BrowserView.swift,
+				Views/BulletedList.swift,
 				Views/CoordinatorView.swift,
 				Views/CustomImage.swift,
 				Views/CustomTextField.swift,
