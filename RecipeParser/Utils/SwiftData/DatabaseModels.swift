@@ -64,7 +64,7 @@ final class Recipe: AppModel, SortableModel {
     }
     var detailedInstructions: [DetailedInstruction] {
         let sectionIndices = instructions.enumerated().compactMap { (index, item) in
-            isSection(item) ? index : nil
+            isSection(item.trimmingCharacters(in: .whitespaces)) ? index : nil
         }
         
         if sectionIndices.isEmpty {
@@ -210,6 +210,7 @@ private extension Recipe {
         return either {
             item.hasSuffix("Instructions")
             item.hasPrefix("For the")
+            item.hasSuffix(" –")
         }
     }
 }

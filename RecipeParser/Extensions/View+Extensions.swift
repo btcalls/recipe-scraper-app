@@ -211,12 +211,6 @@ extension RoundedRectangle {
     }
 }
 
-extension Text {
-    func bulleted() -> Text {
-        return Text("• \(self)")
-    }
-}
-
 extension Toggle where Label == EmptyView {
     init(_ isOn: Binding<Bool>) {
         self.init(isOn: isOn) {

@@ -12,7 +12,7 @@ struct RecipeMetadataView: View {
     
     @ScaledMetric private var size: CGFloat = 150
     @ScaledMetric private var spacing = Layout.Scaled.spacing
-    @ScaledMetric private var bodySpacing = Layout.Spacing.medium
+    @ScaledMetric private var bodySpacing = Layout.Scaled.interItem
     
     private var recipeImage: CustomImage {
         guard let metadata, let image = metadata.image else {

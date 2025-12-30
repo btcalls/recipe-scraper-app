@@ -51,7 +51,7 @@ private struct TimeDetailsView: View {
 private struct DetailsView: View {
     let recipe: Recipe
         
-    @ScaledMetric private var spacing = Layout.Spacing.medium
+    @ScaledMetric private var spacing = Layout.Scaled.interItem
     
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
@@ -81,28 +81,13 @@ private struct HeaderView: View {
     }
 }
 
-private struct IngredientView: View {
-    let value: String
-    
-    var body: some View {
-        Text(value)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .fontWeight(.light)
-    }
-}
-
 private struct InstructionSection: View {
     let title: String
     let items: [String]
     
     var body: some View {
         Section {
-            ForEach(items, id: \.self) {
-                Text($0)
-                    .bulleted()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .fontWeight(.light)
-            }
+            BulletedList(items: items)
         } header: {
             HeaderView(value: title)
         }
@@ -113,10 +98,10 @@ struct RecipeView: View {
     var recipe: Recipe
     
     @Environment(\.presentationMode) private var presentationMode
+    @EnvironmentObject private var coordinator: Coordinator
     @Namespace private var titleID
-    @ScaledMetric private var spacing = Layout.Spacing.medium
+    @ScaledMetric private var spacing = Layout.Scaled.interItem
     @State private var isCookCompleted = false
-    @State private var isStarted = false
     @State private var isCalendarDisplayed = false
     @State private var title: String = ""
     @State private var viewState = ViewState()
@@ -124,9 +109,6 @@ struct RecipeView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
-//            Toggle($isCalendarDisplayed)
-//                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .calendar)))
-            
             Button(recipe.isFavorite ? .bookmarkFill : .bookmark) {
                 Task {
                     try? await onToggleFavorite()
@@ -137,8 +119,14 @@ struct RecipeView: View {
         ToolbarSpacer(.flexible, placement: .bottomBar)
         
         ToolbarItemGroup(placement: .bottomBar) {
-            Toggle($isStarted)
-                .toggleStyle(CustomToggleStyle(icons: (on: .x, off: .list)))
+            Button(.list) {
+                coordinator
+                    .presentSheet(.instructions(recipe.detailedInstructions, {
+                        Task {
+                            try? await onCompleteRecipe()
+                        }
+                    }))
+            }
             
             Button(.checkmark, role: .confirm) {
                 isCookCompleted.toggle()
@@ -163,9 +151,7 @@ struct RecipeView: View {
                         TimeDetailsView(recipe: recipe)
                         
                         Section {
-                            ForEach(recipe.ingredients) {
-                                IngredientView(value: $0.label)
-                            }
+                            BulletedList(items: recipe.ingredients.map { $0.label })
                         } header: {
                             HeaderView(value: .ingredients)
                         }
@@ -191,16 +177,10 @@ struct RecipeView: View {
                             try? await onCompleteRecipe()
                         }
                     }
+                    
                     Button(String.cancel, role: .cancel) {}
                 } message: {
                     Text(String.cookCompleteConfirmation)
-                }
-                .sheet(isPresented: $isStarted) {
-                    InstructionsView(items: recipe.detailedInstructions) {
-                        Task {
-                            try? await onCompleteRecipe()
-                        }
-                    }
                 }
                 .sheet(isPresented: $isCalendarDisplayed) {
                     // TODO:

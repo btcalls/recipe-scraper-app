@@ -24,12 +24,13 @@ enum AppPages: Hashable {
     }
 }
 
-enum Sheet: String, Identifiable {
-    var id: String {
-        self.rawValue
+enum Sheet: Identifiable {
+    var id: UUID {
+        UUID()
     }
     
     case browser
+    case instructions([DetailedInstruction], @MainActor () -> Void)
 }
 
 final class Coordinator: ObservableObject {
@@ -59,10 +60,17 @@ final class Coordinator: ObservableObject {
     @ViewBuilder
     func build(page: AppPages) -> some View {
         switch page {
-        case .onboarding: OnboardingView()
-        case .home: HomeView()
-        case .recipes: RecipeListView(view: .full)
-        case .recipe(let item): RecipeView(item)
+        case .onboarding:
+            OnboardingView()
+        
+        case .home:
+            HomeView()
+        
+        case .recipes:
+            RecipeListView(view: .full)
+        
+        case .recipe(let item):
+            RecipeView(item)
         }
     }
     
@@ -72,6 +80,11 @@ final class Coordinator: ObservableObject {
         case .browser:
             BrowserView()
                 .ignoresSafeArea()
+        
+        case let .instructions(items, action):
+            InstructionsView(items: items) {
+                action()
+            }
         }
     }
 }

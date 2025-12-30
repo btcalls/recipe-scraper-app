@@ -12,7 +12,7 @@ struct InstructionsView: View {
     var onComplete: @MainActor () -> Void
     
     @Environment(\.dismiss) private var dismiss
-    @ScaledMetric private var spacing = Layout.Spacing.medium
+    @ScaledMetric private var spacing = Layout.Scaled.interItem
     @State private var isCookCompleted = false
     @State private var index = 0
     @State private var sectionIndex = 0
@@ -62,7 +62,7 @@ struct InstructionsView: View {
                 }
                 
                 Button(.checkmark, role: .confirm) {
-                    isCookCompleted.toggle()
+                    isCookCompleted = true
                 }
                 .remove(if: !isNextDisabled)
             }
@@ -94,7 +94,9 @@ struct InstructionsView: View {
                 onComplete()
             }
             
-            Button(String.cancel, role: .cancel) {}
+            Button(String.cancel, role: .cancel) {
+                isCookCompleted = false
+            }
         } message: {
             Text(String.cookCompleteConfirmation)
         }

@@ -38,7 +38,6 @@ private struct BaseView: View {
                     .padding()
             }
         }
-        .background(Color.appBackground)
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
         .listStyle(.plain)
@@ -137,7 +136,6 @@ extension RecipeListView {
     init(view mode: Mode = .full) {
         self.mode = mode
         
-        
         // Setup initial query for items
         var descriptor = FetchDescriptor<Recipe>(
             sortBy: [Recipe.getSortDescriptor(for: self.sortItem.keyPath,
@@ -164,11 +162,10 @@ extension RecipeListView {
 }
 
 #Preview {
-    @Previewable @State var isEmpty: Bool = false
-    
     NavigationStack {
         RecipeListView()
-            .modelContainer(MockService.shared.modelContainer(withSample: !isEmpty))
+            .modelContainer(MockService.shared.modelContainer(withSample: true))
+            .background(Color.appBackground)
     }
 }
 
