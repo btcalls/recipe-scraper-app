@@ -111,6 +111,7 @@
 				Views/BrowserView.swift,
 				Views/BulletedList.swift,
 				Views/CoordinatorView.swift,
+				Views/CustomButton.swift,
 				Views/CustomImage.swift,
 				Views/CustomTextField.swift,
 				Views/IconButton.swift,
@@ -122,13 +123,13 @@
 				Views/Modifiers/ScaledModifier.swift,
 				Views/Modifiers/ShapeAndBorderModifier.swift,
 				Views/Modifiers/ToastModifier.swift,
+				Views/PageSelector.swift,
 				Views/ParseRecipeView.swift,
 				Views/RecipeMetadataView.swift,
 				Views/SortControlView.swift,
 				Views/Styles/CustomMenuStyle.swift,
 				Views/Styles/CustomToggleStyle.swift,
 				Views/ToastView.swift,
-				Views/WideButton.swift,
 			);
 			target = 492BD7D12DC9A07F0020485B /* RecipeParserShareExtension */;
 		};

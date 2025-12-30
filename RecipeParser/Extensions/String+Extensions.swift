@@ -29,11 +29,20 @@ extension String {
     // MARK: Onboarding
     
     static let onboardingItemOneTitle = "Search Recipe"
-    static let onboardingItemOneDesc = "Search your desired recipe using the in-built browser or Safari."
+    static var onboardingItemOneDesc: AttributedString {
+        let browser = "Safari"
+        var attrString = AttributedString("Search your desired recipe using the browser accessible within the app or \(browser).")
+        
+        if let range = attrString.range(of: browser) {
+            attrString[range].font = Font.system(size: 16, weight: .bold)
+        }
+        
+        return attrString
+    }
     static let onboardingItemTwoTitle = "Save it!"
     static var onboardingItemTwoDesc: AttributedString {
         let displayName = Bundle.main.displayName ?? "app"
-        var attrString = AttributedString("Using the browser's Share option, select the \(displayName) to save it.")
+        var attrString = AttributedString("Using the browser's Share option, select \(displayName) to save it.")
         
         if let range = attrString.range(of: displayName) {
             attrString[range].font = Font.system(size: 16, weight: .bold)

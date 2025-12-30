@@ -29,7 +29,7 @@ struct ParseRecipeView: View {
                     
                     Spacer()
                     
-                    WideButton(.saveRecipe, icon: .save) {
+                    CustomButton(.saveRecipe, icon: .save) {
                         Task {
                             await processRecipe()
                         }

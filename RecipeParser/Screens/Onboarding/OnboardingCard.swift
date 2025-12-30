@@ -21,43 +21,36 @@ struct OnboardingCard<Content>: View where Content : View {
             image
                 .resizable()
                 .scaledToFit()
-                .clipShape(.rect(corners: .concentric(minimum: .small)))
-                .shadow()
+                .clipShape(.rect(corners: .concentric(minimum: .large)))
                 .containerRelativeFrame(.vertical,
                                         count: 100,
-                                        span: 60,
+                                        span: 50,
                                         spacing: 0)
+                .padding(.horizontal, Layout.Padding.horizontal)
             
             Text(title)
                 .font(.largeTitle)
-                .foregroundStyle(.white)
+                .foregroundStyle(Color.appForeground)
                 .fontWeight(.semibold)
                 .lineLimit(2)
-                .scale(.padding(.horizontal), 20)
             
             caption
-                .foregroundStyle(.white)
+                .foregroundStyle(Color.appForeground)
+                .lineLimit(3)
                 .multilineTextAlignment(.center)
-                .scale(.padding(.horizontal), 20)
             
             Spacer()
             
             if let (title, handler) = action {
-                WideButton(title, action: handler)
+                CustomButton(title, kind: .wide, action: handler)
             }
-            
-            Spacer()
         }
         .frame(minWidth: 0,
                maxWidth: .infinity,
                minHeight: 0,
                maxHeight: .infinity,
                alignment: .center)
-        .background(LinearGradient(gradient: Gradient(colors: [.red, .orange]),
-                                   startPoint: .top,
-                                   endPoint: .bottom))
-        .cornerRadius(Layout.CornerRadius.medium.rawValue)
-        .padding(.horizontal, 20)
+        .padding(.horizontal, Layout.Padding.horizontal)
     }
 }
 

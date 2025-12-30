@@ -9,18 +9,17 @@ import SwiftUI
 
 struct OnboardingView: View {
     @EnvironmentObject private var coordinator: Coordinator
+    @State private var selection = 0
     
-    var body: some View {
-        TabView {
-            OnboardingCard(
+    private var pages: [OnboardingCard<Text>] {
+        return [
+            .init(
                 title: .onboardingItemOneTitle,
                 image: Image("Placeholder")
             ) {
                 Text(String.onboardingItemOneDesc)
-            }
-            .tag(0)
-            
-            OnboardingCard(
+            },
+            .init(
                 title: .onboardingItemTwoTitle,
                 image: Image("Placeholder"),
                 action: (.getStarted, {
@@ -29,10 +28,22 @@ struct OnboardingView: View {
             ) {
                 Text(String.onboardingItemTwoDesc)
             }
-            .tag(1)
+        ]
+    }
+    
+    var body: some View {
+        VStack(spacing: Layout.Scaled.interItem) {
+            TabView(selection: $selection) {
+                ForEach(pages.enumerated(), id: \.element.title) { index, view in
+                    view.tag(index)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .padding(.vertical, Layout.Padding.horizontal)
+            
+            PageSelector(selection: $selection, pages: Array(0..<pages.count))
+                .padding(.bottom, Layout.Padding.vertical)
         }
-        .tabViewStyle(PageTabViewStyle())
-        .padding(.vertical, 20)
     }
 }
 

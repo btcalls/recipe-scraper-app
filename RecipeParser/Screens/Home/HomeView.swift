@@ -29,7 +29,7 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .trailing, spacing: spacing) {
-                WideButton(
+                CustomButton(
                     display: (.seeAll, .chevronRightCircle),
                     kind: .regular) {
                         coordinator.push(page: .recipes)
@@ -54,7 +54,7 @@ struct HomeView: View {
                 Text(String.noRecipesDescription)
             }
         ) {
-            WideButton(.addRecipe, icon: .plus) {
+            CustomButton(.addRecipe, icon: .plus) {
                 coordinator.presentSheet(.browser)
             }
         }
