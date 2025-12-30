@@ -10,6 +10,8 @@
 		492BD7DC2DC9A07F0020485B /* RecipeParserShareExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 492BD7D22DC9A07F0020485B /* RecipeParserShareExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		492BD7F82DC9E45F0020485B /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 492BD7F72DC9E45F0020485B /* SFSymbolsMacro */; };
 		49A5307C2DC88CDF0023574C /* SFSymbolsMacro in Frameworks */ = {isa = PBXBuildFile; productRef = 49A5307B2DC88CDF0023574C /* SFSymbolsMacro */; };
+		49D538672F03D812009733C0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 49D538662F03D812009733C0 /* AppIcon.icon */; };
+		49D538682F03D812009733C0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 49D538662F03D812009733C0 /* AppIcon.icon */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +58,7 @@
 		49B19D302DB0F9ED008F9B9E /* RecipeParser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RecipeParser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B19D412DB0F9EE008F9B9E /* RecipeParserTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeParserTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		49B19D4B2DB0F9EE008F9B9E /* RecipeParserUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeParserUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		49D538662F03D812009733C0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -217,6 +220,7 @@
 		49B19D272DB0F9EC008F9B9E = {
 			isa = PBXGroup;
 			children = (
+				49D538662F03D812009733C0 /* AppIcon.icon */,
 				491881622E2E0C4E00F9292C /* RecipeParser.xctestplan */,
 				49B19D322DB0F9ED008F9B9E /* RecipeParser */,
 				49B19D442DB0F9EE008F9B9E /* RecipeParserTests */,
@@ -391,6 +395,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D538672F03D812009733C0 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -398,6 +403,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				49D538682F03D812009733C0 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +532,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = RecipeParser/RecipeParser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -565,6 +572,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = RecipeParser/RecipeParser.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;

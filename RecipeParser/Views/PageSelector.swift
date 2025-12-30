@@ -20,7 +20,6 @@ struct PageSelector<SelectionValue>: View where SelectionValue : Hashable {
     }
     
     var body: some View {
-        // Custom indicators
         HStack(spacing: Layout.Spacing.medium) {
             ForEach(pages, id: \.self) { index in
                 Circle()
