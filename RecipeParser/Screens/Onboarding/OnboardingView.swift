@@ -44,6 +44,7 @@ struct OnboardingView: View {
             PageSelector(selection: $selection, pages: Array(0..<pages.count))
                 .padding(.bottom, Layout.Padding.vertical)
         }
+        .appBackground()
     }
 }
 

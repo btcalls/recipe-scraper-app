@@ -31,7 +31,8 @@ struct HomeView: View {
             VStack(alignment: .trailing, spacing: spacing) {
                 CustomButton(
                     display: (.seeAll, .chevronRightCircle),
-                    kind: .regular) {
+                    kind: .regular,
+                    role: .confirm) {
                         coordinator.push(page: .recipes)
                     }
                     .remove(if: isEmpty)
@@ -42,7 +43,7 @@ struct HomeView: View {
             }
             .padding()
         }
-        .background(Color.appBackground)
+        .appBackground()
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             toolbarContent
@@ -54,7 +55,7 @@ struct HomeView: View {
                 Text(String.noRecipesDescription)
             }
         ) {
-            CustomButton(.addRecipe, icon: .plus) {
+            CustomButton(.addRecipe, icon: .plus, role: .confirm) {
                 coordinator.presentSheet(.browser)
             }
         }

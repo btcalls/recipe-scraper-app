@@ -60,18 +60,18 @@ struct CustomButton: AppButton {
         }
         
         guard let role else {
-            return (.accentColor, .white)
+            return (nil, .appForeground)
         }
         
         switch role {
         case .destructive:
             return (nil, nil)
-            
-        case .cancel:
-            return (nil, .appForeground)
         
+        case .confirm:
+            return (.accentColor, .appBackground)
+            
         default:
-            return (.accentColor, .white)
+            return (nil, .appForeground)
         }
     }
     
@@ -89,7 +89,7 @@ struct CustomButton: AppButton {
     var body: some View {
         Button(role: role, action: action) {
             label
-                .font(.title3)
+                .font(.headline)
                 .fontWeight(.medium)
                 .padding()
         }
@@ -143,7 +143,8 @@ extension CustomButton {
 }
 
 #Preview {
-    CustomButton("Sample", kind: .wide) {}
+    CustomButton("Sample") {}
+    CustomButton("Save", kind: .wide, role: .confirm) {}
     CustomButton("Delete", icon: .x, kind: .regular, role: .destructive) {}
     CustomButton("Cancel", role: .cancel) {}
     CustomButton.loading("Testing Button") {}

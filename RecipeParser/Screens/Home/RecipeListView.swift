@@ -38,8 +38,10 @@ private struct BaseView: View {
                     .padding()
             }
         }
+        .appBackground()
         .scrollBounceBehavior(.basedOnSize)
         .scrollClipDisabled()
+        .scrollIndicators(.hidden)
         .listStyle(.plain)
     }
 }

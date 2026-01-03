@@ -171,6 +171,7 @@ struct RecipeView: View {
             .appBackground()
             .navigationTitle(title)
             .scrollBounceBehavior(.basedOnSize)
+            .scrollIndicators(.hidden)
             .onScrollTargetVisibilityChange(
                 idType: String.self,
                 threshold: 0.25

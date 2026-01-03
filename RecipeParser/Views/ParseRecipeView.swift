@@ -30,7 +30,12 @@ struct ParseRecipeView: View {
                     
                     Spacer()
                     
-                    CustomButton(.saveRecipe, icon: .save, kind: .wide) {
+                    CustomButton(
+                        .saveRecipe,
+                        icon: .save,
+                        kind: .wide,
+                        role: .confirm
+                    ) {
                         Task {
                             await processRecipe()
                         }
