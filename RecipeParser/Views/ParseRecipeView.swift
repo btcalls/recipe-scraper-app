@@ -25,22 +25,23 @@ struct ParseRecipeView: View {
         NavigationStack {
             LoadableView(viewState: viewState) {
                 VStack(alignment: .center, spacing: spacing) {
-                    RecipeMetadataView(metadata: recipeMetadata)
+                    RecipeInfoView(metadata: recipeMetadata)
+                        .redacted(as: .placeholder, if: recipeMetadata == nil)
                     
                     Spacer()
                     
-                    CustomButton(.saveRecipe, icon: .save) {
+                    CustomButton(.saveRecipe, icon: .save, kind: .wide) {
                         Task {
                             await processRecipe()
                         }
                     }
                 }
                 .scale(.padding(.horizontal), 20)
-                .scale(.padding(.top), 20)
                 .toolbar {
                     Button(role: .close) {
                         close()
                     }
+                    .disabled(viewState.isProcessing)
                 }
             }
             .task {

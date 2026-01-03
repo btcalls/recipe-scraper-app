@@ -48,26 +48,6 @@ private struct TimeDetailsView: View {
     }
 }
 
-private struct DetailsView: View {
-    let recipe: Recipe
-        
-    @ScaledMetric private var spacing = Layout.Scaled.interItem
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: spacing) {
-            Text(recipe.name)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Text(recipe.detail)
-                .fontWeight(.light)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .scale(.padding(.vertical), 10)
-        }
-    }
-}
-
 private struct HeaderView: View {
     let value: String
     
@@ -139,13 +119,7 @@ struct RecipeView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     LazyVStack(alignment: .center, spacing: spacing) {
-                        CustomImage(kind: .url(recipe.imageURL, toCache: true))
-                            .scale(.height(), 300)
-                            .fitToAspectRatio(.photo16x9)
-                            .clipTo(RoundedRectangle(cornerRadius: .large))
-                            .padding(.vertical, 10)
-                            
-                        DetailsView(recipe: recipe)
+                        RecipeInfoView(recipe: recipe)
                             .id(recipe.name)
                         
                         TimeDetailsView(recipe: recipe)
@@ -194,11 +168,13 @@ struct RecipeView: View {
                     }
                 }
             }
-            .background(Color.appBackground)
+            .appBackground()
             .navigationTitle(title)
-            .navigationBarTitleDisplayMode(.inline)
             .scrollBounceBehavior(.basedOnSize)
-            .onScrollTargetVisibilityChange(idType: String.self) { ids in
+            .onScrollTargetVisibilityChange(
+                idType: String.self,
+                threshold: 0.25
+            ) { ids in
                 title = ids.contains { $0 == recipe.name } ? "" : recipe.name
             }
         }

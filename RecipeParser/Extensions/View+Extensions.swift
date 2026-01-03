@@ -109,9 +109,13 @@ extension View {
     func shadow(_ color: Color = .black) -> some View {
         return shadow(color: color.opacity(0.3), radius: 5, x: 2, y: 5)
     }
+    
+    func appBackground() -> some View {
+        return self.background(Color.appBackground)
+    }
 }
 
-// MARK: Actions
+// MARK: Notifications
 
 extension View {
     /// Adds an action to perform when a notification from `NotificationCenter` is received.
@@ -131,21 +135,6 @@ extension View {
             center.publisher(for: name, object: object),
             perform: action
         )
-    }
-}
-
-// MARK: Navigation
-
-extension View {
-    /// Modifier to apply navigation capabilities to this view.
-    /// - Parameter value: The value in which navigation will be based of.
-    /// - Parameter shape: The shape to apply to both glass and view containers.
-    /// - Returns: Modifed view with navigation in place.
-    func asLink<Value, S: RoundedRectangularShape>(
-        value: Value,
-        shape: S = Capsule()
-    ) -> some View where Value : Hashable {
-        return modifier(NavigableViewModifier(value: value, shape: shape))
     }
 }
 
