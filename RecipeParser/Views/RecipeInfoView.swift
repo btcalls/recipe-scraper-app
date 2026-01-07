@@ -42,6 +42,7 @@ struct RecipeInfoView: View {
                 .fitToAspectRatio(.photo16x9)
                 .clipTo(RoundedRectangle(cornerRadius: .large))
                 .padding(.vertical, 10)
+                .shadow()
             
             VStack(alignment: .center, spacing: bodySpacing) {
                 Text(name)

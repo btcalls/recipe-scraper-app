@@ -10,9 +10,10 @@ import SwiftUI
 struct PageSelector<SelectionValue>: View where SelectionValue : Hashable {
     @Binding var selection: SelectionValue
     var pages: [SelectionValue]
+    var selectedColor: Color = .accent
     
     private func color(for isSelected: Bool) -> Color {
-        isSelected ? .accentColor : .appForeground.opacity(0.3)
+        isSelected ? selectedColor : .appForeground.opacity(0.3)
     }
     
     private func value(for isSelected: Bool) -> CGFloat {

@@ -15,7 +15,7 @@ extension Color {
 extension LinearGradient {
     static let accent = Self(
         gradient: Gradient(
-            colors: [.red, Color.accent]
+            colors: [Color.accent.opacity(0.75), Color.accent]
         ),
         startPoint: .top,
         endPoint: .bottom

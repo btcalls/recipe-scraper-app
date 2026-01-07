@@ -24,27 +24,25 @@ struct ParseRecipeView: View {
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
-                VStack(alignment: .center, spacing: spacing) {
-                    RecipeInfoView(metadata: recipeMetadata)
-                        .redacted(as: .placeholder, if: recipeMetadata == nil)
-                    
-                    Spacer()
-                    
-                    CustomButton(
-                        .saveRecipe,
-                        icon: .save,
-                        kind: .wide,
-                        role: .confirm
-                    ) {
-                        Task {
-                            await processRecipe()
-                        }
+                ScrollView {
+                    VStack(alignment: .center, spacing: spacing) {
+                        RecipeInfoView(metadata: recipeMetadata)
+                            .redacted(as: .placeholder, if: recipeMetadata == nil)
+                        
+                        Spacer()
                     }
                 }
                 .scale(.padding(.horizontal), 20)
                 .toolbar {
                     Button(role: .close) {
                         close()
+                    }
+                    .disabled(viewState.isProcessing)
+                    
+                    Button(String.saveRecipe, role: .confirm) {
+                        Task {
+                            await processRecipe()
+                        }
                     }
                     .disabled(viewState.isProcessing)
                 }

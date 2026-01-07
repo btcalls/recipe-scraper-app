@@ -68,7 +68,7 @@ struct CustomButton: AppButton {
             return (nil, nil)
         
         case .confirm:
-            return (.accentColor, .appBackground)
+            return (.accent, .appBackground)
             
         default:
             return (nil, .appForeground)
