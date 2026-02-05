@@ -18,7 +18,7 @@ struct HomeView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if !isEmpty {
-            ToolbarItem {
+            ToolbarItem(placement: .confirmationAction) {
                 Button(.plus, role: .confirm) {
                     coordinator.presentSheet(.browser)
                 }

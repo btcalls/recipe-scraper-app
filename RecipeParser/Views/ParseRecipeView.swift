@@ -21,6 +21,25 @@ struct ParseRecipeView: View {
         sharedURL = url
     }
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(role: .close) {
+                close()
+            }
+            .disabled(viewState.isProcessing)
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(String.saveRecipe, role: .confirm) {
+                Task {
+                    await processRecipe()
+                }
+            }
+            .disabled(viewState.isProcessing)
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
@@ -34,17 +53,7 @@ struct ParseRecipeView: View {
                 }
                 .scale(.padding(.horizontal), 20)
                 .toolbar {
-                    Button(role: .close) {
-                        close()
-                    }
-                    .disabled(viewState.isProcessing)
-                    
-                    Button(String.saveRecipe, role: .confirm) {
-                        Task {
-                            await processRecipe()
-                        }
-                    }
-                    .disabled(viewState.isProcessing)
+                    toolbarContent
                 }
             }
             .task {
@@ -65,6 +74,8 @@ struct ParseRecipeView: View {
     
     /// Starts parsing recipe and saving to persistent storage.
     private func processRecipe() async {
+        // TODO: Error on parse when API is dormant for a while; need to relaunch
+        // TODO: Nav buttons disabled but still interactable while parsing
         defer {
             viewState.isProcessing = false
         }

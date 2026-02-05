@@ -82,7 +82,6 @@ struct RecipeView: View {
     @Namespace private var titleID
     @ScaledMetric private var spacing = Layout.Scaled.interItem
     @State private var isCookCompleted = false
-    @State private var isCalendarDisplayed = false
     @State private var title: String = ""
     @State private var viewState = ViewState()
     
@@ -94,6 +93,7 @@ struct RecipeView: View {
                     try? await onToggleFavorite()
                 }
             }
+            .tint(recipe.isFavorite ? .yellow : .primary)
         }
         
         ToolbarSpacer(.flexible, placement: .bottomBar)
@@ -145,6 +145,7 @@ struct RecipeView: View {
                 .toolbar {
                     toolbarContent
                 }
+                // TODO: Move to Coordinator
                 .alert(String.success, isPresented: $isCookCompleted) {
                     Button(String.markComplete) {
                         Task {
@@ -155,17 +156,6 @@ struct RecipeView: View {
                     Button(String.cancel, role: .cancel) {}
                 } message: {
                     Text(String.cookCompleteConfirmation)
-                }
-                .sheet(isPresented: $isCalendarDisplayed) {
-                    // TODO:
-                } content: {
-                    Button("Add") {
-                        Task {
-                            try? await onScheduleRecipe()
-                            
-                            isCalendarDisplayed = false
-                        }
-                    }
                 }
             }
             .appBackground()
