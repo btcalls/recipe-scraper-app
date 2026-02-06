@@ -18,7 +18,7 @@ struct HomeView: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         if !isEmpty {
-            ToolbarItem {
+            ToolbarItem(placement: .confirmationAction) {
                 Button(.plus, role: .confirm) {
                     coordinator.presentSheet(.browser)
                 }
@@ -29,9 +29,10 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .trailing, spacing: spacing) {
-                WideButton(
+                CustomButton(
                     display: (.seeAll, .chevronRightCircle),
-                    kind: .regular) {
+                    kind: .regular,
+                    role: .confirm) {
                         coordinator.push(page: .recipes)
                     }
                     .remove(if: isEmpty)
@@ -42,7 +43,7 @@ struct HomeView: View {
             }
             .padding()
         }
-        .background(Color.appBackground)
+        .appBackground()
         .scrollBounceBehavior(.basedOnSize)
         .toolbar {
             toolbarContent
@@ -54,7 +55,7 @@ struct HomeView: View {
                 Text(String.noRecipesDescription)
             }
         ) {
-            WideButton(.addRecipe, icon: .plus) {
+            CustomButton(.addRecipe, icon: .plus, role: .confirm) {
                 coordinator.presentSheet(.browser)
             }
         }

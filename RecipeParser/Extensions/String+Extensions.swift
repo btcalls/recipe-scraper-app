@@ -9,6 +9,29 @@ import Foundation
 import SwiftUI
 
 extension String {
+    func highlight(_ words: [String],
+                   font: Font = .default.bold(),
+                   color: Color = Color.appForeground) -> AttributedString {
+        var attrString = AttributedString(self)
+        
+        for word in words {
+            if let range = attrString.range(of: word) {
+                attrString[range].inlinePresentationIntent = .stronglyEmphasized
+                attrString[range].foregroundColor = color
+            }
+        }
+        
+        return attrString
+    }
+    
+    func highlight(_ word: String,
+                   font: Font = .default.bold(),
+                   color: Color = Color.appForeground) -> AttributedString {
+        return highlight([word], font: font, color: color)
+    }
+}
+
+extension String {
     // MARK: Buttons
     
     static let cancel = "Cancel"
@@ -28,18 +51,28 @@ extension String {
     
     // MARK: Onboarding
     
-    static let onboardingItemOneTitle = "Search Recipe"
-    static let onboardingItemOneDesc = "Search your desired recipe using the in-built browser or Safari."
-    static let onboardingItemTwoTitle = "Save it!"
+    static let onboardingItemOneTitle = "Search"
+    static var onboardingItemOneDesc: AttributedString {
+        let browser = "Safari"
+        let string = "From within the app or the \(browser) browser, search for your favourite recipes."
+        
+        return string.highlight(browser)
+    }
+    static let onboardingItemTwoTitle = "View"
     static var onboardingItemTwoDesc: AttributedString {
-        let displayName = Bundle.main.displayName ?? "app"
-        var attrString = AttributedString("Using the browser's Share option, select the \(displayName) to save it.")
+        let displayName = Bundle.main.displayName ?? "Recipe App"
+        let action = "Share"
+        let string = "Using the browser's \(action) option, select \(displayName) to view its details and save it."
         
-        if let range = attrString.range(of: displayName) {
-            attrString[range].font = Font.system(size: 16, weight: .bold)
-        }
+        return string.highlight([displayName, action])
         
-        return attrString
+    }
+    static let onboardingItemThreeTitle = "Save"
+    static var onboardingItemThreeDesc: AttributedString {
+        let hookStatement = "ads and clutter not included"
+        let string = "By selecting \(String.saveRecipe), you now have offline access to any recipes you want—\(hookStatement)."
+        
+        return string.highlight([.saveRecipe, hookStatement])
     }
     
     // MARK: Descriptions
@@ -47,17 +80,10 @@ extension String {
     static let cookCompleteConfirmation = "Would you like to mark this recipe and your cooking session as completed?"
     
     static var noRecipesDescription: AttributedString {
-        let actionString = "Add Recipe"
-        var attrString = AttributedString(
-            "Save your first recipe by pressing the \(actionString) button."
-        )
+        let action = "Add Recipe"
+        let string = "Save your first recipe by pressing the \(action) button."
         
-        if let range = attrString.range(of: actionString) {
-            attrString[range].foregroundColor = Color.accentColor
-            attrString[range].font = .default.bold()
-        }
-        
-        return attrString
+        return string.highlight(action, color: .accent)
     }
     
     // MARK: Constants

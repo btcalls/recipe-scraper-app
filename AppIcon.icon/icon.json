@@ -1,0 +1,75 @@
+{
+  "fill" : {
+    "linear-gradient" : [
+      "extended-srgb:1.00000,0.58431,0.00000,1.00000",
+      "extended-srgb:1.00000,0.21961,0.23529,1.00000"
+    ]
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "normal",
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "extended-srgb:1.00000,0.21961,0.23529,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:0.00000,1.00000"
+              }
+            }
+          ],
+          "glass" : false,
+          "image-name" : "fork.knife 3.png",
+          "name" : "fork.knife 3",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 0.75,
+            "translation-in-points" : [
+              -176.453125,
+              152.6640625
+            ]
+          }
+        },
+        {
+          "glass" : false,
+          "image-name" : "book.badge.plus.fill.png",
+          "name" : "book.badge.plus.fill",
+          "position" : {
+            "scale" : 1.75,
+            "translation-in-points" : [
+              -3.9609375,
+              157.0234375
+            ]
+          }
+        }
+      ],
+      "lighting" : "individual",
+      "position" : {
+        "scale" : 1,
+        "translation-in-points" : [
+          11.125,
+          -29.375
+        ]
+      },
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

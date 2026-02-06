@@ -33,6 +33,22 @@ struct InstructionsView: View {
         return section.instructions[index]
     }
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(.x, role: .close) {
+                dismiss()
+            }
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(.checkmark, role: .confirm) {
+                isCookCompleted = true
+            }
+            .remove(if: !isNextDisabled)
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -57,14 +73,7 @@ struct InstructionsView: View {
                 }
             }
             .toolbar {
-                Button(.x, role: .close) {
-                    dismiss()
-                }
-                
-                Button(.checkmark, role: .confirm) {
-                    isCookCompleted = true
-                }
-                .remove(if: !isNextDisabled)
+                toolbarContent
             }
             .safeAreaBar(edge: .bottom, content: {
                 GlassEffectContainer {
@@ -85,6 +94,7 @@ struct InstructionsView: View {
             .scrollClipDisabled()
             .scrollBounceBehavior(.basedOnSize)
             .scale(.padding(.horizontal), 20)
+            .scale(.padding(.top), 20)
         }
         .presentationBackgroundInteraction(.disabled)
         .presentationDetents([.fraction(0.65), .large])

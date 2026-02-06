@@ -21,26 +21,39 @@ struct ParseRecipeView: View {
         sharedURL = url
     }
     
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(role: .close) {
+                close()
+            }
+            .disabled(viewState.isProcessing)
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(String.saveRecipe, role: .confirm) {
+                Task {
+                    await processRecipe()
+                }
+            }
+            .disabled(viewState.isProcessing)
+        }
+    }
+    
     var body: some View {
         NavigationStack {
             LoadableView(viewState: viewState) {
-                VStack(alignment: .center, spacing: spacing) {
-                    RecipeMetadataView(metadata: recipeMetadata)
-                    
-                    Spacer()
-                    
-                    WideButton(.saveRecipe, icon: .save) {
-                        Task {
-                            await processRecipe()
-                        }
+                ScrollView {
+                    VStack(alignment: .center, spacing: spacing) {
+                        RecipeInfoView(metadata: recipeMetadata)
+                            .redacted(as: .placeholder, if: recipeMetadata == nil)
+                        
+                        Spacer()
                     }
                 }
                 .scale(.padding(.horizontal), 20)
-                .scale(.padding(.top), 20)
                 .toolbar {
-                    Button(role: .close) {
-                        close()
-                    }
+                    toolbarContent
                 }
             }
             .task {
@@ -61,6 +74,8 @@ struct ParseRecipeView: View {
     
     /// Starts parsing recipe and saving to persistent storage.
     private func processRecipe() async {
+        // TODO: Error on parse when API is dormant for a while; need to relaunch
+        // TODO: Nav buttons disabled but still interactable while parsing
         defer {
             viewState.isProcessing = false
         }

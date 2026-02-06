@@ -8,14 +8,14 @@
 import SwiftUI
 
 private struct ImageAndLabelView: View {
-    var display: WideButton.Display
-    var kind: WideButton.Kind
+    var display: CustomButton.Display
+    var kind: CustomButton.Kind
     
     @ScaledMetric private var spacing = Layout.Spacing.small
     
     var body: some View {
         switch kind {
-        case .regular:
+        case .regular, .wide:
             if let sfSymbol = display.icon {
                 Label(display.title, sfSymbol: sfSymbol)
                     .labelIconToTitleSpacing(spacing)
@@ -33,7 +33,7 @@ private struct ImageAndLabelView: View {
     }
 }
 
-struct WideButton: AppButton {
+struct CustomButton: AppButton {
     typealias Display = (title: String, icon: Symbol?)
     typealias ButtonKind = Kind
     
@@ -60,24 +60,37 @@ struct WideButton: AppButton {
         }
         
         guard let role else {
-            return (.accentColor, .white)
+            return (nil, .appForeground)
         }
         
         switch role {
         case .destructive:
             return (nil, nil)
-            
-        case .cancel:
-            return (nil, .appForeground)
         
+        case .confirm:
+            return (.accent, .appBackground)
+            
         default:
-            return (.accentColor, .white)
+            return (nil, .appForeground)
+        }
+    }
+    
+    @ViewBuilder private var label: some View {
+        switch kind {
+        case .wide:
+            ImageAndLabelView(display: display, kind: kind)
+                .frame(maxWidth: .infinity)
+                
+        default:
+            ImageAndLabelView(display: display, kind: kind)
         }
     }
     
     var body: some View {
         Button(role: role, action: action) {
-            ImageAndLabelView(display: display, kind: kind)
+            label
+                .font(.headline)
+                .fontWeight(.medium)
                 .padding()
         }
         .disabled(isDisabled)
@@ -86,9 +99,10 @@ struct WideButton: AppButton {
     }
 }
 
-extension WideButton {
+extension CustomButton {
     enum Kind {
         case regular
+        case wide
         case loading(String = .processing)
     }
     
@@ -117,7 +131,7 @@ extension WideButton {
     }
 }
 
-extension WideButton {
+extension CustomButton {
     static func loading(
         _ title: String = .processing,
         action: @escaping @MainActor () -> Void
@@ -129,8 +143,9 @@ extension WideButton {
 }
 
 #Preview {
-    WideButton("Sample") {}
-    WideButton("Delete", icon: .x, kind: .regular, role: .destructive) {}
-    WideButton("Cancel", role: .cancel) {}
-    WideButton.loading("Testing Button") {}
+    CustomButton("Sample") {}
+    CustomButton("Save", kind: .wide, role: .confirm) {}
+    CustomButton("Delete", icon: .x, kind: .regular, role: .destructive) {}
+    CustomButton("Cancel", role: .cancel) {}
+    CustomButton.loading("Testing Button") {}
 }

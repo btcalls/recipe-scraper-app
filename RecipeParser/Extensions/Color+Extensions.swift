@@ -11,3 +11,13 @@ extension Color {
     static let appBackground = Color("BackgroundColor")
     static let appForeground = Color("ForegroundColor")
 }
+
+extension LinearGradient {
+    static let accent = Self(
+        gradient: Gradient(
+            colors: [Color.accent.opacity(0.75), Color.accent]
+        ),
+        startPoint: .top,
+        endPoint: .bottom
+    )
+}
