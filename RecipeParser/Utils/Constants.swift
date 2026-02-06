@@ -79,4 +79,5 @@ enum Symbol: String {
     case list = "checklist"
     case save = "square.and.arrow.down"
     case calendar = "calendar.badge.plus"
+    case play = "play.fill"
 }

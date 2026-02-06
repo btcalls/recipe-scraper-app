@@ -99,17 +99,17 @@ struct RecipeView: View {
         ToolbarSpacer(.flexible, placement: .bottomBar)
         
         ToolbarItemGroup(placement: .bottomBar) {
-            Button(.list) {
+            Button(.checkmark) {
+                isCookCompleted.toggle()
+            }
+            
+            Button(.play, role: .confirm) {
                 coordinator
                     .presentSheet(.instructions(recipe.detailedInstructions, {
                         Task {
                             try? await onCompleteRecipe()
                         }
                     }))
-            }
-            
-            Button(.checkmark, role: .confirm) {
-                isCookCompleted.toggle()
             }
         }
     }
